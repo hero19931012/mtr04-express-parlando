@@ -2,7 +2,7 @@
   "development": {
     "username": "huiming",
     "password": "huiming",
-    "database": "koa_message_board",
+    "database": "koa-db",
     "host": "localhost",
     "dialect": "mysql"
   },
