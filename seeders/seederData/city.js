@@ -141,6 +141,6 @@ area.forEach((city, index) => {
     })
 })
 
-module.exports = { cityList, districtList };
+module.exports = { cityList, districtList, area };
 
 // 由於 district 綁定 city 的 id，如果 seed:undo 會讓 city 的 id 變多，會沒辦法新增 district，只能 migrate:undo 再重新 seed 一次
