@@ -1,6 +1,6 @@
 'use strict';
 
-const {userList} = require('../seederData/seederData-user')
+const {userList} = require('./seederData/seederData-user')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
