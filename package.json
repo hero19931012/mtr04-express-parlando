@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed": "npx sequelize-cli db:seed:all",
+    "migrate": "npx sequelize-cli db:migrate",
+    "demo": "npm run migrate && npm run seed",
     "start": "node App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

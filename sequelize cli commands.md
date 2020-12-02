@@ -25,8 +25,13 @@ npx sequelize-cli db:migrate:undo:all
 
 ## Seeder file for demo
 npx sequelize-cli seed:generate --name demo-user
+npx sequelize-cli seed:generate --name demo-admin
 npx sequelize-cli seed:generate --name demo-city
 npx sequelize-cli seed:generate --name demo-district
+npx sequelize-cli seed:generate --name demo-address
+npx sequelize-cli seed:generate --name demo-product
+npx sequelize-cli seed:generate --name demo-photo
+
 
 ## Run seeds
 npx sequelize-cli db:seed:all

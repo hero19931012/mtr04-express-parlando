@@ -7,12 +7,13 @@ module.exports = {
       'cityId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Address_cities',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     await queryInterface.addColumn(
@@ -20,12 +21,13 @@ module.exports = {
       'cityId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Address_cities',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     await queryInterface.addColumn(
@@ -33,12 +35,13 @@ module.exports = {
       'districtId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Address_districts',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     await queryInterface.addColumn(
@@ -46,12 +49,13 @@ module.exports = {
       'userId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Users',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     await queryInterface.addColumn(
@@ -59,12 +63,13 @@ module.exports = {
       'addressId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Addresses',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     await queryInterface.addColumn(
@@ -72,12 +77,13 @@ module.exports = {
       'userId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Users',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     await queryInterface.addColumn(
@@ -85,12 +91,13 @@ module.exports = {
       'orderId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Orders',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     await queryInterface.addColumn(
@@ -98,12 +105,13 @@ module.exports = {
       'productId',
       {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Products',
           key: 'id',
         },
-        onUpdate: 'RESTRICT',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
       }
     );
     // await queryInterface.addColumn(
@@ -115,8 +123,8 @@ module.exports = {
     //       model: 'Products',
     //       key: 'id',
     //     },
-    //     onUpdate: 'RESTRICT',
-    //     onDelete: 'SET NULL',
+    //     onUpdate: 'CASCADE',
+    //     onDelete: 'RESTRICT',
     //   }
     // );
     // await queryInterface.addColumn(
@@ -128,8 +136,8 @@ module.exports = {
     //       model: 'Photos',
     //       key: 'id',
     //     },
-    //     onUpdate: 'RESTRICT',
-    //     onDelete: 'SET NULL',
+    //     onUpdate: 'CASCADE',
+    //     onDelete: 'RESTRICT',
     //   }
     // );
   },
