@@ -1,6 +1,6 @@
 'use strict';
 
-const { districtList } = require('../seederData-city');
+const { districtList } = require('../seederData/seederData-city');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
