@@ -26,7 +26,7 @@ const userList = []
     users.forEach((user) => {
       userList.push({
         username: user,
-        password: "1234",
+        password: bcrypt.hash(user, saltRounds, (err, hash) => {return hash}),
         realName: user,
         email: "email@mail.com",
         phone: "0987654321",
