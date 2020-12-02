@@ -2,7 +2,7 @@
   "development": {
     "username": "huiming",
     "password": "huiming",
-    "database": "koa-db",
+    "database": "final_project",
     "host": "localhost",
     "dialect": "mysql"
   },

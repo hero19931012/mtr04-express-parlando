@@ -36,6 +36,4 @@ const userList = []
       })
     })
 
-console.log(userList);
-
 module.exports = { userList };

@@ -133,7 +133,7 @@ const districtList = []
 area.forEach((city, index) => {
     city.districts.forEach((districtName) => {
         districtList.push({
-            cityId: index+1,
+            cityId: index + 1,
             districtName,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -142,3 +142,5 @@ area.forEach((city, index) => {
 })
 
 module.exports = { cityList, districtList };
+
+// 由於 district 綁定 city 的 id，如果 seed:undo 會讓 city 的 id 變多，會沒辦法新增 district，只能 migrate:undo 再重新 seed 一次
