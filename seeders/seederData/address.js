@@ -300,13 +300,11 @@ for (let i = 0; i < addresses.length; i++) {
       city.districts.forEach((district, districtIndex) => {
         if (address.indexOf(district) >= 0) {
           // console.log(city.name, district, address.split(district)[1].trim());
-          let userId = Math.ceil(Math.random()*20)
           // console.log('userId', userId);
           addressList.push({
             cityId: cityIndex+1,
             districtId: districtIndex+1,
             address: address.split(district)[1].trim(),
-            userId,
             createdAt: new Date(),
             updatedAt: new Date()
           })

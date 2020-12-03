@@ -1,4 +1,4 @@
-const photoList = [
+const photos = [
   "https://i.picsum.photos/id/1011/600/600.jpg?hmac=EEWEKDR50G0azyhV0K6VHi3QRb45ikqfxRfDtKeQzuw",
   "https://i.picsum.photos/id/182/600/600.jpg?hmac=wVPkGL44ihFNug2qVe9ycwBgmY_oUs8p5lQ_klpS5O0",
   "https://i.picsum.photos/id/72/600/600.jpg?hmac=59xSDoh9stB6jP5z4LxWRMVY4GrKWw1gSGNe6W3qwoo",
@@ -100,5 +100,19 @@ const photoList = [
   "https://i.picsum.photos/id/796/600/600.jpg?hmac=EWz6VhF5lxLNKxRSsH1aVO5c1Y5XTGE6lpqdFXBkKpU",
   "https://i.picsum.photos/id/439/600/600.jpg?hmac=LC9k_bzrN0NhKRyV62fou3ix3cRFZKNfAyXgxGs6zh8"
 ]
+
+const productNum = 20;
+const photoNumPerProduct = photos.length / productNum;
+const photoList = photos.map((url, index) => {
+  let productId = Math.ceil((index + 1) / photoNumPerProduct);
+  return {
+    url,
+    productId,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+})
+
+// console.log(photoList);
 
 module.exports = { photoList };

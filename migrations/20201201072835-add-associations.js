@@ -44,20 +44,20 @@ module.exports = {
         onDelete: 'RESTRICT',
       }
     );
-    await queryInterface.addColumn(
-      'Addresses',
-      'userId',
-      {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
+    // await queryInterface.addColumn(
+    //   'Addresses',
+    //   'userId',
+    //   {
+    //     type: Sequelize.INTEGER,
+    //     allowNull: false,
+    //     references: {
+    //       model: 'Users',
+    //       key: 'id',
+    //     },
+    //     onUpdate: 'CASCADE',
+    //     onDelete: 'RESTRICT',
+    //   }
+    // );
     await queryInterface.addColumn(
       'Orders',
       'addressId',
@@ -114,32 +114,20 @@ module.exports = {
         onDelete: 'RESTRICT',
       }
     );
-    // await queryInterface.addColumn(
-    //   'Product_photos',
-    //   'productId',
-    //   {
-    //     type: Sequelize.INTEGER,
-    //     references: {
-    //       model: 'Products',
-    //       key: 'id',
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'RESTRICT',
-    //   }
-    // );
-    // await queryInterface.addColumn(
-    //   'Product_photos',
-    //   'photoId',
-    //   {
-    //     type: Sequelize.INTEGER,
-    //     references: {
-    //       model: 'Photos',
-    //       key: 'id',
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'RESTRICT',
-    //   }
-    // );
+    await queryInterface.addColumn(
+      'Photos',
+      'productId',
+      {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Products',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      }
+    );
   },
 
   down: async (queryInterface, Sequelize) => {
