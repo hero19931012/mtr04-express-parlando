@@ -112,7 +112,9 @@ function generateOrderProductList(orderList) {
         orderId,
         productId,
         count,
-        unitPrice: rawProductList[productId - 1].price
+        unitPrice: rawProductList[productId - 1].price,
+        createdAt: new Date(),
+        updatedAt: new Date()
       })
     })
   })
@@ -122,11 +124,13 @@ generateOrderProductList(orderList)
 
 const orderStatusList = []
 orderList.forEach((order) => {
-  let {userId, totalPrice} = order
+  let { userId, totalPrice } = order
   orderStatusList.push({
     userId,
     totalPrice,
-    status: 0
+    status: 0,
+    createdAt: new Date(),
+    updatedAt: new Date()
   })
 })
 
