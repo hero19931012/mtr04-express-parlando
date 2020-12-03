@@ -312,7 +312,7 @@ for (let i = 0; i < addresses.length; i++) {
             cityId: cityIndex + 1,
             districtId: districtIndex + 1,
             address: address.split(district)[1].trim(),
-            orderId: Math.ceil(Math.random() * 20),
+            orderId: Math.ceil(Math.random() * 10),
             createdAt: new Date(),
             updatedAt: new Date()
           })

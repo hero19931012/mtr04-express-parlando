@@ -61,7 +61,7 @@ function getTotalPrice(orderContent) {
   return totalPrice;
 }
 
-function orderRequestData() {
+function genarateOrderRequestData() {
   const orderContent = getRandomOrderContent()
 
   return {
@@ -94,9 +94,10 @@ function updateProductList(orderRequestData) {
 const orderList = []
 
 for (let i = 0; i < 10; i++) {
-  let requestData = orderRequestData()
+  let requestData = genarateOrderRequestData()
   // console.log(requestData);
   updateProductList(requestData)
+  // console.log(requestData);
   orderList.push(requestData)
 }
 
@@ -119,8 +120,19 @@ function generateOrderProductList(orderList) {
 
 generateOrderProductList(orderList)
 
+const orderStatusList = []
+orderList.forEach((order) => {
+  let {userId, totalPrice} = order
+  orderStatusList.push({
+    userId,
+    totalPrice,
+    status: 0
+  })
+})
+
+// console.log(orderStatusList);
 // console.log(orderList);
 // console.log(orderProductList);
 // console.log(productList);
 
-module.exports = { orderList, orderProductList, productList };
+module.exports = { orderStatusList, orderProductList, productList };
