@@ -17,7 +17,7 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
-      'Addresses',
+      'Recipient_infos',
       'cityId',
       {
         type: Sequelize.INTEGER,
@@ -31,7 +31,7 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
-      'Addresses',
+      'Recipient_infos',
       'districtId',
       {
         type: Sequelize.INTEGER,
@@ -44,28 +44,14 @@ module.exports = {
         onDelete: 'RESTRICT',
       }
     );
-    // await queryInterface.addColumn(
-    //   'Addresses',
-    //   'userId',
-    //   {
-    //     type: Sequelize.INTEGER,
-    //     allowNull: false,
-    //     references: {
-    //       model: 'Users',
-    //       key: 'id',
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'RESTRICT',
-    //   }
-    // );
     await queryInterface.addColumn(
-      'Orders',
-      'addressId',
+      'Recipient_infos',
+      'orderId',
       {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Addresses',
+          model: 'Orders',
           key: 'id',
         },
         onUpdate: 'CASCADE',

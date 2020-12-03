@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      districtName: {
+      dictrictName: {
         allowNull: false,
         type: Sequelize.STRING(16)
       },
