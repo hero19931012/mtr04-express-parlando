@@ -9,12 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        unique: true,
         allowNull: false,
-        type: Sequelize.STRING(32)
+        type: Sequelize.STRING(64)
       },
       model: {
         allowNull: false,
-        type: Sequelize.STRING(32)
+        type: Sequelize.STRING(64)
       },
       price: {
         allowNull: false,

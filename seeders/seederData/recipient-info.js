@@ -290,7 +290,9 @@ const addresses = [
   "南投縣 草屯鎮 中正路 654 號 1 樓"
 ]
 
-const addressList = []
+const {userList} = require('./user')
+
+const recipientList = []
 for (let i = 0; i < addresses.length; i++) {
   let address = addresses[i];
   // console.log(address);
@@ -301,10 +303,16 @@ for (let i = 0; i < addresses.length; i++) {
         if (address.indexOf(district) >= 0) {
           // console.log(city.name, district, address.split(district)[1].trim());
           // console.log('userId', userId);
-          addressList.push({
-            cityId: cityIndex+1,
-            districtId: districtIndex+1,
+          let {username, phone, email} = userList[Math.floor(Math.random() * userList.length)]
+          let name = username
+          recipientList.push({
+            name,
+            phone,
+            email,
+            cityId: cityIndex + 1,
+            districtId: districtIndex + 1,
             address: address.split(district)[1].trim(),
+            orderId: Math.ceil(Math.random() * 20),
             createdAt: new Date(),
             updatedAt: new Date()
           })
@@ -314,5 +322,5 @@ for (let i = 0; i < addresses.length; i++) {
   })
 }
 
-// console.log(addressList);
-module.exports = { addressList };
+// console.log(recipientList);
+module.exports = { recipientList };
