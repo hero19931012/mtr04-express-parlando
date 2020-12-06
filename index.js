@@ -4,11 +4,16 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 // set controller
+const mainController = require('./controllers/main');
 const recipientController = require('./controllers/recipient');
 const productController = require('./controllers/product');
 
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.set('views', 'views'); // setting views directory
+app.set('view engine', 'ejs'); // setting template engine
 
 const swaggerDocument = require('./swagger.json');
 const swaggerUi = require('swagger-ui-express');
@@ -34,7 +39,9 @@ function redirectBack(req, res) {
   res.redirect('back');
 }
 
-app.get('/', recipientController.index);
+app.get('/login', mainController.login);
+app.post('/login', mainController.handleLogin);
+app.get('/me', mainController.verify)
 app.get('/products', productController.getAll);
 app.get('/products/:id', productController.getOne);
 
