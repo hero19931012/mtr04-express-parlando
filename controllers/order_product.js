@@ -1,8 +1,16 @@
-const userController = {
-  async index(ctx) {
-    await ctx.render('index')
-  },
+const db = require('../models');
+const { RecipientInfo } = db;
 
+const recipientController = {
+  index: (req, res) => {
+    RecipientInfo.findAll()
+      .then((addresses) => {
+        res.status(200).json(addresses);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
 }
 
-module.exports = userController;
+module.exports = recipientController;
