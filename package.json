@@ -9,7 +9,7 @@
     "migrate:undo": "npx sequelize-cli db:migrate:undo:all",
     "demo": "npm run migrate && npm run seed",
     "start": "node App.js",
-    "listen": "nodemon index.js",
+    "listen": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
