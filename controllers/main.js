@@ -16,7 +16,7 @@ const mainController = {
   handleLogin: (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         ok: 0,
         message: "username and password required"
       })
@@ -27,30 +27,36 @@ const mainController = {
       }
     })
       .then((user) => {
-
         bcrypt.compare(password, user.password, (err, result) => {
-          if (!result) {
+          if (err || !result) {
             res.status(400).json({
               ok: 0,
               message: 'password invalid'
             })
           } else {
             // JWT signing
-            const token = jwt.sign(
+            const payload = {
               // user info
-              {
-                id: user.id.toString(),
-                username: user.username,
-              },
-              SECRET,
-              // options
-              {
-                expiresIn: "1 day"
-              })
+              id: user.id.toString(),
+              username: user.username,
+            }
 
-            res.status(200).json({
-              ok: 1,
-              token
+            const options = {
+              expiresIn: "1 day"
+            }
+
+            jwt.sign(payload, SECRET, options, (err, token) => {
+              if (err || !token) {
+                res.status(400).json({
+                  ok: 0,
+                  message: err.toString()
+                })
+              } else {
+                res.status(200).json({
+                  ok: 1,
+                  token
+                })
+              }
             })
           }
         })
@@ -58,7 +64,7 @@ const mainController = {
       .catch(err => {
         res.status(400).json({
           ok: 0,
-          errorMessage: err.toString()
+          message: err.toString()
         })
       });
   },
