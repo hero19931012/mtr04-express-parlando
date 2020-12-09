@@ -8,10 +8,84 @@ const { User } = db;
 const SECRET = 'lidemymtr04parlando'
 ///
 
+const saltRounds = 10;
 
-const mainController = {
-  login: (req, res) => {
-    res.render("login")
+const userController = {
+  handleRegister: (req, res) => {
+    const {
+      username,
+      password,
+      realName,
+      email,
+      phone
+    } = req.body;
+    console.log(username,
+      password,
+      realName,
+      email,
+      phone);
+    if (
+      !username ||
+      !password ||
+      !realName ||
+      !email ||
+      !phone
+    ) {
+      return res.status(400).json({
+        ok: 0,
+        message: "register data incomplete"
+      })
+    }
+
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      if (err) {
+        return res.status(400).json({
+          ok: 0,
+          message: err.toString()
+        })
+      }
+      User.create({
+        username,
+        password,
+        realName,
+        email,
+        phone
+      }).then((user) => {
+        // JWT signing
+        const payload = {
+          // user info
+          id: user.id,
+          username,
+        }
+
+        const options = {
+          expiresIn: "1 day"
+        }
+
+        jwt.sign(payload, SECRET, options, (err, token) => {
+          if (err || !token) {
+            res.status(400).json({
+              ok: 0,
+              message: err.toString()
+            })
+          } else {
+            res.status(200).json({
+              ok: 1,
+              token
+            })
+          }
+        })
+        res.status(200).json({
+          ok: 1,
+          token
+        })
+      }).catch(err => {
+        res.status(400).json({
+          ok: 0,
+          message: err.toString()
+        })
+      })
+    })
   },
   handleLogin: (req, res) => {
     const { username, password } = req.body;
@@ -34,13 +108,10 @@ const mainController = {
               message: 'password invalid'
             })
           } else {
-
-            req.user = username
-
             // JWT signing
             const payload = {
               // user info
-              id: user.id.toString(),
+              id: user.id,
               username: user.username,
             }
 
@@ -93,4 +164,4 @@ const mainController = {
 
 }
 
-module.exports = mainController;
+module.exports = userController;

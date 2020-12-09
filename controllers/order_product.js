@@ -1,5 +1,5 @@
 const db = require('../models');
-const { RecipientInfo } = db;
+const { Order_product } = db;
 
 const recipientController = {
   index: (req, res) => {
