@@ -11,7 +11,7 @@ const swaggerDocument = require('./swagger.json');
 const swaggerUi = require('swagger-ui-express');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/', router);
 

@@ -1,9 +1,9 @@
 const db = require('../models');
-const { RecipientInfo, User, Order, AddressCity } = db;
+const { Recipient_info, User, Order, Address_city, Address_district } = db;
 
 const recipientController = {
   getAll: (req, res) => {
-    RecipientInfo.findAll()
+    Recipient_info.findAll()
       .then((addresses) => {
         res.status(200).json(addresses);
       })
@@ -13,14 +13,14 @@ const recipientController = {
   },
   getOne: (req, res) => {
     const id = req.params.id;
-    RecipientInfo.findOne({
+    Recipient_info.findOne({
       where: {
         id
       },
-      // include: [AddressCity]
+      include: [Order, Address_city, Address_district]
     })
-      .then((addresse) => {
-        res.status(200).json(addresse);
+      .then((recipient) => {
+        res.status(200).json(recipient);
       })
       .catch(err => {
         console.log(err);
