@@ -31,7 +31,12 @@ const productList = []
 
 // console.log(productList);
 
-
+function randomDate(start, end, startHour, endHour) {
+  var date = new Date(+start + Math.random() * (end - start));
+  var hour = startHour + Math.random() * (endHour - startHour) | 0;
+  date.setHours(hour);
+  return date;
+}
 
 const rawProductList = [
   {
@@ -40,7 +45,7 @@ const rawProductList = [
     price: 7600,
     storage: 100,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -49,7 +54,7 @@ const rawProductList = [
     price: 7400,
     storage: 10,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -58,7 +63,7 @@ const rawProductList = [
     price: 4500,
     storage: 100,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -67,7 +72,7 @@ const rawProductList = [
     price: 6700,
     storage: 50,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -76,7 +81,7 @@ const rawProductList = [
     price: 5000,
     storage: 30,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -85,7 +90,7 @@ const rawProductList = [
     price: 7800,
     storage: 90,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -94,7 +99,7 @@ const rawProductList = [
     price: 9100,
     storage: 30,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -103,7 +108,7 @@ const rawProductList = [
     price: 9700,
     storage: 50,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -112,7 +117,7 @@ const rawProductList = [
     price: 4200,
     storage: 100,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -121,7 +126,7 @@ const rawProductList = [
     price: 6500,
     storage: 40,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -130,7 +135,7 @@ const rawProductList = [
     price: 3100,
     storage: 10,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -139,7 +144,7 @@ const rawProductList = [
     price: 5600,
     storage: 70,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -148,7 +153,7 @@ const rawProductList = [
     price: 4200,
     storage: 90,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -157,7 +162,7 @@ const rawProductList = [
     price: 8400,
     storage: 10,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -166,7 +171,7 @@ const rawProductList = [
     price: 7900,
     storage: 50,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -175,7 +180,7 @@ const rawProductList = [
     price: 6300,
     storage: 100,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -184,7 +189,7 @@ const rawProductList = [
     price: 2500,
     storage: 80,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -193,7 +198,7 @@ const rawProductList = [
     price: 2200,
     storage: 20,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -202,7 +207,7 @@ const rawProductList = [
     price: 4900,
     storage: 30,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   },
   {
@@ -211,7 +216,7 @@ const rawProductList = [
     price: 1700,
     storage: 50,
     sell: 0,
-    createdAt: new Date(),
+    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
     updatedAt: new Date()
   }
 ]
