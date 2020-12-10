@@ -1,6 +1,6 @@
 ## 建立 model
 npx sequelize-cli model:generate --name Address_city --attributes cityName:STRING
-npx sequelize-cli model:generate --name Product --attributes name:STRING,model:STRING,price:INTEGER,storage:INTEGER,sell:INTEGER
+npx sequelize-cli model:generate --name Product --attributes name:STRING,model:STRING,colorChip,price:INTEGER,storage:INTEGER,sell:INTEGER
 npx sequelize-cli model:generate --name User --attributes username:STRING,password:STRING,realName:STRING,email:STRING,phone:STRING
 npx sequelize-cli model:generate --name Photo --attributes url:TEXT
 npx sequelize-cli model:generate --name Admin --attributes username:STRING,password:STRING
