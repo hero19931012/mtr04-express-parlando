@@ -17,7 +17,7 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
-      'Recipient_infos',
+      'Recipients',
       'cityId',
       {
         type: Sequelize.INTEGER,
@@ -31,7 +31,7 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
-      'Recipient_infos',
+      'Recipients',
       'districtId',
       {
         type: Sequelize.INTEGER,
@@ -45,7 +45,7 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
-      'Recipient_infos',
+      'Recipients',
       'orderId',
       {
         type: Sequelize.INTEGER,

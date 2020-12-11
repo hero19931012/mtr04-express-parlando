@@ -1,13 +1,13 @@
 ## 建立 model
-npx sequelize-cli model:generate --name Address_city --attributes cityName:STRING
-npx sequelize-cli model:generate --name Product --attributes name:STRING,model:STRING,colorChip,price:INTEGER,storage:INTEGER,sell:INTEGER
-npx sequelize-cli model:generate --name User --attributes username:STRING,password:STRING,realName:STRING,email:STRING,phone:STRING
-npx sequelize-cli model:generate --name Photo --attributes url:TEXT
-npx sequelize-cli model:generate --name Admin --attributes username:STRING,password:STRING
-npx sequelize-cli model:generate --name Order --attributes totalPrice:INTEGER,status:INTEGER
-npx sequelize-cli model:generate --name Address_district --attributes districtName:STRING
-npx sequelize-cli model:generate --name Recipient_info --attributes name:STRING,phone:STRING,email:STRING,address:STRING
-npx sequelize-cli model:generate --name Order_product --attributes count:INTEGER,unitPrice:INTEGER
+npx sequelize-cli model:generate --name Address_city --attributes cityName:STRING --force;
+npx sequelize-cli model:generate --name Product --attributes name:STRING,model:STRING,colorChip:STRING,price:INTEGER,storage:INTEGER,sell:INTEGER --force;
+npx sequelize-cli model:generate --name User --attributes username:STRING,password:STRING,realName:STRING,email:STRING,phone:STRING --force;
+npx sequelize-cli model:generate --name Photo --attributes url:TEXT --force;
+npx sequelize-cli model:generate --name Admin --attributes username:STRING,password:STRING --force;
+npx sequelize-cli model:generate --name Order --attributes totalPrice:INTEGER,status:INTEGER --force;
+npx sequelize-cli model:generate --name Address_district --attributes districtName:STRING --force;
+npx sequelize-cli model:generate --name Recipient --attributes name:STRING,phone:STRING,email:STRING,address:STRING --force;
+npx sequelize-cli model:generate --name Order_product --attributes count:INTEGER,unitPrice:INTEGER --force
 
 
 ## create migration (for association)
