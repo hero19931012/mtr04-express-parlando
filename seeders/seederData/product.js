@@ -52,14 +52,21 @@ for (let i = 0; i < 2; i++) {
   for (let i = 0; i < 20; i++) {
     let price = Math.ceil(Math.random() * 100) * 100;
     let total = 100;
-    let sell = Math.floor(Math.random() * 10) * 10;
-    let storage = total - sell;
     let serialNum = (i + 1) < 10 ? "0" + (i + 1).toString() : (i + 1).toString();
     let colorSet = Math.floor(Math.random() * 3)
 
     if (colorSet > 0) {
+
+      const temp = [] // 檢查有沒有重複的顏色
       for (let i = 0; i < colorSet; i++) {
+        let sell = Math.floor(Math.random() * 10) * 10;
+        let storage = total - sell;
         let color = colors[Math.floor(Math.random() * colors.length)]
+        if (temp.indexOf(color) > 0) {
+          i--;
+          continue;
+        }
+        temp.push(color);
         rawProductList.push({
           name: `${name}-${serialNum}`,
           model: `${type}-${serialNum}${color.abbreviation}`,
@@ -72,6 +79,8 @@ for (let i = 0; i < 2; i++) {
         })
       }
     } else {
+      let sell = Math.floor(Math.random() * 10) * 10;
+      let storage = total - sell;
       rawProductList.push({
         name: `${name}-${serialNum}`,
         model: `${type}-${serialNum}`,
