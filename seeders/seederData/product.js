@@ -1,35 +1,28 @@
-const productList = []
+const colors = [
+  { "chip": "11151c", "name": "Rich Black FOGRA 29", "abbreviation": "RBF" },
+  { "chip": "212d40", "name": "Prussian Blue", "abbreviation": "PB" },
+  { "chip": "364156", "name": "Charcoal", "abbreviation": "C" },
+  { "chip": "7d4e57", "name": "Tuscan Red", "abbreviation": "TR" },
+  { "chip": "d66853", "name": "Copper Red", "abbreviation": "CR" },
+  { "chip": "daddd8", "name": "Timberwolf", "abbreviation": "T" },
+  { "chip": "c7d59f", "name": "Tea Green", "abbreviation": "TG" },
+  { "chip": "b7ce63", "name": "June Bud", "abbreviation": "JB" },
+  { "chip": "8fb339", "name": "Apple Green", "abbreviation": "AG" },
+  { "chip": "4b5842", "name": "Rifle Green", "abbreviation": "RG" },
+  { "chip": "133c55", "name": "Indigo Dye", "abbreviation": "ID" },
+  { "chip": "386fa4", "name": "Honolulu Blue", "abbreviation": "HB" },
+  { "chip": "59a5d8", "name": "Carolina Blue", "abbreviation": "CB" },
+  { "chip": "84d2f6", "name": "Baby Blue", "abbreviation": "BB" },
+  { "chip": "91e5f6", "name": "Sky Blue Crayola", "abbreviation": "SBC" },
+  { "chip": "880d1e", "name": "Burgundy", "abbreviation": "B" },
+  { "chip": "dd2d4a", "name": "Rusty Red", "abbreviation": "RR" },
+  { "chip": "f26a8d", "name": "Ultra Red", "abbreviation": "UR" },
+  { "chip": "f49cbb", "name": "Amaranth Pink", "abbreviation": "AP" },
+  { "chip": "cbeef3", "name": "Light Cyan", "abbreviation": "LC" }
+]
 
-// function getRandomCharCode() {
-//   return Math.floor(Math.random() * 26) + 65
-// }
 
-// for (let i = 0; i < 20; i++) {
-//   let name = String.fromCharCode(
-//     getRandomCharCode(),
-//     getRandomCharCode(),
-//     getRandomCharCode(),
-//     getRandomCharCode(),
-//     getRandomCharCode(),
-//   )
-//   let model = String.fromCharCode(getRandomCharCode(), getRandomCharCode()) + '-' + Math.ceil(Math.random() * 1000).toString();
-//   let price = Math.ceil(Math.random() * 100) * 100
-//   let total = 100
-//   let sell = Math.floor(Math.random() * 10) * 10
-//   let storage = total - sell;
-
-//   productList.push({
-//     name,
-//     model,
-//     price,
-//     storage,
-//     sell,
-//     createdAt: new Date(),
-//     updatedAt: new Date()
-//   })
-// }
-
-// console.log(productList);
+const productTypes = ["HP", "EP", "AC"] // 耳罩式、入耳式、週邊
 
 function randomDate(start, end, startHour, endHour) {
   var date = new Date(+start + Math.random() * (end - start));
@@ -38,187 +31,61 @@ function randomDate(start, end, startHour, endHour) {
   return date;
 }
 
-const rawProductList = [
-  {
-    name: 'ZESEK',
-    model: 'DQ-200',
-    price: 7600,
-    storage: 100,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'DVIER',
-    model: 'KR-135',
-    price: 7400,
-    storage: 10,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'NOYRW',
-    model: 'NO-711',
-    price: 4500,
-    storage: 100,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'GRCCN',
-    model: 'OQ-936',
-    price: 6700,
-    storage: 50,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'EYHMR',
-    model: 'LL-850',
-    price: 5000,
-    storage: 30,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'SPOGL',
-    model: 'XK-357',
-    price: 7800,
-    storage: 90,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'FIHEP',
-    model: 'CX-422',
-    price: 9100,
-    storage: 30,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'NMWWX',
-    model: 'TS-815',
-    price: 9700,
-    storage: 50,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'ENMNN',
-    model: 'BK-560',
-    price: 4200,
-    storage: 100,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'FQSNX',
-    model: 'IX-702',
-    price: 6500,
-    storage: 40,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'JDLCT',
-    model: 'OR-25',
-    price: 3100,
-    storage: 10,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'MNQPC',
-    model: 'AX-282',
-    price: 5600,
-    storage: 70,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'ZSDWK',
-    model: 'YF-466',
-    price: 4200,
-    storage: 90,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'TXRRU',
-    model: 'JX-472',
-    price: 8400,
-    storage: 10,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'OTCCV',
-    model: 'TB-506',
-    price: 7900,
-    storage: 50,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'VVSYU',
-    model: 'GI-358',
-    price: 6300,
-    storage: 100,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'WPESF',
-    model: 'XR-286',
-    price: 2500,
-    storage: 80,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'ASWWY',
-    model: 'RS-349',
-    price: 2200,
-    storage: 20,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'RBKYJ',
-    model: 'NL-766',
-    price: 4900,
-    storage: 30,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
-  },
-  {
-    name: 'QJYBN',
-    model: 'DC-616',
-    price: 1700,
-    storage: 50,
-    sell: 0,
-    createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-    updatedAt: new Date()
+const rawProductList = []
+
+for (let i = 0; i < 2; i++) {
+  const type = productTypes[i]
+  let name = '';
+  switch (type) {
+    case "HP":
+      name = "Headphone";
+      break;
+    case "EP":
+      name = "Earphone";
+      break;
+    case "AC":
+      name = "Accessory";
+      break;
+    default: break;
   }
-]
+
+  for (let i = 0; i < 20; i++) {
+    let price = Math.ceil(Math.random() * 100) * 100;
+    let total = 100;
+    let sell = Math.floor(Math.random() * 10) * 10;
+    let storage = total - sell;
+    let serialNum = (i + 1) < 10 ? "0" + (i + 1).toString() : (i + 1).toString();
+    let colorSet = Math.floor(Math.random() * 3)
+
+    if (colorSet > 0) {
+      for (let i = 0; i < colorSet; i++) {
+        let color = colors[Math.floor(Math.random() * colors.length)]
+        rawProductList.push({
+          name: `${name}-${serialNum}`,
+          model: `${type}-${serialNum}${color.abbreviation}`,
+          colorChip: color.chip,
+          price,
+          storage,
+          sell,
+          createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
+          updatedAt: new Date()
+        })
+      }
+    } else {
+      rawProductList.push({
+        name: `${name}-${serialNum}`,
+        model: `${type}-${serialNum}`,
+        colorChip: null,
+        price,
+        storage,
+        sell,
+        createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
+        updatedAt: new Date()
+      })
+    }
+  }
+}
+
+// console.log(rawProductList);
 
 module.exports = { rawProductList };
