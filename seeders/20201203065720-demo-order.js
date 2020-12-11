@@ -1,10 +1,10 @@
 'use strict';
 
-const { orderStatusList } = require('./seederData/order');
+const { orderList } = require('./seederData/order');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Orders', orderStatusList);
+    await queryInterface.bulkInsert('Orders', orderList);
   },
 
   down: async (queryInterface, Sequelize) => {

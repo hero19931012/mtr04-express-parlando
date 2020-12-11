@@ -9,8 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cityName: {
-        allowNull: false,
-        type: Sequelize.STRING(16)
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

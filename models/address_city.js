@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Address_city.hasMany(models.Recipient_info, {
+      Address_city.hasMany(models.Recipient, {
         foreignKey: 'cityId',
-      });
-      Address_city.hasMany(models.Recipient_info, {
-        foreignKey: 'districtId',
-      });
+      })
+      Address_city.hasMany(models.Address_district, {
+        foreignKey: 'cityId',
+      })
     }
   };
   Address_city.init({
