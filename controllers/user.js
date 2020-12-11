@@ -85,10 +85,11 @@ const userController = {
     })
       .then((user) => {
         bcrypt.compare(password, user.password, (err, result) => {
+          console.log(result);
           if (err || !result) {
-            res.status(400).json({
+            return res.status(400).json({
               ok: 0,
-              message: 'password invalid'
+              message: `password invalid`
             })
           } else {
             // JWT signing
@@ -141,10 +142,60 @@ const userController = {
       }
     })
   },
-  add: (req, res) => {
+  handleUpdate: (req, res) => {
+    // const token = req.header('Authorization').replace('Bearer ', '');
+    // jwt.verify(token, SECRET, (err, jwtUser) => {
+    //   if (err || !jwtUser) {
+    //     res.status(400).json({
+    //       ok: 0,
+    //       message: "verify fail"
+    //     })
+    //   } else {
+    //     res.status(200).json({
+    //       ok: 1,
+    //       user
+    //     })
+    //   }
+    // })
 
-  },
-
+    const id = req.params.id;
+    const { realName, email, phone } = req.body;
+    if (!realName || !email || !phone) {
+      return res.status(400).json({
+        ok: 0,
+        message: "data incomplete"
+      })
+    }
+    User.findOne({ where: { id } })
+      .then((user) => {
+        const token = req.header('Authorization').replace('Bearer ', '');
+        jwt.verify(token, SECRET, (err, jwtUser) => {
+          console.log(jwtUser)
+          if (err || !jwtUser || jwtUser.username !== user.username) {
+            return res.status(400).json({
+              ok: 0,
+              message: "verify fail"
+            })
+          } else {
+            return user.update({
+              realName, email, phone
+            })
+          }
+        })
+      })
+      .then(() => {
+        res.status(200).json({
+          ok: 1,
+          message: "update succeeded"
+        })
+      })
+      .catch(err => {
+        res.status(400).json({
+          ok: 0,
+          message: err.toString()
+        })
+      })
+  }
 }
 
 module.exports = userController;
