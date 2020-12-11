@@ -24,31 +24,35 @@ const users = [
 ]
 
 const passwords = [
-  "$2b$10$pmpCwjgB2nb8Br/pBE.oZ.6Qxh6kbt6zz19gnSeVFl/EdF9AYrnEe",
-  "$2b$10$UyE7mZ3cbk4I5PrNK1gJWeWiCqBxIU08iz1sdV1z2J/bhd6aZ/Hyi",
-  "$2b$10$0l8wS1365mHchwhsdK8FZOkP/2vOt1Vupt3E3QsbH9FrlMk0bMx3C",
-  "$2b$10$8tSmLDTY8MuRQX1RN0ScCOYxE7xQas5brBXxdIgsJiBO3n634ybLO",
-  "$2b$10$hDtXJ2GewmgmV/D8rMmN9.b9O9ln.xJJ09hu6uylGbM6IZPw8y.wO",
-  "$2b$10$.33V06rfMRM/encqZUFqiek2gfmxB4jVbvpiRbTFRazFiLjvrHkPq",
-  "$2b$10$Z8RyAhrkLJAx3xDFTJYGiuVnmrGE0nuO.wSuPbGHnT0B61yTm52Ty",
-  "$2b$10$N7frlYaW6sKZ3ReZBv12Xe5PigMCSJmrI72ztniOmEsa9nZ.bWHUe",
-  "$2b$10$WSomdfVObsLOuVJjArP2du/Ifnp7YCtqlR9tjIhnrjCd/oPcRkMsS",
-  "$2b$10$l3RjUaR7ZoUMxefitthdsejE9oPnNaiwDFQVNggKfiJqUWEd5gkmO",
-  "$2b$10$fdYRvflyvmCGpqNPfflYYeNM7EDl8mI2n5DJbeEam4/i5wqW41ZvG",
-  "$2b$10$IA6dUd3ywHXyEWl4aeWGp.nbG99lYhm.CAJ9aPePUP/UCr9o6VFeW",
-  "$2b$10$0wzuWOU26iK5qL9qxKALsee1sJ537QqSuI2Tw2UQNVwQHAy2RrXFy",
-  "$2b$10$8FQfiEqjEgZ1sLovGwJxaO2RGJY6U3ZfXDSuWhicFK22WUV4dQBH2",
-  "$2b$10$x9GrEkfTJ/MaCD1SXPjbS.qOQpScgTvyIJ1e8OxXRJkIXMeGL/RUi",
-  "$2b$10$Zj3hML38TxAqz0SfC6XY2e0JtYy5DvIRJ3Fj4zfgxrbDGnmJsnTNK",
-  "$2b$10$zx/diPKXrB0dmGpCxUpDou09noeByF4dNUvESm1HS2ZujMBJsRP9G",
-  "$2b$10$yrPmjAooM3jN1ytiRjooZun8ku3KuJJDMAN9eb6aP4pLyBYvnXtQW",
-  "$2b$10$18YrVD8wsJgXGNDTvRgeheC0PFdqyIhnzmwnr1huBYp1S.3nQ7vgi",
-  "$2b$10$xwOzpFSBN0yN6DenPgztu.1r7kXiH2UGJWt433bwIZSCpc5heFLRW"
+  "$2b$10$0z1Gl7Wjjx261s3sTOor7ernUp7M6LWJFquMZyuawkQdck30E6Tci",
+  "$2b$10$Tc2TeTJBlCx0slfPXXuRKejQa4yz.WwLolWCNzrQbJZQAFpEz6j6C",
+  "$2b$10$xQzvq00V7X336UFTzu/A0evnrpyqeO9FUyXLpPscfPWAZ6s7BGjfm",
+  "$2b$10$z4Umo3QXlku0hbU28ei8k.zh3w9jfNZdQiHxpYfKA4UmTFw2p4qQO",
+  "$2b$10$cryQer0U6KVEQjAfXDWFh.CAgEGbecHiZ5p1n040jLU8Jhb56f0te",
+  "$2b$10$Vd0MgnqcVlvf7dFzg9yb8uFd9PwxetWTrybnV28uOVevFtXiLkbvi",
+  "$2b$10$9rmDS8OIL5RrpOUqVuA8hOkNsRkNlr34eMhwc9MQNR0G3Fgt3COZq",
+  "$2b$10$c6bWb9MCjk.VsA4VVORmtOw7IRJkjN0um93KKzViLX/Qi3MxML5Hi",
+  "$2b$10$prxpPi.qsYFRcZryM4R0gu68fWqxv/YYyyw3XPtFQzaq1XVDQGhvS",
+  "$2b$10$UTOLI4XFx0Q./J/Ti0Cv5./uZJkbyXTr29UIzPFvYsnKdwLOYDezu",
+  "$2b$10$3Kd6sUpwy4Jo.0Hvp2jmHu0Da5ESYHOacpOrjkmWzaT2RXgjMBlBq",
+  "$2b$10$vU3IO5OhEYJwIirSuZ18q.2hl0vHzoAfNol5FZamUtZy5jUhVKZ3W",
+  "$2b$10$pI5BeRnmkmx2ZZNbRdtKAOh2BDxdWmbWE0G2p4.pZ8gewDvRX64we",
+  "$2b$10$WGQ7bncRLTyy90M3EQBRj.9bF0qAU.FYeoBZ6rTCkpJrJ7yN5PwTe",
+  "$2b$10$wrzyemEnOE24z0SDgGWY9.vz9Trkg1vS4cbitPO7mcPuvHJ1JRhq.",
+  "$2b$10$4nY9nab/Rn/aT7pA08o4h.0jPiuh4me3jjlyWqoNeyXyLgVLKRRpm",
+  "$2b$10$f9.99BRE.iJ4teRwC35G7efd3hu7shy8jldLx3wW2RIUh/W1UMRVS",
+  "$2b$10$2047G13UUj9fNCpiYcSI6.ni6ntNb1Zx0h.fih8nIlnT3Eq/z7q2W",
+  "$2b$10$/Ymv6XKR7y0bKAmqVZpNOOBLFLjbYUl5.sPN3IJpc0Ifsikkd.pp6",
+  "$2b$10$6DdQ85iqFPiuBWU66o0JGeG2O7iUCOCCJ7UYaI4/wackdnT.1wceG"
 ]
 
 const userList = []
-
+const saltRounds = 10
 for (let i = 0; i < 20; i++) {
+  // bcrypt.hash(users[i], saltRounds, (err, hash) => {
+  //   if (err || !hash) { return }
+  //   console.log(users[i], hash);
+  // })
   userList.push({
     username: users[i],
     password: passwords[i],
