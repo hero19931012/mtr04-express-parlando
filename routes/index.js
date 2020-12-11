@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router();
 
+
+const indexController = require('../controllers/index');
 const userController = require('../controllers/user');
 const productController = require('../controllers/product');
 const orderController = require('../controllers/order');
@@ -9,6 +11,8 @@ const recipientController = require('../controllers/recipient');
 const checkPermission = () => {
 
 }
+
+router.get('/', indexController.index);
 
 router.post('/register', userController.handleRegister);
 router.post('/login', userController.handleLogin);

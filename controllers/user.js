@@ -13,23 +13,11 @@ const saltRounds = 10;
 const userController = {
   handleRegister: (req, res) => {
     const {
-      username,
-      password,
-      realName,
-      email,
+      username, password, realName, email,
       phone
     } = req.body;
-    console.log(username,
-      password,
-      realName,
-      email,
-      phone);
     if (
-      !username ||
-      !password ||
-      !realName ||
-      !email ||
-      !phone
+      !username || !password || !realName || !email || !phone
     ) {
       return res.status(400).json({
         ok: 0,
@@ -38,7 +26,7 @@ const userController = {
     }
 
     bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) {
+      if (err || !hash) {
         return res.status(400).json({
           ok: 0,
           message: err.toString()
@@ -46,7 +34,7 @@ const userController = {
       }
       User.create({
         username,
-        password,
+        password: hash,
         realName,
         email,
         phone
@@ -63,21 +51,16 @@ const userController = {
         }
 
         jwt.sign(payload, SECRET, options, (err, token) => {
-          if (err || !token) {
-            res.status(400).json({
+          if (err) {
+            return res.status(400).json({
               ok: 0,
               message: err.toString()
             })
-          } else {
-            res.status(200).json({
-              ok: 1,
-              token
-            })
           }
-        })
-        res.status(200).json({
-          ok: 1,
-          token
+          res.status(200).json({
+            ok: 1,
+            token
+          })
         })
       }).catch(err => {
         res.status(400).json({
@@ -138,7 +121,7 @@ const userController = {
       .catch(err => {
         res.status(400).json({
           ok: 0,
-          message: err.toString()
+          message: "username had been registered"
         })
       });
   },
