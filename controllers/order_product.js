@@ -1,11 +1,11 @@
 const db = require('../models');
 const { Order_product } = db;
 
-const recipientController = {
-  index: (req, res) => {
-    RecipientInfo.findAll()
-      .then((addresses) => {
-        res.status(200).json(addresses);
+const orderProductController = {
+  getAll: (req, res) => {
+    Order_product.findAll()
+      .then((result) => {
+        res.status(200).json(result);
       })
       .catch(err => {
         console.log(err);
@@ -13,4 +13,4 @@ const recipientController = {
   },
 }
 
-module.exports = recipientController;
+module.exports = orderProductController;
