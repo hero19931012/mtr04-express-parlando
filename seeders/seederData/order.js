@@ -1,18 +1,6 @@
 const { rawProductList } = require('./product');
 const { userList } = require('./user')
-
 const productList = [...rawProductList]
-
-// 1. 隨機挑 1-3 件產品，訂購 1-3 件
-// 2. 產生 20 筆訂單
-
-// 1. 購物車撈出 product，計算 price
-// 2. user 結帳 => 傳入 userId, productId, count, cityId, districtId, address, totalPrice
-// 3. 寫入 address: cityId, districtId, address, 取得 addressId
-// 4. 寫入 order: userId, addressId, totalPrice, status, 取得 orderId
-// 5. 寫入 order_product: orderId, productId, count, unitPrice
-
-
 
 function getRamdomNum(max) {
   return Math.ceil(Math.random() * max)
@@ -26,33 +14,33 @@ function getRandomProductId() {
   return getRamdomNum(rawProductList.length - 1) // id: 1-20
 }
 
+
+
+// 產生訂單
+// 1. 隨機挑 1-3 件產品，訂購 1-3 件
+// 2. 產生 10 筆訂單
 function getRandomOrderContent() {
-  let type = getRamdomNum(3)
-  // console.log('買幾樣', type);
+  let type = getRamdomNum(3) // 隨機產生要買幾種商品
+  let temp = [] // 用於記錄已經買的商品，如同一訂單已經有同樣商品就跳過
+  const orderContent = [] // 記錄訂單內容
 
-  const orderContent = []
-
-  let temp = []
   for (let i = 0; i < type; i++) {
-    let productId = getRandomProductId()
-    // console.log("productId", productId, "indexOf", temp.indexOf(productId));
-    if (temp.indexOf(productId) >= 0) {
-      // console.log("商品已存在");
+    let productId = getRandomProductId() // 隨機取用商品
+    if (temp.indexOf(productId) >= 0) { // 檢查是曾已存在
       i--
       continue;
     }
     temp.push(productId)
-    let count = getRamdomNum(3)
-    orderContent.push({
+    let count = getRamdomNum(3) // 隨機產生購買數量
+    orderContent.push({ // 加入訂單
       productId,
       count
     })
   }
-  // console.log("temp", temp);
   return orderContent
 }
 
-function getTotalPrice(orderContent) {
+function getTotalPrice(orderContent) { // 計算總價
   let totalPrice = 0;
   orderContent.forEach((product) => {
     let unitPrice = rawProductList[product.productId - 1].price
@@ -61,7 +49,8 @@ function getTotalPrice(orderContent) {
   return totalPrice;
 }
 
-function genarateOrderRequestData() {
+// 產生前端發送的 req 格式
+function genarateOrderRequestData() { 
   const orderContent = getRandomOrderContent()
 
   return {
@@ -71,15 +60,13 @@ function genarateOrderRequestData() {
   }
 }
 
-function updateProductList(orderRequestData) {
-  let { orderContent } = orderRequestData
-
+// 根據 orderRequests 更新 product 的資料
+function updateProductList(requestData) { 
+  let { orderContent } = requestData
   orderContent.forEach((item) => {
     let { productId, count } = item
-    // console.log(productId, count);
     productList.forEach((product, index) => {
-      if (productId - 1 === index) {
-        // console.log(index);
+      if (productId === product.id) {
         productList[index] = {
           ...product,
           storage: product.storage - count,
@@ -90,42 +77,19 @@ function updateProductList(orderRequestData) {
   })
 }
 
-
-const orderList = []
-
+// 產生一串訂單的 req
+const orderRequests = []
 for (let i = 0; i < 10; i++) {
   let requestData = genarateOrderRequestData()
-  // console.log(requestData);
   updateProductList(requestData)
-  // console.log(requestData);
-  orderList.push(requestData)
+  orderRequests.push(requestData)
 }
 
-const orderProductList = []
-function generateOrderProductList(orderList) {
-  orderList.forEach((order, index) => {
-    let orderId = index + 1;
-
-    order.orderContent.forEach((item) => {
-      let { productId, count } = item
-      orderProductList.push({
-        orderId,
-        productId,
-        count,
-        unitPrice: rawProductList[productId - 1].price,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      })
-    })
-  })
-}
-
-generateOrderProductList(orderList)
-
-const orderStatusList = []
-orderList.forEach((order) => {
+// 產生 訂單 的資料
+const orderList = []
+orderRequests.forEach((order) => {
   let { userId, totalPrice } = order
-  orderStatusList.push({
+  orderList.push({
     userId,
     totalPrice,
     status: 0,
@@ -134,9 +98,26 @@ orderList.forEach((order) => {
   })
 })
 
-// console.log(orderStatusList);
-// console.log(orderList);
-// console.log(orderProductList);
-// console.log(productList);
+// 產生 訂單X商品 的 table
+const orderProductList = []
+orderRequests.forEach((order, index) => {
+  const orderId = index + 1;
+  order.orderContent.forEach((item) => {
+    const { productId, count } = item
+    orderProductList.push({
+      orderId,
+      productId,
+      count,
+      unitPrice: rawProductList[productId - 1].price,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    })
+  })
+})
 
-module.exports = { orderStatusList, orderProductList, productList };
+// console.log("orderRequests", orderRequests);
+// console.log("orderList", orderList);
+// console.log("orderProductList", orderProductList);
+// console.log("productList", productList);
+
+module.exports = { orderList, orderProductList, productList };
