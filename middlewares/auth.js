@@ -5,14 +5,14 @@ const { User } = db
 
 function auth(req, res, next) {
   if (!req.header('Authorization')) {
-    return res.status(401).send("UNAUTHORIZED")
+    return res.status(401).send("unauthorized")
   }
   const token = req.header('Authorization').replace('Bearer ', '');
   jwt.verify(token, SECRET, (err, jwtUser) => {
     if (err) {
       res.status(401).json({
         ok: 0,
-        message: "UNAUTHORIZED"
+        message: "unauthorized"
       })
     } else {
       User.findOne({ where: { username: jwtUser.username } })
