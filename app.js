@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const router = require('./routes');
 const port = process.env.PORT || 3000;
+const morgan = require('morgan');
 
 app.set('views', 'views'); // setting views directory
 app.set('view engine', 'ejs'); // setting template engine
@@ -13,6 +14,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(morgan('dev'))
 app.use('/', router);
 
 app.listen(port, () => {
