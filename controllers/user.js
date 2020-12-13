@@ -120,24 +120,31 @@ const userController = {
         })
       });
   },
-  verify: (req, res) => {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    jwt.verify(token, SECRET, (err, user) => {
-      if (err || !user) {
-        res.status(400).json({
-          ok: 0,
-          message: "verify fail"
-        })
-      } else {
-        res.status(200).json({
-          ok: 1,
-          user
-        })
-      }
-    })
-  },
+  // verify: (req, res) => {
+  //   const token = req.header('Authorization').replace('Bearer ', '');
+  //   jwt.verify(token, SECRET, (err, user) => {
+  //     if (err || !user) {
+  //       res.status(400).json({
+  //         ok: 0,
+  //         message: "verify fail"
+  //       })
+  //     } else {
+  //       res.status(200).json({
+  //         ok: 1,
+  //         user
+  //       })
+  //     }
+  //   })
+  // },
   handleUpdate: (req, res) => {
     const id = req.params.id;
+    if (!req.user || Number(id) !== req.user.id) {
+      return res.status(401).json({
+        ok: 0,
+        message: "unauthorized or invalid userId"
+      })
+    }
+
     const { realName, email, phone } = req.body;
     if (!realName || !email || !phone) {
       return res.status(400).json({
@@ -145,20 +152,11 @@ const userController = {
         message: "data incomplete"
       })
     }
+
     User.findOne({ where: { id } })
       .then((user) => {
-        const token = req.header('Authorization').replace('Bearer ', '');
-        jwt.verify(token, SECRET, (err, jwtUser) => {
-          if (err || !jwtUser || jwtUser.username !== user.username) {
-            return res.status(400).json({
-              ok: 0,
-              message: "verify fail"
-            })
-          } else {
-            return user.update({
-              realName, email, phone
-            })
-          }
+        return user.update({
+          realName, email, phone
         })
       })
       .then(() => {
