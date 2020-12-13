@@ -2,11 +2,8 @@ const { render } = require('ejs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const db = require('../models');
+const { SECRET } = require('../.env/env')
 const { User } = db;
-
-/// JWT key => 之後要放在 env
-const SECRET = 'lidemymtr04parlando'
-///
 
 const saltRounds = 10;
 
@@ -49,7 +46,6 @@ const userController = {
         const options = {
           expiresIn: "1 day"
         }
-
         jwt.sign(payload, SECRET, options, (err, token) => {
           if (err) {
             return res.status(400).json({
@@ -85,7 +81,6 @@ const userController = {
     })
       .then((user) => {
         bcrypt.compare(password, user.password, (err, result) => {
-          console.log(result);
           if (err || !result) {
             return res.status(400).json({
               ok: 0,
@@ -102,7 +97,6 @@ const userController = {
             const options = {
               expiresIn: "1 day"
             }
-
             jwt.sign(payload, SECRET, options, (err, token) => {
               if (err || !token) {
                 res.status(400).json({
@@ -143,21 +137,6 @@ const userController = {
     })
   },
   handleUpdate: (req, res) => {
-    // const token = req.header('Authorization').replace('Bearer ', '');
-    // jwt.verify(token, SECRET, (err, jwtUser) => {
-    //   if (err || !jwtUser) {
-    //     res.status(400).json({
-    //       ok: 0,
-    //       message: "verify fail"
-    //     })
-    //   } else {
-    //     res.status(200).json({
-    //       ok: 1,
-    //       user
-    //     })
-    //   }
-    // })
-
     const id = req.params.id;
     const { realName, email, phone } = req.body;
     if (!realName || !email || !phone) {
@@ -170,7 +149,6 @@ const userController = {
       .then((user) => {
         const token = req.header('Authorization').replace('Bearer ', '');
         jwt.verify(token, SECRET, (err, jwtUser) => {
-          console.log(jwtUser)
           if (err || !jwtUser || jwtUser.username !== user.username) {
             return res.status(400).json({
               ok: 0,
