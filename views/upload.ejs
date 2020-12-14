@@ -10,38 +10,35 @@
 <body>
   <form action="/handleUpload" method="POST" enctype="multipart/form-data">
     <input type="text" name="name" />
-    <input type="file" name="image" />
+    <input type="file" name="file" />
     <button type="submit">submit</button>
   </form>
 </body>
 
 <script>
-  const input = document.querySelector('input[type=file]')
+  const form = document.querySelector('form')
+  const inputFile = document.querySelector('input[name=file]')
+  const inputName = document.querySelector('input[name=name]')
 
-  input.addEventListener('change', (e) => {
-    const image = e.target.files[0]
-    console.log(image);
-    // const formData = new FormData()
-    //   formData.append('image', image)
-    //   formData.append('name', "123")
-    //   formData.append('description', "hahaha")
+  // input.addEventListener('change', (e) => {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const image = inputFile.files[0]
+    const name = inputName.value
 
-    //   for (var p of formData) {
-    //     console.log(p);
-    //   }
+    let formData = new FormData(form)
+    // formData.append("file", image)
+    // formData.append("name", name)
 
-    //   const options = {
-    //     // header: {
-    //     //   "Content-Type": "application/x-www-form-urlencoded"
-    //     // },
-    //     method: "POST",
-    //     body: {
-    //       formData
-    //     }
-    //   }
+    for (var p of formData) {
+      console.log(p);
+    }
 
-    //   fetch('/handleUpload', options)
-    //     .then((res) => { console.log(res) })
+    fetch('/handleUpload', {
+      method: "POST",
+      body: formData
+    })
+      .then((res) => { console.log(res) })
   })
 
 </script>

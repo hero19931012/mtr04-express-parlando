@@ -32,12 +32,11 @@ router.get('/orders/:id', auth, orderController.getOne);
 router.get('/recipients', auth, recipientController.getAll);
 router.get('/recipients/:id', auth, recipientController.getOne);
 
-// imgae upload
+// image upload
+router.get('/upload', imageController.upload);
+
 var upload = multer({});
-router.post('/post', upload.single('file'), function (req, res) {
-  console.log(req.file.buffer.toString("base64"));
-  res.send("file saved on server");
-});
+router.post('/handleUpload', upload.single("file"), imageController.handleUpload);
 
 router.get('/', auth, (req, res) => {
   res.status(200).send({
