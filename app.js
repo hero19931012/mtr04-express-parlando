@@ -12,10 +12,45 @@ const swaggerDocument = require('./swagger.json');
 const swaggerUi = require('swagger-ui-express');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 app.use(morgan('dev'))
-app.use('/', router);
+
+
+
+
+
+
+
+
+
+
+
+const multer = require('multer');
+const imageController = require('./controllers/image')
+
+app.get('/upload', imageController.upload)
+
+// const upload = multer()
+const upload = multer({dest: "../upload/"})
+app.post(
+  '/handleUpload',
+  // upload.single("image"),
+  upload.array(),
+  (req, res) => {
+    const { formData } = req.body;
+    res.status(200).send(formData);
+  });
+
+
+
+  app.use('/', router);
+
+
+
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Listening on port:${port}!`);

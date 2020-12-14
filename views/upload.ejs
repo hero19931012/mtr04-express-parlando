@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>image upload</title>
+</head>
+
+<body>
+  <form action="/handleUpload" method="POST" enctype="multipart/form-data">
+    <input type="text" name="name" />
+    <input type="file" name="image" />
+    <button type="submit">submit</button>
+  </form>
+</body>
+
+<script>
+  const input = document.querySelector('input[type=file]')
+
+  input.addEventListener('change', (e) => {
+    const image = e.target.files[0]
+    console.log(image);
+    // const formData = new FormData()
+    //   formData.append('image', image)
+    //   formData.append('name', "123")
+    //   formData.append('description', "hahaha")
+
+    //   for (var p of formData) {
+    //     console.log(p);
+    //   }
+
+    //   const options = {
+    //     // header: {
+    //     //   "Content-Type": "application/x-www-form-urlencoded"
+    //     // },
+    //     method: "POST",
+    //     body: {
+    //       formData
+    //     }
+    //   }
+
+    //   fetch('/handleUpload', options)
+    //     .then((res) => { console.log(res) })
+  })
+
+</script>
+
+</html>
