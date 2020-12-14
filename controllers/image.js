@@ -8,18 +8,9 @@ const imageController = {
   },
 
   handleUpload: (req, res) => {
-    const file = req.file.Buffer.toString('base64')
-    // if ((!file)) {
-    //   res.status(400).json({
-    //     ok: 0,
-    //     message: "no file"
-    //   })
-    // }
-    // console.log(file);
-    // res.status(200).json({
-    //   ok: 1,
-    //   message: "got file"
-    // })
+    console.log("name", req.body.name);
+    console.log(req.file.buffer.toString("base64"));
+    res.send("file saved on server");
   }
 }
 
