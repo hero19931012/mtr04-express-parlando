@@ -17,22 +17,12 @@
 
 <script>
   const form = document.querySelector('form')
-  const inputFile = document.querySelector('input[name=file]')
-  const inputName = document.querySelector('input[name=name]')
 
   // input.addEventListener('change', (e) => {
   form.addEventListener('submit', (e) => {
     e.preventDefault()
-    const image = inputFile.files[0]
-    const name = inputName.value
 
     let formData = new FormData(form)
-    // formData.append("file", image)
-    // formData.append("name", name)
-
-    for (var p of formData) {
-      console.log(p);
-    }
 
     fetch('/handleUpload', {
       method: "POST",
