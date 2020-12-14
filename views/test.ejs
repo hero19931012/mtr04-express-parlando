@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+
+<body>
+
+  <form id="imgur">
+    <input type="file" class="imgur" accept="image/*" data-max-size="5000" />
+  </form>
+
+
+</body>
+<script>
+  $("document").ready(function () {
+    $('input[type=file]').on("change", function () {
+      var $files = $(this).get(0).files;
+      var formData = new FormData();
+      formData.append("image", $files[0]);
+      formData.append("album", "mzjS4yw")
+      if ($files.length) {
+        var apiUrl = 'https://api.imgur.com/3/upload';
+        var apiKey = 'f30deac39d4c495';
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": apiUrl,
+          "method": "POST",
+          "datatype": "json",
+          "headers": {
+            "Authorization": "Client-ID " + apiKey,
+          },
+          "processData": false,
+          "contentType": false,
+          "data": formData,
+          beforeSend: function () {
+            console.log("上传中...");
+          },
+          success: function (res) {
+            $('body').append('<img src="' + res.data.link + '" />');
+          },
+          error: function () {
+            alert("上传失败");
+          }
+        }
+        $.ajax(settings).done(function (res) {
+          console.log("Done");
+        });
+      }
+    });
+  });
+
+</script>
+
+</html>

@@ -38,6 +38,11 @@ router.get('/upload', imageController.upload);
 var upload = multer({});
 router.post('/handleUpload', upload.single("file"), imageController.handleUpload);
 
+router.get('/test', (req, res) => {
+  res.render('test')
+})
+
+
 router.get('/', auth, (req, res) => {
   res.status(200).send({
     message: "user authorized",
