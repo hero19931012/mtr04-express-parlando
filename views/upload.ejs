@@ -10,29 +10,58 @@
 <body>
   <form action="/handleUpload" method="POST" enctype="multipart/form-data">
     <input type="text" name="name" />
-    <input type="file" name="file" />
+    <input type="file" name="files" multiple/>
     <button type="submit">submit</button>
   </form>
+  <div class="result"></div>
 </body>
 
 <script>
-  const form = document.querySelector('form')
 
-  // input.addEventListener('change', (e) => {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault()
+window.onload = function() {
+  //Check File API support
+  if (window.File && window.FileList && window.FileReader) {
+    var filesInput = document.querySelector("input[name=files]");
+    filesInput.addEventListener("change", function(event) {
+      var files = event.target.files; //FileList object
+      var output = document.querySelector(".result");
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        //Only pics
+        if (!file.type.match('image'))
+          continue;
+        var picReader = new FileReader();
+        picReader.addEventListener("load", function(event) {
+          var picFile = event.target;
+          var div = document.createElement("div");
+          div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
+            "title='" + picFile.name + "'/>";
+          output.insertBefore(div, null);
+        });
+        //Read the image
+        picReader.readAsDataURL(file);
+      }
+    });
+  } else {
+    console.log("Your browser does not support File API");
+  }
+}
 
-    let formData = new FormData(form)
+  // const form = document.querySelector('form')
+  // form.addEventListener('submit', (e) => {
+  //   e.preventDefault()
 
-    fetch('/handleUpload', {
-      method: "POST",
-      body: formData
-    })
-      .then((res) => { console.log(res) })
-      .catch(err => {
-        console.log(err);
-      })
-  })
+  //   let formData = new FormData(form)
+
+  //   fetch('/handleUpload', {
+  //     method: "POST",
+  //     body: formData
+  //   })
+  //     .then((res) => { console.log(res) })
+  //     .catch(err => {
+  //       console.log(err);
+  //     })
+  // })
 
 </script>
 

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const db = require('../models');
-const { SECRET } = require('../.env/env');
+const { SECRET } = require('../env/env');
 const { User } = db
 
 function auth(req, res, next) {

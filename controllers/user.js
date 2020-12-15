@@ -2,7 +2,7 @@ const { render } = require('ejs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const db = require('../models');
-const { SECRET } = require('../.env/env')
+const { SECRET } = require('../env/env')
 const { User } = db;
 
 const saltRounds = 10;
