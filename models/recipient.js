@@ -4,21 +4,16 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Recipient extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      Recipient.belongsTo(models.Order, {
-        foreignKey: 'orderId'
-      });
       Recipient.belongsTo(models.Address_city, {
         foreignKey: 'cityId'
       });
       Recipient.belongsTo(models.Address_district, {
         foreignKey: 'districtId'
       });
+      Recipient.hasOne(models.Order, {
+        foreignKey: 'orderId'
+      })
     }
   };
   Recipient.init({
