@@ -4,16 +4,15 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Address_district extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+
     static associate(models) {
-      Address_district.belongs
-      Address_district.hasMany(models.Recipient, {
-        foreignKey: 'districtId',
-      })
+      Recipient_info.belongsTo(models.Address_city, {
+        foreignKey: 'cityId'
+      });
+      Recipient_info.belongsTo(models.Address_district, {
+        foreignKey: 'districtId'
+      });
+
     }
   };
   Address_district.init({
