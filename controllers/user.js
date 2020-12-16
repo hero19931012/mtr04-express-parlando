@@ -35,35 +35,37 @@ const userController = {
         realName,
         email,
         phone
-      }).then((user) => {
-        // JWT signing
-        const payload = {
-          // user info
-          id: user.id,
-          username,
-        }
-
-        const options = {
-          expiresIn: "1 day"
-        }
-        jwt.sign(payload, SECRET, options, (err, token) => {
-          if (err) {
-            return res.status(400).json({
-              ok: 0,
-              message: err.toString()
-            })
+      })
+        .then((user) => {
+          // JWT signing
+          const payload = {
+            // user info
+            id: user.id,
+            username,
           }
-          res.status(200).json({
-            ok: 1,
-            token
+
+          const options = {
+            expiresIn: "1 day"
+          }
+          jwt.sign(payload, SECRET, options, (err, token) => {
+            if (err) {
+              return res.status(400).json({
+                ok: 0,
+                message: err.toString()
+              })
+            }
+            res.status(200).json({
+              ok: 1,
+              token
+            })
           })
         })
-      }).catch(err => {
-        res.status(400).json({
-          ok: 0,
-          message: err.toString()
-        })
-      })
+        .catch(err => {
+          res.status(400).json({
+            ok: 0,
+            message: "username had been registered"
+          })
+        });
     })
   },
   handleLogin: (req, res) => {
@@ -116,9 +118,9 @@ const userController = {
       .catch(err => {
         res.status(400).json({
           ok: 0,
-          message: "username had been registered"
+          message: err.toString()
         })
-      });
+      })
   },
   // verify: (req, res) => {
   //   const token = req.header('Authorization').replace('Bearer ', '');
