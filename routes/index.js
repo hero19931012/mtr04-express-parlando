@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router();
 const multer = require('multer');
-const auth = require('../middlewares/auth');
+const userAuth = require('../middlewares/userAuth');
+const adminAuth = require('../middlewares/adminAuth');
 const bodyParser = require('body-parser');
 
-
+const adminController = require('../controllers/admin');
 const userController = require('../controllers/user');
 const productController = require('../controllers/product');
 const orderController = require('../controllers/order');
@@ -16,21 +17,29 @@ const checkPermission = () => {
 
 }
 
-router.post('/register', userController.handleRegister);
-router.post('/login', userController.handleLogin);
-router.get('/login', userController.handleLogin);
-router.patch('/users/:id', auth, userController.handleUpdate)
-// router.get('/me', userController.verify)
+router.post('/adminLogin', adminController.handleLogin)
 
 router.get('/products', productController.get);
 router.get('/products/:id', productController.getOne);
+router.get('/edit-product/:id', adminAuth, productController.getOne)
+router.patch('/edit-product/:id', adminAuth, productController.edit)
 
-router.get('/orders', auth, orderController.getAll);
-router.get('/orders/:id', auth, orderController.getOne);
 
 
-router.get('/recipients', auth, recipientController.getAll);
-router.get('/recipients/:id', auth, recipientController.getOne);
+router.post('/register', userController.handleRegister);
+router.post('/login', userController.handleLogin);
+router.get('/login', userController.handleLogin);
+router.patch('/users/:id', userAuth, userController.handleUpdate)
+// router.get('/me', userController.verify)
+
+
+
+router.get('/orders', userAuth, orderController.getAll);
+router.get('/orders/:id', userAuth, orderController.getOne);
+
+
+router.get('/recipients', userAuth, recipientController.getAll);
+router.get('/recipients/:id', userAuth, recipientController.getOne);
 
 // image upload
 router.get('/upload', imageController.upload);
@@ -43,7 +52,7 @@ router.get('/test', (req, res) => {
 })
 
 
-router.get('/', auth, (req, res) => {
+router.get('/', userAuth, (req, res) => {
   res.status(200).send({
     message: "user authorized",
     user: req.user
