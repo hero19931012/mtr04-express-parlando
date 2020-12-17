@@ -19,11 +19,10 @@ const checkPermission = () => {
 
 router.post('/adminLogin', adminController.handleLogin)
 
-router.get('/products', productController.get);
-router.get('/products/:id', productController.getOne);
-router.get('/edit-product/:id', adminAuth, productController.getOne)
-router.patch('/edit-product/:id', adminAuth, productController.edit)
-
+router.get('/products', productController.getAll);
+router.get('/products/:id', productController.getOne)
+router.post('/products', adminAuth, productController.add)
+router.patch('/products/:id', adminAuth, productController.update)
 
 
 router.post('/register', userController.handleRegister);
@@ -32,9 +31,7 @@ router.get('/login', userController.handleLogin);
 router.patch('/users/:id', userAuth, userController.handleUpdate)
 // router.get('/me', userController.verify)
 
-
-
-router.get('/orders', userAuth, orderController.getAll);
+router.get('/orders', userAuth, orderController.getUserOrders);
 router.get('/orders/:id', userAuth, orderController.getOne);
 
 

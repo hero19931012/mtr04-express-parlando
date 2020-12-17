@@ -18,12 +18,25 @@ const orderController = {
         id
       }
     })
-    ,then((order) => {
-      res.status(200).json({
-        ok: 1,
-        order
+      , then((order) => {
+        res.status(200).json({
+          ok: 1,
+          order
+        })
       })
+  },
+  getUserOrders: (req, res) => {
+    const userId = req.query.userId;
+    console.log("userId", userId);
+    Order.findAll({
+      where: { userId }
     })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 }
 

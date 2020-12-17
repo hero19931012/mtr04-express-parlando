@@ -10,6 +10,7 @@ const saltRounds = 10;
 const adminController = {
   handleLogin: (req, res) => {
     const { username, password } = req.body;
+    console.log(username, password);
     if (!username || !password) {
       return res.status(400).json({
         ok: 0,
@@ -43,7 +44,7 @@ const adminController = {
               if (err || !token) {
                 res.status(400).json({
                   ok: 0,
-                  message: err.toString()
+                  message: "jwt sign error: " + err.toString()
                 })
               } else {
                 res.status(200).json({
@@ -58,7 +59,7 @@ const adminController = {
       .catch(err => {
         res.status(400).json({
           ok: 0,
-          message: err.toString()
+          message: "admin user error: " + err.toString()
         })
       })
   },
