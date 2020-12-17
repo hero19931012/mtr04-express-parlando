@@ -6,13 +6,12 @@ module.exports = (sequelize, DataTypes) => {
   class Address_district extends Model {
 
     static associate(models) {
-      Recipient_info.belongsTo(models.Address_city, {
+      Address_district.belongsTo(models.Address_city, {
         foreignKey: 'cityId'
       });
-      Recipient_info.belongsTo(models.Address_district, {
+      Address_district.hasMany(models.Recipient, {
         foreignKey: 'districtId'
       });
-
     }
   };
   Address_district.init({
