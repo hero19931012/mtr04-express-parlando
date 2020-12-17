@@ -98,7 +98,36 @@
         }
       }
     },
-    "/products": {},
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      }
+    },
     "/orders": {
       "get": {
         "tags": [
@@ -330,20 +359,14 @@
     "Product": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
-        },
-        "model": {
+        "productName": {
           "type": "string"
         },
         "price": {
-          "type": "string"
+          "type": "integer"
         },
-        "storage": {
-          "type": "string"
-        },
-        "sell": {
-          "type": "string"
+        "models": {
+          "type": "array"
         }
       }
     },
