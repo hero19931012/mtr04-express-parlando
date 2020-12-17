@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       Product_model.belongsTo(models.Product, {
         foreignKey: 'productId'
       });
-      Recipient_info.hasMany(models.Order_product, {
+      Product_model.hasMany(models.Order_product, {
         foreignKey: 'modelId'
       });
     }
