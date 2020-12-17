@@ -1,8 +1,8 @@
 const db = require('../models');
-const { Product } = db;
+const { Product, Product_model } = db;
 
 const productController = {
-  get: (req, res) => {
+  getAll: (req, res) => {
     const { sort, order, limit, offset } = req.query;
     Product.findAll({
       limit: Number(limit),
@@ -44,9 +44,42 @@ const productController = {
       });
   },
   add: (req, res) => {
-
+    const product = req.body
+    console.log(product);
+    Product.create({
+      productName: product.productName,
+      price: product.price
+    })
+    .then(result => {
+      console.log("product create result: " + result);
+      const modelsWithProductId = product.models.map((model) => {
+        return {
+          ...model,
+          sell: 0,
+          productId: result.id
+        }
+      })
+      return Product_model.bulkCreate(modelsWithProductId)
+    })
+    .then((result) => {
+      console.log("model create result: " + result);
+      res.status(200).json({
+        ok: 1,
+        result
+      })
+    })
+    .catch(err => {
+      let errorMessage = "product create error: " + err.toString()
+      console.log(errorMessage);
+      res.status(400).json({
+        ok: 0,
+        message: errorMessage
+      })
+    })
   },
-
+  update: (req, res) => {
+  
+  }
 }
 
 module.exports = productController;
