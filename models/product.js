@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   Product.init({
     productName: DataTypes.STRING,
-    price: DataTypes.INTEGER
+    price: DataTypes.INTEGER,
+    isDeleted: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Product',

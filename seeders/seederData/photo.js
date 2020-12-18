@@ -101,7 +101,9 @@ const photos = [
   "https://i.picsum.photos/id/439/600/600.jpg?hmac=LC9k_bzrN0NhKRyV62fou3ix3cRFZKNfAyXgxGs6zh8"
 ]
 
-const productNum = 20;
+const { productList } = require('./product')
+
+const productNum = productList.length;
 const photoNumPerProduct = photos.length / productNum;
 const photoList = photos.map((url, index) => {
   let productId = Math.ceil((index + 1) / photoNumPerProduct);
