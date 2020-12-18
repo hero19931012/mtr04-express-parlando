@@ -3,15 +3,20 @@ const { Product, Product_model } = db;
 
 const productController = {
   getAll: (req, res) => {
-    const { sort, order, limit, offset } = req.query;
+    let { sort, order, limit, offset } = req.query;
+
     Product.findAll({
-      limit: Number(limit),
-      offset: Number(offset),
+      limit: limit !== undefined ? Number(limit) : null,
+      offset: offset !== undefined ? Number(offset) : 0,
       order: [
-        [sort, order],
+        [
+          sort === undefined ? sort : "id",
+          order !== undefined ? sort : "ASC"
+        ],
       ],
     })
       .then((products) => {
+        console.log(products);
         res.status(200).json({
           ok: 1,
           products
@@ -20,49 +25,54 @@ const productController = {
       .catch(err => {
         res.status(400).json({
           ok: 0,
-          errorMessage: err
+          errorMessage: err.toString()
         })
       });
   },
   getOne: (req, res) => {
+    const id = req.params.id
+    console.log("id = ", id);
     Product.findOne({
       where: {
-        id: req.params.id
+        id
       },
       include: [Product_model]
     })
-    .then((product) => {
-      // console.log(product);
-
-      // 只回傳 id, colorChip, storage
-      const models = product.Product_models
-      .filter((model) => { return model.storage > 0 })
-      .map((model) => {
-        const { id, colorChip, storage } = model
-        return {
-          id,
-          colorChip,
-          storage: storage > 10 ? true : false
+      .then((product) => {
+        // 如果是 admin 就回傳全部；如果是 user 只回傳 id, modelName, colorChip, storage
+        if (req.user === "admin") {
+          return res.status(200).json({
+            ok: 1,
+            product
+          })
         }
-      })
 
-      res.status(200).json({
-        ok: 1,
-        models
+        const models = product.Product_models
+          .filter((model) => { return model.storage > 0 })
+          .map((model) => {
+            const { id, modelName, colorChip, storage } = model
+            return {
+              id,
+              modelName,
+              colorChip,
+              storage: storage > 10 ? true : false
+            }
+          })
+
+        const result = {...product.dataValues} // 從 sequelize 物件拿出資料
+        result.Product_models = models
+
+        res.status(200).json({
+          ok: 1,
+          product: result
+        })
       })
-    })
-      // .then((product) => {
-      //   res.status(200).json({
-      //     ok: 1,
-      //     product
-      //   });
-      // })
-      // .catch(err => {
-      //   res.status(400).json({
-      //     ok: 0,
-      //     errorMessage: err.toString()
-      //   })
-      // });
+      .catch(err => {
+        res.status(400).json({
+          ok: 0,
+          errorMessage: err.toString()
+        })
+      });
   },
   add: (req, res) => {
     const product = req.body

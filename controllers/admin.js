@@ -10,7 +10,6 @@ const saltRounds = 10;
 const adminController = {
   handleLogin: (req, res) => {
     const { username, password } = req.body;
-    console.log(username, password);
     if (!username || !password) {
       return res.status(400).json({
         ok: 0,
@@ -35,6 +34,7 @@ const adminController = {
               // user info
               id: user.id,
               username: user.username,
+              role: "admin"
             }
 
             const options = {
