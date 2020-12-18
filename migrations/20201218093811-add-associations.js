@@ -142,6 +142,34 @@ module.exports = {
         onDelete: 'RESTRICT',
       }
     );
+    await queryInterface.addColumn(
+      'ECpay_results',
+      'userId',
+      {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      }
+    );
+    await queryInterface.addColumn(
+      'ECpay_reasults',
+      'orderId',
+      {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Orders',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      }
+    );
   },
 
   down: async (queryInterface, Sequelize) => {}
