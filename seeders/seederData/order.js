@@ -17,20 +17,20 @@ function getRandomProductId() {
 }
 
 
-const orderRequestData = {
-  userId,
-  products: [
-    {
-      productId,
-      modelId
-    },
-    {
-      productId,
-      modelId
-    }
-  ],
-  totalPrice
-}
+// const orderRequestData = {
+//   userId,
+//   products: [
+//     {
+//       productId,
+//       modelId
+//     },
+//     {
+//       productId,
+//       modelId
+//     }
+//   ],
+//   totalPrice
+// }
 
 
 

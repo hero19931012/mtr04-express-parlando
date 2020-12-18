@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       ECpay_result.belongsTo(models.User, {
         foreignKey: 'userId',
       });
-      ECpay_result.hasOne(models.Order, {
+      ECpay_result.belongsTo(models.Order, {
         foreignKey: 'orderId',
       });
     }
