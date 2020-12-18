@@ -189,6 +189,15 @@
               "minimum": 1
             },
             "description": "The order id"
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string",
+              "format": "Bearer {{token}}"
+            },
+            "required": true
           }
         ],
         "responses": {

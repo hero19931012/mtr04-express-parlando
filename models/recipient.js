@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       Recipient.belongsTo(models.Address_district, {
         foreignKey: 'districtId'
       });
-      Recipient.hasOne(models.Order, {
+      Recipient.belongsTo(models.Order, {
         foreignKey: 'orderId'
       })
     }

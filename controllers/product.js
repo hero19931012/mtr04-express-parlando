@@ -31,7 +31,6 @@ const productController = {
   },
   getOne: (req, res) => {
     const id = req.params.id
-    console.log("id = ", id);
     Product.findOne({
       where: {
         id
@@ -40,7 +39,7 @@ const productController = {
     })
       .then((product) => {
         // 如果是 admin 就回傳全部；如果是 user 只回傳 id, modelName, colorChip, storage
-        if (req.user === "admin") {
+        if (req.user.role === "admin") {
           return res.status(200).json({
             ok: 1,
             product
@@ -109,6 +108,9 @@ const productController = {
       })
   },
   update: (req, res) => {
+
+  },
+  delete: (req, res) => {
 
   }
 }

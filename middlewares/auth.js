@@ -18,7 +18,10 @@ function checkAuth(req, res, next) {
     if (decodedToken.role === "admin") {
       Admin.findOne({ where: { username: decodedToken.username } })
         .then((user) => {
-          req.user = decodedToken.role
+          const { id, username, role } = decodedToken;
+          req.user = {
+            id, username, role
+          }
           return next()
         })
         .catch(err => {
@@ -31,7 +34,10 @@ function checkAuth(req, res, next) {
     if (decodedToken.role === "user") {
       User.findOne({ where: { username: decodedToken.username } })
         .then((user) => {
-          req.user = decodedToken.role
+          const { id, username, role } = decodedToken;
+          req.user = {
+            id, username, role
+          }
           return next()
         })
         .catch(err => {

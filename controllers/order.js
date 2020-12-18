@@ -3,12 +3,27 @@ const { Order } = db;
 
 const orderController = {
   getAll: (req, res) => {
+    // 如果是 admin => 輸出全部訂單，如果是 user => where: userId
     Order.findAll()
       .then((orders) => {
-        res.status(200).json(orders);
+        if (req.user.role === "admin") {
+          return res.status(200).json({
+            ok: 1,
+            orders
+          });
+        }
+        res.status(200).json({
+          ok: 1,
+          orders: orders.filter((order) => {
+            return order.userId === req.user.id
+          })
+        })
       })
       .catch(err => {
-        console.log(err);
+        res.status(500).json({
+          ok: 0,
+          message: "Get order err: " + err.toString()
+        })
       });
   },
   getOne: (req, res) => {
@@ -18,25 +33,24 @@ const orderController = {
         id
       }
     })
-      , then((order) => {
+      .then((order) => {
         res.status(200).json({
           ok: 1,
           order
         })
       })
-  },
-  getUserOrders: (req, res) => {
-    const userId = req.query.userId;
-    console.log("userId", userId);
-    Order.findAll({
-      where: { userId }
-    })
-      .then((res) => {
-        console.log(res);
-      })
       .catch(err => {
-        console.log(err);
+        res.status(500).json({
+          ok: 0,
+          message: "Get one order err: " + err.toString()
+        })
       })
+  },
+  add: (req, res) => {
+    
+  },
+  delete: (req, res) => {
+
   }
 }
 

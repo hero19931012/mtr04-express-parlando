@@ -123,22 +123,6 @@ const userController = {
         })
       })
   },
-  // verify: (req, res) => {
-  //   const token = req.header('Authorization').replace('Bearer ', '');
-  //   jwt.verify(token, SECRET, (err, user) => {
-  //     if (err || !user) {
-  //       res.status(400).json({
-  //         ok: 0,
-  //         message: "verify fail"
-  //       })
-  //     } else {
-  //       res.status(200).json({
-  //         ok: 1,
-  //         user
-  //       })
-  //     }
-  //   })
-  // },
   handleUpdate: (req, res) => {
     const id = req.params.id;
     if (!req.user || Number(id) !== req.user.id) {

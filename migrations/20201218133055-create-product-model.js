@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       isDeleted: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

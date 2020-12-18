@@ -8,11 +8,14 @@ module.exports = (sequelize, DataTypes) => {
       Order.belongsTo(models.User, {
         foreignKey: 'userId',
       });
-      Order.hasOne(models.Recipient, {
+      Order.hasMany(models.Recipient, {
         foreignKey: 'orderId',
       });
       Order.hasMany(models.Order_product, {
-        foreignKey: 'OrderId',
+        foreignKey: 'orderId',
+      });
+      Order.hasOne(models.ECpay_result, {
+        foreignKey: 'orderId'
       });
     }
   };
