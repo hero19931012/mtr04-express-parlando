@@ -94,6 +94,7 @@ const userController = {
               // user info
               id: user.id,
               username: user.username,
+              role: "user"
             }
 
             const options = {
