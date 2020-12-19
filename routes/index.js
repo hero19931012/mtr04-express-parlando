@@ -4,6 +4,7 @@ const multer = require('multer');
 const adminController = require('../controllers/admin');
 const userController = require('../controllers/user');
 const productController = require('../controllers/product');
+const modelController = require('../controllers/model');
 const orderController = require('../controllers/order');
 const recipientController = require('../controllers/recipient');
 const imageController = require('../controllers/image');
@@ -11,16 +12,17 @@ const imageController = require('../controllers/image');
 const router = express.Router();
 
 const checkPermission = (roles = []) => (req, res, next) => {
+  const role = req.user !== undefined ? req.user.role : null
   if (
     roles.indexOf('user') >= 0 && roles.indexOf('user') >= 0
-    && (req.user.role === 'user' || req.user.role === 'admin')
-    ) {
+    && (role === 'user' || role === 'admin')
+  ) {
     return next()
   }
-  if (roles.indexOf('admin') >= 0 && req.user.role === 'admin') {
+  if (roles.indexOf('admin') >= 0 && role === 'admin') {
     return next()
   }
-  if (roles.indexOf('user') >= 0 && req.user.role === 'user') {
+  if (roles.indexOf('user') >= 0 && role === 'user') {
     return next()
   }
   res.status(401).end()
@@ -30,18 +32,22 @@ const onlyAdmin = checkPermission(['admin'])
 const onlyUser = checkPermission(['user'])
 const adminAndUser = checkPermission(['admin', 'user'])
 
+router.post('/register', userController.handleRegister);
+router.post('/login', userController.handleLogin);
+router.patch('/users/:id', userController.handleUpdate)
+
 router.post('/adminLogin', adminController.handleLogin)
 
 router.get('/products', productController.getAll);
 router.get('/products/:id', productController.getOne)
 router.post('/products', onlyAdmin, productController.add)
 router.patch('/products/:id', onlyAdmin, productController.update)
-router.patch('/products/:id', onlyAdmin, productController.delete)
+router.delete('/products/:id', onlyAdmin, productController.delete)
 
-router.post('/register', userController.handleRegister);
-router.post('/login', userController.handleLogin);
-router.patch('/users/:id', userController.handleUpdate)
-// router.get('/me', userController.verify)
+router.get('/models/:id', onlyAdmin, modelController.getOne)
+router.post('/models', onlyAdmin, modelController.add)
+router.patch('/models/:id', onlyAdmin, modelController.update)
+router.delete('/models/:id', onlyAdmin, modelController.delete)
 
 router.get('/orders', adminAndUser, orderController.getAll);
 router.get('/orders/:id', adminAndUser, orderController.getOne);
@@ -59,7 +65,7 @@ router.get('/images', onlyAdmin, imageController.upload);
 
 // 404 not found
 router.use((req, res) => {
-  res.status(404).send("404: File not found")
+  res.status(404).send("404 Not found")
 })
 
 module.exports = router;
