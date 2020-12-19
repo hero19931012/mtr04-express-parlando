@@ -82,8 +82,8 @@ for (let i = 0; i < 4; i++) {
       createdAt: new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24),
       updatedAt: new Date()
     })
-    
-    
+
+
     let models = []
 
     // 產生型號
@@ -106,12 +106,14 @@ for (let i = 0; i < 4; i++) {
         colorChip,
         storage,
         sell,
-        productId
+        productId,
+        createdAt: new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24),
+        updatedAt: new Date()
       }
       models.push(model)
       modelList.push(model)
     }
-    
+
     productId++
     rawProductList.push({
       productName,
