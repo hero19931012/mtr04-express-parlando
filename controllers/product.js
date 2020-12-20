@@ -33,16 +33,13 @@ const productController = {
   getOne: (req, res) => {
     const { id } = req.params
     Product.findOne({
-      where: {
-        id,
-        isDeleted: null
-      },
+      where: { id, isDeleted: null },
       include: [Product_model]
     })
       .then((product) => {
         // 如果找不到 => product === null
         if (product === null) {
-          res.status(400).json({
+          res.status(403).json({
             message: "get product error1: " + "product has been deleted"
           })
         }
@@ -61,19 +58,19 @@ const productController = {
               id,
               modelName,
               colorChip,
-              storage: storage > 10 ? true : false
+              storage: storage > 10 ? true : false // 不直接回傳庫存
             }
           })
 
-        const result = { ...product.dataValues } // 從 sequelize 物件拿出資料
-        result.Product_models = models
+        const productForUser = { ...product.dataValues } // 從 sequelize 物件拿出資料
+        productForUser.Product_models = models
 
         res.status(200).json({
-          product: result
+          product: productForUser
         })
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(500).json({
           message: "get product error2: " + err.toString()
         })
       });
@@ -81,7 +78,7 @@ const productController = {
   add: (req, res) => {
     const { productName, price } = req.body;
 
-    if (!productName || price) {
+    if (!productName || !price) {
       return res.status(400).json({
         message: "add product error1: product data incomplete"
       })
@@ -95,7 +92,7 @@ const productController = {
         res.status(200).json({ product })
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(500).json({
           message: "add product error2: " + err.toString()
         })
       })
@@ -104,16 +101,16 @@ const productController = {
     const { id } = req.params
     const { productName, price } = req.body;
 
-    if (!productName || price) {
+    if (!productName || !price) {
       return res.status(400).json({
         message: "update product error1: product data incomplete"
       })
     }
 
-    Product.findOne({ where: { id } })
+    Product.findOne({ where: { id, isDeleted: null } })
       .then(product => {
         if (product === null) {
-          return res.status(400).json({
+          return res.status(403).json({
             message: "update product error2: product has been deleted"
           })
         }
@@ -123,19 +120,16 @@ const productController = {
         })
       })
       .then((product) => {
-        res.status(200).json({
-          product
-        })
+        res.status(200).json({ product })
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(500).json({
           message: "update product error3: " + err.toString()
         })
       })
   },
   delete: (req, res) => {
     const { id } = req.params
-    console.log("id", id);
     Product.findOne({ where: { id } })
       .then(product => {
         return product.update({
@@ -143,10 +137,10 @@ const productController = {
         })
       })
       .then(() => {
-        res.status(200).end()
+        res.status(204).end()
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(403).json({
           message: "update product error: " + err.toString()
         })
       })

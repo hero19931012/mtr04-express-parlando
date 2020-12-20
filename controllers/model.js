@@ -3,25 +3,18 @@ const { Product_model } = db;
 
 const modelController = {
   getOne: (req, res) => {
-    const id = req.params.id
-    Product_model.findOne({
-      where: {
-        id,
-        isDeleted: null
-      },
-    })
+    const { id } = req.params
+    Product_model.findOne({ where: { id, isDeleted: null } })
       .then((model) => {
         if (model === null) {
-          return res.status(400).json({
+          return res.status(403).json({
             message: "get models error1: model has been deleted"
           })
         }
-        return res.status(200).json({
-          model
-        })
+        return res.status(200).json({ model })
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(500).json({
           errorMessage: "get models error2" + err.toString()
         })
       });
@@ -49,7 +42,7 @@ const modelController = {
         res.status(200).json({ model });
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(500).json({
           message: "add model error2: " + err.toString()
         });
       })
@@ -57,19 +50,23 @@ const modelController = {
   update: (req, res) => {
     const { id } = req.params
     const { modelName, colorChip, storage } = req.body;
-    Product_model.findOne({
-      where: {
-        id,
-        isDeleted: null
-      }
-    })
-      .then(product => {
-        if (product === null) {
-          res.status(400).json({
-            message: "update model error: model has been deleted"
+    if (
+      !modelName ||
+      !colorChip ||
+      !storage
+    ) {
+      return res.status(400).json({
+        message: "update model error1: model data incomplete"
+      })
+    }
+    Product_model.findOne({ where: { id, isDeleted: null } })
+      .then(model => {
+        if (model === null) {
+          res.status(403).json({
+            message: "update model error2: model has been deleted"
           })
         }
-        return product.update({
+        return model.update({
           modelName,
           colorChip,
           storage
@@ -81,22 +78,17 @@ const modelController = {
         })
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(500).json({
           message: "update model error: " + err.toString()
         })
       })
   },
   delete: (req, res) => {
     const { id } = req.params
-    Product_model.findOne({
-      where: {
-        id,
-        isDeleted: null
-      }
-    })
+    Product_model.findOne({ where: { id, isDeleted: null } })
       .then(model => {
         if (model === null) {
-          res.status(400).json({
+          res.status(403).json({
             message: "delete model error1: model has been deleted"
           })
         }
@@ -105,10 +97,10 @@ const modelController = {
         })
       })
       .then(() => {
-        res.status(200).end()
+        res.status(204).end()
       })
       .catch(err => {
-        res.status(400).json({
+        res.status(500).json({
           message: "delete model error2: " + err.toString()
         })
       })

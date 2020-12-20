@@ -34,9 +34,9 @@ const adminAndUser = checkPermission(['admin', 'user'])
 
 router.post('/register', userController.handleRegister);
 router.post('/login', userController.handleLogin);
-router.patch('/users/:id', userController.handleUpdate)
+router.patch('/users/:id', onlyUser, userController.update)
 
-router.post('/adminLogin', adminController.handleLogin)
+router.post('/admin', adminController.handleLogin)
 
 router.get('/products', productController.getAll);
 router.get('/products/:id', productController.getOne)
@@ -52,11 +52,12 @@ router.delete('/models/:id', onlyAdmin, modelController.delete)
 router.get('/orders', adminAndUser, orderController.getAll);
 router.get('/orders/:id', adminAndUser, orderController.getOne);
 router.post('/orders', adminAndUser, orderController.add)
+router.patch('/orders/:id', onlyAdmin, orderController.update)
 router.delete('/orders/:id', adminAndUser, orderController.delete)
 
 router.get('/recipients', adminAndUser, recipientController.getAll);
 router.get('/recipients/:id', adminAndUser, recipientController.getOne);
-router.patch('/recipients/:id', onlyAdmin, recipientController.edit)
+router.patch('/recipients/:id', onlyAdmin, recipientController.update)
 
 // image upload
 const upload = multer({});
