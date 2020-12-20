@@ -49,6 +49,9 @@ const orderController = {
   add: (req, res) => {
     
   },
+  update: (req, res) => {
+    // 完成訂單 => status: 1, order_products.findAll({where: {orderId}})
+  },
   delete: (req, res) => {
 
   }

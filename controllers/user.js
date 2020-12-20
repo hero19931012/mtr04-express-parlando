@@ -123,20 +123,18 @@ const userController = {
         })
       })
   },
-  handleUpdate: (req, res) => {
-    const id = req.params.id;
-    if (!req.user || Number(id) !== req.user.id) {
+  update: (req, res) => {
+    const { id } = req.params;
+    if ( Number(id) !== req.user.id ) {
       return res.status(401).json({
-        ok: 0,
-        message: "unauthorized or invalid userId"
+        message: "update user error1: invalid user"
       })
     }
 
     const { realName, email, phone } = req.body;
     if (!realName || !email || !phone) {
       return res.status(400).json({
-        ok: 0,
-        message: "data incomplete"
+        message: "update user error2: user data incomplete"
       })
     }
 
@@ -146,16 +144,20 @@ const userController = {
           realName, email, phone
         })
       })
-      .then(() => {
+      .then((user) => {
         res.status(200).json({
-          ok: 1,
-          message: "update succeeded"
+          user: {
+            id,
+            username: user.username,
+            realName,
+            email,
+            phone
+          }
         })
       })
       .catch(err => {
-        res.status(400).json({
-          ok: 0,
-          message: err.toString()
+        res.status(500).json({
+          message: "update user error3: " + err.toString()
         })
       })
   }

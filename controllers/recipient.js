@@ -26,7 +26,7 @@ const recipientController = {
         console.log(err);
       });
   },
-  edit: (req, res) => {
+  update: (req, res) => {
     
   }
 }
