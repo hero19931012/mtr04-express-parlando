@@ -1,6 +1,6 @@
 'use strict';
 
-const { productList } = require('./seederData/order');
+const { productList } = require('./seederData/product');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {

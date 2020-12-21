@@ -1,33 +1,71 @@
 const express = require('express')
-const router = express.Router();
+const multer = require('multer');
 
-
+const adminController = require('../controllers/admin');
 const userController = require('../controllers/user');
 const productController = require('../controllers/product');
+const modelController = require('../controllers/model');
 const orderController = require('../controllers/order');
 const recipientController = require('../controllers/recipient');
+const imageController = require('../controllers/image');
 
-const checkPermission = () => {
+const router = express.Router();
 
+const checkPermission = (roles = []) => (req, res, next) => {
+  const role = req.user !== undefined ? req.user.role : null
+  if (
+    roles.indexOf('user') >= 0 && roles.indexOf('user') >= 0
+    && (role === 'user' || role === 'admin')
+  ) {
+    return next()
+  }
+  if (roles.indexOf('admin') >= 0 && role === 'admin') {
+    return next()
+  }
+  if (roles.indexOf('user') >= 0 && role === 'user') {
+    return next()
+  }
+  res.status(401).end()
 }
+
+const onlyAdmin = checkPermission(['admin'])
+const onlyUser = checkPermission(['user'])
+const adminAndUser = checkPermission(['admin', 'user'])
 
 router.post('/register', userController.handleRegister);
 router.post('/login', userController.handleLogin);
-router.get('/login', userController.handleLogin);
 router.patch('/users/:id', userController.handleUpdate)
 
-router.get('/me', userController.verify)
+router.post('/adminLogin', adminController.handleLogin)
 
-router.get('/products', productController.get);
-router.get('/products/:id', productController.getOne);
+router.get('/products', productController.getAll);
+router.get('/products/:id', productController.getOne)
+router.post('/products', onlyAdmin, productController.add)
+router.patch('/products/:id', onlyAdmin, productController.update)
+router.delete('/products/:id', onlyAdmin, productController.delete)
 
-router.get('/orders', orderController.getAll);
-router.get('/orders/:id', orderController.getOne);
+router.get('/models/:id', onlyAdmin, modelController.getOne)
+router.post('/models', onlyAdmin, modelController.add)
+router.patch('/models/:id', onlyAdmin, modelController.update)
+router.delete('/models/:id', onlyAdmin, modelController.delete)
 
+router.get('/orders', adminAndUser, orderController.getAll);
+router.get('/orders/:id', adminAndUser, orderController.getOne);
+router.post('/orders', adminAndUser, orderController.add)
+router.delete('/orders/:id', adminAndUser, orderController.delete)
 
-router.get('/recipients', recipientController.getAll);
-router.get('/recipients/:id', recipientController.getOne);
+router.get('/recipients', adminAndUser, recipientController.getAll);
+router.get('/recipients/:id', adminAndUser, recipientController.getOne);
+router.patch('/recipients/:id', onlyAdmin, recipientController.edit)
 
+// image upload
+const upload = multer({});
+router.post('/images', upload.single("file"), imageController.handleUpload);
+router.get('/images', onlyAdmin, imageController.upload);
 
+// 404 not found
+router.use((req, res) => {
+  res.status(404).send("404 Not found")
+})
 
 module.exports = router;

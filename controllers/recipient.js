@@ -26,6 +26,9 @@ const recipientController = {
         console.log(err);
       });
   },
+  edit: (req, res) => {
+    
+  }
 }
 
 module.exports = recipientController;

@@ -2,11 +2,8 @@ const { render } = require('ejs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const db = require('../models');
+const { SECRET } = require('../env/env')
 const { User } = db;
-
-/// JWT key => 之後要放在 env
-const SECRET = 'lidemymtr04parlando'
-///
 
 const saltRounds = 10;
 
@@ -38,36 +35,37 @@ const userController = {
         realName,
         email,
         phone
-      }).then((user) => {
-        // JWT signing
-        const payload = {
-          // user info
-          id: user.id,
-          username,
-        }
-
-        const options = {
-          expiresIn: "1 day"
-        }
-
-        jwt.sign(payload, SECRET, options, (err, token) => {
-          if (err) {
-            return res.status(400).json({
-              ok: 0,
-              message: err.toString()
-            })
+      })
+        .then((user) => {
+          // JWT signing
+          const payload = {
+            // user info
+            id: user.id,
+            username,
           }
-          res.status(200).json({
-            ok: 1,
-            token
+
+          const options = {
+            expiresIn: "1 day"
+          }
+          jwt.sign(payload, SECRET, options, (err, token) => {
+            if (err) {
+              return res.status(400).json({
+                ok: 0,
+                message: err.toString()
+              })
+            }
+            res.status(200).json({
+              ok: 1,
+              token
+            })
           })
         })
-      }).catch(err => {
-        res.status(400).json({
-          ok: 0,
-          message: err.toString()
-        })
-      })
+        .catch(err => {
+          res.status(400).json({
+            ok: 0,
+            message: "username had been registered"
+          })
+        });
     })
   },
   handleLogin: (req, res) => {
@@ -85,7 +83,6 @@ const userController = {
     })
       .then((user) => {
         bcrypt.compare(password, user.password, (err, result) => {
-          console.log(result);
           if (err || !result) {
             return res.status(400).json({
               ok: 0,
@@ -97,12 +94,12 @@ const userController = {
               // user info
               id: user.id,
               username: user.username,
+              role: "user"
             }
 
             const options = {
               expiresIn: "1 day"
             }
-
             jwt.sign(payload, SECRET, options, (err, token) => {
               if (err || !token) {
                 res.status(400).json({
@@ -122,43 +119,19 @@ const userController = {
       .catch(err => {
         res.status(400).json({
           ok: 0,
-          message: "username had been registered"
+          message: err.toString()
         })
-      });
-  },
-  verify: (req, res) => {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    jwt.verify(token, SECRET, (err, user) => {
-      if (err || !user) {
-        res.status(400).json({
-          ok: 0,
-          message: "verify fail"
-        })
-      } else {
-        res.status(200).json({
-          ok: 1,
-          user
-        })
-      }
-    })
+      })
   },
   handleUpdate: (req, res) => {
-    // const token = req.header('Authorization').replace('Bearer ', '');
-    // jwt.verify(token, SECRET, (err, jwtUser) => {
-    //   if (err || !jwtUser) {
-    //     res.status(400).json({
-    //       ok: 0,
-    //       message: "verify fail"
-    //     })
-    //   } else {
-    //     res.status(200).json({
-    //       ok: 1,
-    //       user
-    //     })
-    //   }
-    // })
-
     const id = req.params.id;
+    if (!req.user || Number(id) !== req.user.id) {
+      return res.status(401).json({
+        ok: 0,
+        message: "unauthorized or invalid userId"
+      })
+    }
+
     const { realName, email, phone } = req.body;
     if (!realName || !email || !phone) {
       return res.status(400).json({
@@ -166,21 +139,11 @@ const userController = {
         message: "data incomplete"
       })
     }
+
     User.findOne({ where: { id } })
       .then((user) => {
-        const token = req.header('Authorization').replace('Bearer ', '');
-        jwt.verify(token, SECRET, (err, jwtUser) => {
-          console.log(jwtUser)
-          if (err || !jwtUser || jwtUser.username !== user.username) {
-            return res.status(400).json({
-              ok: 0,
-              message: "verify fail"
-            })
-          } else {
-            return user.update({
-              realName, email, phone
-            })
-          }
+        return user.update({
+          realName, email, phone
         })
       })
       .then(() => {
