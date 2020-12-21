@@ -16,17 +16,44 @@ const productController = {
           order !== undefined ? order : "ASC"
         ],
       ],
+      include: [Product_model]
     })
       .then((products) => {
+        // 如果是 admin 就回傳全部；如果是 user，回傳 id, modelName, colorChip, storage
+        if (req.user !== undefined && req.user.role === 'admin') {
+          res.status(200).json({
+            products
+          });
+        }
+
+        const productListForUser = products.map((product) => {
+          const models = product.Product_models
+            .filter((model) => { return model.storage > 0 })
+            .map((model) => {
+              const { id, modelName, colorChip, storage } = model
+              return {
+                id,
+                modelName,
+                colorChip,
+                storage
+              }
+            })
+
+          const productForUser = { ...product.dataValues } // 從 sequelize 物件拿出資料
+          productForUser.Product_models = models
+
+          return {
+            ...productForUser
+          }
+        })
+
         res.status(200).json({
-          ok: 1,
-          products
-        });
+          products: productListForUser
+        })
       })
       .catch(err => {
         res.status(400).json({
-          ok: 0,
-          errorMessage: "get products error: " + err.toString()
+          message: "get products error: " + err.toString()
         })
       });
   },
@@ -58,7 +85,7 @@ const productController = {
               id,
               modelName,
               colorChip,
-              storage: storage > 10 ? true : false // 不直接回傳庫存
+              storage
             }
           })
 
