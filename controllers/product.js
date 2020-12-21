@@ -1,14 +1,20 @@
 const db = require('../models');
-const { Product } = db;
+const { Product, Product_model } = db;
 
 const productController = {
-  get: (req, res) => {
-    const { sort, order, limit, offset } = req.query;
+  getAll: (req, res) => {
+    let { sort, order, limit, offset } = req.query;
     Product.findAll({
-      limit: Number(limit),
-      offset: Number(offset),
+      where: {
+        isDeleted: null
+      },
+      limit: limit !== undefined ? Number(limit) : null,
+      offset: offset !== undefined ? Number(offset) : 0,
       order: [
-        [sort, order],
+        [
+          sort !== undefined ? sort : "id",
+          order !== undefined ? order : "ASC"
+        ],
       ],
     })
       .then((products) => {
@@ -20,33 +26,131 @@ const productController = {
       .catch(err => {
         res.status(400).json({
           ok: 0,
-          errorMessage: err
+          errorMessage: "get products error: " + err.toString()
         })
       });
   },
   getOne: (req, res) => {
+    const { id } = req.params
     Product.findOne({
       where: {
-        id: req.params.id
-      }
+        id,
+        isDeleted: null
+      },
+      include: [Product_model]
     })
       .then((product) => {
+        // 如果找不到 => product === null
+        if (product === null) {
+          res.status(400).json({
+            message: "get product error1: " + "product has been deleted"
+          })
+        }
+
+        // 如果是 admin 就回傳全部；如果是 user 只回傳 id, modelName, colorChip, storage
+        if (req.user !== undefined && req.user.role === "admin") {
+          return res.status(200).json({
+            product
+          })
+        }
+        const models = product.Product_models
+          .filter((model) => { return model.storage > 0 })
+          .map((model) => {
+            const { id, modelName, colorChip, storage } = model
+            return {
+              id,
+              modelName,
+              colorChip,
+              storage: storage > 10 ? true : false
+            }
+          })
+
+        const result = { ...product.dataValues } // 從 sequelize 物件拿出資料
+        result.Product_models = models
+
         res.status(200).json({
-          ok: 1,
-          product
-        });
+          product: result
+        })
       })
       .catch(err => {
         res.status(400).json({
-          ok: 0,
-          errorMessage: err.toString()
+          message: "get product error2: " + err.toString()
         })
       });
   },
   add: (req, res) => {
+    const { productName, price } = req.body;
 
+    if (!productName || price) {
+      return res.status(400).json({
+        message: "add product error1: product data incomplete"
+      })
+    }
+
+    Product.create({
+      productName,
+      price
+    })
+      .then((product) => {
+        res.status(200).json({ product })
+      })
+      .catch(err => {
+        res.status(400).json({
+          message: "add product error2: " + err.toString()
+        })
+      })
   },
+  update: (req, res) => {
+    const { id } = req.params
+    const { productName, price } = req.body;
 
+    if (!productName || price) {
+      return res.status(400).json({
+        message: "update product error1: product data incomplete"
+      })
+    }
+
+    Product.findOne({ where: { id } })
+      .then(product => {
+        if (product === null) {
+          return res.status(400).json({
+            message: "update product error2: product has been deleted"
+          })
+        }
+        return product.update({
+          productName,
+          price
+        })
+      })
+      .then((product) => {
+        res.status(200).json({
+          product
+        })
+      })
+      .catch(err => {
+        res.status(400).json({
+          message: "update product error3: " + err.toString()
+        })
+      })
+  },
+  delete: (req, res) => {
+    const { id } = req.params
+    console.log("id", id);
+    Product.findOne({ where: { id } })
+      .then(product => {
+        return product.update({
+          isDeleted: 1
+        })
+      })
+      .then(() => {
+        res.status(200).end()
+      })
+      .catch(err => {
+        res.status(400).json({
+          message: "update product error: " + err.toString()
+        })
+      })
+  }
 }
 
 module.exports = productController;
