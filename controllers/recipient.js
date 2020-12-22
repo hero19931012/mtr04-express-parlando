@@ -1,29 +1,31 @@
 const db = require('../models');
-const { Recipient_info, User, Order, Address_city, Address_district } = db;
+const { Recipient, User, Order, Address_city, Address_district } = db;
 
 const recipientController = {
   getAll: (req, res) => {
-    Recipient_info.findAll()
-      .then((addresses) => {
-        res.status(200).json(addresses);
+    Recipient.findAll()
+      .then((recipient) => {
+        res.status(200).json(recipient);
       })
       .catch(err => {
-        console.log(err);
+        res.status(500).json({
+          message: "get recipients error: " + err.toString()
+        })
       });
   },
   getOne: (req, res) => {
-    const id = req.params.id;
-    Recipient_info.findOne({
-      where: {
-        id
-      },
+    const { id } = req.params;
+    Recipient.findOne({
+      where: { id },
       include: [Order, Address_city, Address_district]
     })
       .then((recipient) => {
         res.status(200).json(recipient);
       })
       .catch(err => {
-        console.log(err);
+        res.status(500).json({
+          message: "get recipient error: " + err.toString()
+        })
       });
   },
   update: (req, res) => {
