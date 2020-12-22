@@ -71,62 +71,66 @@ const userController = {
     const { username, password } = req.body;
     if (!username || !password) {
       return res.status(400).json({
-        ok: 0,
-        message: "username and password required"
+        message: "login error1: username and password required"
       })
     }
-    User.findOne({
-      where: {
-        username
-      }
-    })
+    User.findOne({ where: { username } })
       .then((user) => {
         bcrypt.compare(password, user.password, (err, result) => {
           if (err || !result) {
             return res.status(400).json({
-              ok: 0,
-              message: `password invalid`
-            })
-          } else {
-            // JWT signing
-            const payload = {
-              // user info
-              id: user.id,
-              username: user.username,
-              role: "user"
-            }
-
-            const options = {
-              expiresIn: "1 day"
-            }
-            jwt.sign(payload, SECRET, options, (err, token) => {
-              if (err || !token) {
-                res.status(400).json({
-                  ok: 0,
-                  message: err.toString()
-                })
-              } else {
-                res.status(200).json({
-                  ok: 1,
-                  token
-                })
-              }
+              message: `login error2: invalid username and password`
             })
           }
+
+          // JWT signing
+          const payload = {
+            // user info
+            id: user.id,
+            username: user.username,
+            role: "user"
+          }
+          const options = {
+            expiresIn: "1 day"
+          }
+          jwt.sign(payload, SECRET, options, (err, token) => {
+            if (err || !token) {
+              return res.status(400).json({
+                ok: 0,
+                message: err.toString()
+              })
+            }
+            res.status(200).json({
+              ok: 1,
+              token
+            })
+          })
         })
       })
       .catch(err => {
-        res.status(400).json({
-          ok: 0,
-          message: err.toString()
+        res.status(500).json({
+          message: "login error3: " + err.toString()
         })
       })
   },
   getOne: (req, res) => {
     const { id } = req.params;
     if (req.user.role !== 'admin' && Number(id) !== req.user.id) {
-      res.status(401).end()
+      return res.status(401).end()
     }
+
+    User.findOne({ where: { id } })
+      .then(user => {
+        res.status(200).json({
+          user: {
+            id,
+            username: user.username,
+            realName,
+            email,
+            phone
+          }
+        })
+      })
   },
   update: (req, res) => {
     const { id } = req.params;
