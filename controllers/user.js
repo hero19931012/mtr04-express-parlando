@@ -1,11 +1,10 @@
-const { render } = require('ejs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const db = require('../models');
-const { SECRET } = require('../env/env')
+const { SECRET, saltRounds } = require('../env/env')
 const { User } = db;
 
-const saltRounds = 10;
+
 
 const userController = {
   handleRegister: (req, res) => {
@@ -123,18 +122,22 @@ const userController = {
         })
       })
   },
+  getOne: (req, res) => {
+    const { id } = req.params;
+    if (req.user.role !== 'admin' && Number(id) !== req.user.id) {
+      res.status(401).end()
+    }
+  },
   update: (req, res) => {
     const { id } = req.params;
-    if ( Number(id) !== req.user.id ) {
-      return res.status(401).json({
-        message: "update user error1: invalid user"
-      })
+    if (Number(id) !== req.user.id) {
+      return res.status(401).end()
     }
 
     const { realName, email, phone } = req.body;
     if (!realName || !email || !phone) {
       return res.status(400).json({
-        message: "update user error2: user data incomplete"
+        message: "update user error1: user data incomplete"
       })
     }
 
@@ -157,7 +160,7 @@ const userController = {
       })
       .catch(err => {
         res.status(500).json({
-          message: "update user error3: " + err.toString()
+          message: "update user error2: " + err.toString()
         })
       })
   }
