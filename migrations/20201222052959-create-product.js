@@ -14,6 +14,9 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
+      article: {
+        type: Sequelize.TEXT
+      },
       isDeleted: {
         type: Sequelize.INTEGER
       },
