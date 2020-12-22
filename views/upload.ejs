@@ -8,9 +8,7 @@
 </head>
 
 <body>
-  <img src="https://i.imgur.com/fKZIjO2.jpg" alt="">
-  <form action="/handleUpload" method="POST" enctype="multipart/form-data">
-    <input type="text" name="name" />
+  <form action="/photos" method="POST" enctype="multipart/form-data">
     <input type="file" name="files" multiple />
     <button type="submit">submit</button>
   </form>
@@ -48,22 +46,22 @@
     }
   }
 
-  // const form = document.querySelector('form')
-  // form.addEventListener('submit', (e) => {
-  //   e.preventDefault()
+  const form = document.querySelector('form')
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
 
-  //   let formData = new FormData(form)
+    let formData = new FormData(form)
 
-  //   fetch('/handleUpload', {
-  //     method: "POST",
-  //     body: formData
-  //   })
-  //     .then((res) => { console.log(res) })
-  //     .catch(err => {
-  //       console.log(err);
-  //     })
-  // })
-
+    fetch('/photos', {
+      method: "POST",
+      body: formData
+    })
+      .then((res) => res.json())
+      .then(links => {console.log(links);})
+      .catch(err => {
+        console.log(err);
+      })
+  })
 </script>
 
 </html>

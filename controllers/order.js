@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Order } = db;
+const { Order, Order_product, Product, Product_model } = db;
 
 const orderController = {
   getAll: (req, res) => {
@@ -8,12 +8,10 @@ const orderController = {
       .then((orders) => {
         if (req.user.role === "admin") {
           return res.status(200).json({
-            ok: 1,
             orders
           });
         }
         res.status(200).json({
-          ok: 1,
           orders: orders.filter((order) => {
             return order.userId === req.user.id
           })
@@ -21,37 +19,114 @@ const orderController = {
       })
       .catch(err => {
         res.status(500).json({
-          ok: 0,
-          message: "Get order err: " + err.toString()
+          message: "Get order error: " + err.toString()
         })
       });
   },
   getOne: (req, res) => {
-    const { id } = req.body;
-    Order.findOne({
-      where: {
-        id
+    const { id } = req.params;
+
+    let totalPrice = 0;
+    let status = null;
+
+    Order.findOne({ where: { id } }).then(order => {
+      // 如果是 admin 的話可以看全部的 order
+      if (req.user.role !== 'admin' && req.user.id !== order.userId) {
+        res.status(401).end()
       }
+
+      totalPrice = order.totalPrice;
+      status = order.status
+
+      return Order_product.findAll({
+        where: { orderId: id },
+        include: [Product, Product_model]
+      })
     })
-      .then((order) => {
+      .then((content) => {
+        const productList = content.map((product) => {
+          return {
+            productId: product.Product.id,
+            productName: product.Product.productName,
+            modelId: product.Product_model.id,
+            modelName: product.Product_model.modelName,
+            unitPrice: product.unitPrice,
+            count: product.count
+          }
+        })
+
+        const orderContent = {
+          totalPrice,
+          status,
+          products: productList,
+        }
+
         res.status(200).json({
-          ok: 1,
-          order
+          order: orderContent
         })
       })
       .catch(err => {
         res.status(500).json({
-          ok: 0,
-          message: "Get one order err: " + err.toString()
+          message: "Get one order error1: " + err.toString()
         })
       })
   },
-  add: (req, res) => {
-    
+  add: async (req, res) => {
+    // 1. 檢查是否有夠庫存
+    // 2. lock Product table, 更新庫存
+    requestData = {
+      userId,
+      totalPrice,
+      products: [
+        {
+          productId,
+          modelId,
+        }
+      ]
+    }
+
+
+    const { userId, totalPrice, products } = req.body;
+    if (!userId, !totalPrice, !products) {
+      return res.status(400).json({
+        message: 'add order error1: order data incomplete'
+      })
+    }
+
+    // transaction
+    let count = 10
+
+    try {
+      const result = await db.sequelize.transaction(async ()=> {
+        const product = await Product_model.findOne({where: {id: 1}})
+
+        if (product.storage < count) {
+          throw new Error("storage not enough")
+        }        
+        
+        await product.update({
+          storage: product.storage - count,
+          sell: product.sell + count
+        })
+
+        return product
+      })
+
+      res.status(200).json({
+        result,
+      })
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        message: "add order error2: " + err.toString()
+      })
+    }
+  },
+  update: (req, res) => {
+    // 完成訂單 => status: 1, order_products.findAll({where: {orderId}})
   },
   delete: (req, res) => {
 
-  }
+  },
 }
-
 module.exports = orderController;
