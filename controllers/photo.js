@@ -53,5 +53,4 @@ const photoController = {
       })
   }
 }
-
 module.exports = photoController;
