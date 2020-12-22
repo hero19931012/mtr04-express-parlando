@@ -52,11 +52,12 @@
 
     let formData = new FormData(form)
 
-    fetch('/handleUpload', {
+    fetch('/photos', {
       method: "POST",
       body: formData
     })
-      .then((res) => { console.log(res) })
+      .then((res) => res.json())
+      .then(links => {console.log(links);})
       .catch(err => {
         console.log(err);
       })
