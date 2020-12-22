@@ -121,10 +121,11 @@ const userController = {
 
     User.findOne({ where: { id } })
       .then(user => {
+        const { username, realName, email, phone } = user
         res.status(200).json({
           user: {
             id,
-            username: user.username,
+            username,
             realName,
             email,
             phone
