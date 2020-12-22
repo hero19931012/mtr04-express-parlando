@@ -107,11 +107,8 @@ const userController = {
       })
   },
   getOne: (req, res) => {
-    const { id } = req.params;
-    if (req.user.role !== 'admin' && Number(id) !== req.user.id) {
-      return res.status(401).end()
-    }
-
+    const id = req.user.id
+    
     User.findOne({ where: { id } })
       .then(user => {
         const { username, realName, email, phone } = user
@@ -127,10 +124,7 @@ const userController = {
       })
   },
   update: (req, res) => {
-    const { id } = req.params;
-    if (Number(id) !== req.user.id) {
-      return res.status(401).end()
-    }
+    const { id } = req.user.id;
 
     const { realName, email, phone } = req.body;
     if (!realName || !email || !phone) {
