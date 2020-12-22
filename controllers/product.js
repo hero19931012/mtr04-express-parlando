@@ -21,7 +21,7 @@ const productController = {
       .then((products) => {
         // 如果是 admin 就回傳全部；如果是 user，回傳 id, modelName, colorChip, storage
         if (req.user !== undefined && req.user.role === 'admin') {
-          res.status(200).json({
+          return res.status(200).json({
             products
           });
         }
