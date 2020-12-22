@@ -7,7 +7,7 @@ const productController = require('../controllers/product');
 const modelController = require('../controllers/model');
 const orderController = require('../controllers/order');
 const recipientController = require('../controllers/recipient');
-const imageController = require('../controllers/image');
+const photoController = require('../controllers/photo');
 
 const router = express.Router();
 
@@ -34,6 +34,7 @@ const adminAndUser = checkPermission(['admin', 'user'])
 
 router.post('/register', userController.handleRegister);
 router.post('/login', userController.handleLogin);
+router.get('/users/:id', adminAndUser, userController.getOne)
 router.patch('/users/:id', onlyUser, userController.update)
 
 router.post('/admin', adminController.handleLogin)
@@ -61,8 +62,9 @@ router.patch('/recipients/:id', onlyAdmin, recipientController.update)
 
 // image upload
 const upload = multer({});
-router.post('/images', upload.single("file"), imageController.handleUpload);
-router.get('/images', onlyAdmin, imageController.upload);
+router.get('/upload', photoController.index)
+router.get('/photos', onlyAdmin, photoController.getAll);
+router.post('/photos', upload.single("file"), photoController.upload);
 
 // 404 not found
 router.use((req, res) => {

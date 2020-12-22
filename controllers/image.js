@@ -16,11 +16,7 @@ const imageController = {
 
     const files = req.file.buffer.toString("base64")
 
-    try {
-      imgurUpload(files)
-    } catch (error) {
 
-    }
   }
 }
 

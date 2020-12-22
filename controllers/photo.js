@@ -1,16 +1,22 @@
+const { render } = require('ejs');
 const db = require('../models');
-const { RecipientInfo } = db;
+const { Photo } = db;
 
-const recipientController = {
+const photoController = {
   index: (req, res) => {
-    RecipientInfo.findAll()
-      .then((addresses) => {
-        res.status(200).json(addresses);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    res.render('upload')
   },
+  getAll: (req, res) => {
+
+  },
+  upload: (req, res) => {
+    // 接收 files 陣列
+    // call api => return links 陣列
+    // 寫入 Photos，關聯 ProductId
+
+    const files = req.file.buffer.toString("base64")
+    console.log(files);
+  }
 }
 
-module.exports = recipientController;
+module.exports = photoController;
