@@ -34,8 +34,8 @@ const adminAndUser = checkPermission(['admin', 'user'])
 
 router.post('/register', userController.handleRegister);
 router.post('/login', userController.handleLogin);
-router.get('/users/:id', adminAndUser, userController.getOne);
-router.patch('/users/:id', onlyUser, userController.update);
+router.get('/users', onlyUser, userController.getOne);
+router.patch('/users', onlyUser, userController.update);
 
 router.post('/admin', adminController.handleLogin);
 
