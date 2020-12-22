@@ -16,7 +16,6 @@ const userController = {
       !username || !password || !realName || !email || !phone
     ) {
       return res.status(400).json({
-        ok: 0,
         message: "register data incomplete"
       })
     }
@@ -24,7 +23,6 @@ const userController = {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err || !hash) {
         return res.status(400).json({
-          ok: 0,
           message: err.toString()
         })
       }
@@ -49,19 +47,16 @@ const userController = {
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err) {
               return res.status(400).json({
-                ok: 0,
                 message: err.toString()
               })
             }
             res.status(200).json({
-              ok: 1,
               token
             })
           })
         })
         .catch(err => {
           res.status(400).json({
-            ok: 0,
             message: "username had been registered"
           })
         });
@@ -96,12 +91,10 @@ const userController = {
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err || !token) {
               return res.status(400).json({
-                ok: 0,
-                message: err.toString()
+                message: "jwt sign error: " + err.toString()
               })
             }
             res.status(200).json({
-              ok: 1,
               token
             })
           })
@@ -121,10 +114,11 @@ const userController = {
 
     User.findOne({ where: { id } })
       .then(user => {
+        const { username, realName, email, phone } = user
         res.status(200).json({
           user: {
             id,
-            username: user.username,
+            username,
             realName,
             email,
             phone

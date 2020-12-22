@@ -9,7 +9,6 @@ const adminController = {
     const { username, password } = req.body;
     if (!username || !password) {
       return res.status(400).json({
-        ok: 0,
         message: "login error1: username and password required"
       })
     }
@@ -35,12 +34,10 @@ const adminController = {
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err || !token) {
               return res.status(400).json({
-                ok: 0,
                 message: "jwt sign error: " + err.toString()
               })
             }
             res.status(200).json({
-              ok: 1,
               token
             })
           })

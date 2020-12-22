@@ -19,7 +19,7 @@ const orderController = {
       })
       .catch(err => {
         res.status(500).json({
-          message: "Get order error: " + err.toString()
+          message: "Get orders error: " + err.toString()
         })
       });
   },
@@ -67,25 +67,11 @@ const orderController = {
       })
       .catch(err => {
         res.status(500).json({
-          message: "Get one order error1: " + err.toString()
+          message: "Get one order error: " + err.toString()
         })
       })
   },
   add: async (req, res) => {
-    // 1. 檢查是否有夠庫存
-    // 2. lock Product table, 更新庫存
-    requestData = {
-      userId,
-      totalPrice,
-      products: [
-        {
-          productId,
-          modelId,
-        }
-      ]
-    }
-
-
     const { userId, totalPrice, products } = req.body;
     if (!userId, !totalPrice, !products) {
       return res.status(400).json({
@@ -93,34 +79,164 @@ const orderController = {
       })
     }
 
-    // transaction
-    let count = 10
+    const orderContent = {
+      userId,
+      totalPrice
+    }
+
+    ///// transaction
+    // 1. 新增一筆 order => orderId
+    // 2. 對 products 遍歷，拿到 unitPrice, count
+    // 3. 檢查庫存，有庫存的話就寫入 Order_product
+    /////
 
     try {
-      const result = await db.sequelize.transaction(async ()=> {
-        const product = await Product_model.findOne({where: {id: 1}})
+      db.sequelize.transaction(async () => {
 
-        if (product.storage < count) {
-          throw new Error("storage not enough")
-        }        
-        
-        await product.update({
-          storage: product.storage - count,
-          sell: product.sell + count
+        const order = await Order.create(orderContent)
+        const orderId = order.id
+
+        for (let i = 0; i < products.length; i++) {
+          // product => {
+          //  modelId,
+          //  count
+          // }
+          const item = products[i]
+
+          const model = await Product_model.findOne({
+            where: { id: item.modelId },
+            include: [Product]
+          })
+
+          if (item.count > model.storage) {
+            throw new Error("no storage")
+          }
+
+          const order_product = {
+            orderId,
+            modelId: model.id,
+            count: item.count,
+            unitPrice: model.Product.dataValues.price
+          }
+
+          console.log(order_product);
+        }
+      })
+        // 用來接 transaction 的 then & catch
+        .then(() => {
+          res.status(200).json({
+            message: "add order success"
+          })
         })
-
-        return product
-      })
-
-      res.status(200).json({
-        result,
-      })
+        .catch(err => {
+          return res.status(500).json({
+            message: "add order error: " + err.toString()
+          })
+        })
     } catch (err) {
-      console.log(err);
       res.status(500).json({
-        message: "add order error2: " + err.toString()
+        message: "add order error: " + err.toString()
       })
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // transaction
+    // 1. 檢查是否有夠庫存
+    // 2. lock Product table, 更新庫存
+
+    // try {
+    //   const result = await db.sequelize.transaction(async () => {
+
+    //     const order = await Order.create({
+    //       userId,
+    //       totalPrice
+    //     })
+
+    //     await products.forEach(async (item) => {
+    //       console.log(item);
+
+    //       const product = await Product.findOne({
+    //         where: { id: item.productId }
+    //       })
+
+    //       item.orderId = order.id
+    //       item.unitPrice = product.price
+
+    //       const model = await Product_model.findOne({
+    //         where: { id: item.modelId },
+    //         lock: true
+    //       })
+
+    //       const { count } = item
+
+    //       if (item.storage < count) {
+    //         throw new Error("no storage")
+    //       }
+
+    //       await model.update({
+    //         storage: item.storage - count,
+    //         sell: item.sell + count
+    //       })
+
+    //       await Order_product.create(item)
+    //       .catch(err => { throw new Error("add order_product error") })
+    //     })
+
+    //     return order
+    //   })
+    //   res.status(200).json({
+    //     result
+    //   })
+    // } catch (err) {
+    //   console.log(err);
+    //   res.status(500).json({
+    //     message: "add order error2: " + err.toString()
+    //   })
+    // }
   },
   update: (req, res) => {
     // 完成訂單 => status: 1, order_products.findAll({where: {orderId}})
