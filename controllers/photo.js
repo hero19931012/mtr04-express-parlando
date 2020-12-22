@@ -11,8 +11,8 @@ const photoController = {
 
   },
   upload: (req, res) => {
-    if (req.fils.length === 0) {
-      res.status(400).json({
+    if (req.files.length === 0) {
+      return res.status(400).json({
         message: "upload images error: no images found"
       })
     }
@@ -30,16 +30,17 @@ const photoController = {
         reject(err)
       }
     })
-      // .then(links => {
-      //   const photoArray = links.map((link) => {
-      //     return {
-      //       url: link
-      //     }
-      //   })
-      //   console.log(links);
-      //   return Photo.bulkCreate(photoArray)
-      // })
+      .then(links => {
+        const photoArray = links.map((link) => {
+          return {
+            url: link
+          }
+        })
+        // console.log(links);
+        return Photo.bulkCreate(photoArray)
+      })
       .then((photos) => {
+        // console.log("bulkCreate result: ", photos);
         res.status(200).json({
           photos
         })
