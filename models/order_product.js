@@ -8,9 +8,6 @@ module.exports = (sequelize, DataTypes) => {
       Order_product.belongsTo(models.Order, {
         foreignKey: 'orderId',
       });
-      Order_product.belongsTo(models.Product, {
-        foreignKey: 'productId',
-      });
       Order_product.belongsTo(models.Product_model, {
         foreignKey: 'modelId',
       });

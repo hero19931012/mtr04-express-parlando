@@ -52,19 +52,31 @@ let productId = 1
 // 為每個顏色產生商品
 for (let i = 0; i < 4; i++) {
   const type = productTypes[i]
-  let name = '';
+  let typeInfo = {};
   switch (type) {
     case "HP":
-      name = "Headphone";
+      typeInfo = {
+        typeName: "Headphone",
+        typeNum: 1
+      };
       break;
     case "EP":
-      name = "Earphone";
+      typeInfo = {
+        typeName: "Earphone",
+        typeNum: 2
+      };
       break;
     case "SP":
-      name = "Speaker";
+      typeInfo = {
+        typeName: "Speaker",
+        typeNum: 3
+      };
       break;
     case "AC":
-      name = "Accessory";
+      typeInfo = {
+        typeName: "Accessory",
+        typeNum: 4
+      };
       break;
     default: break;
   }
@@ -73,16 +85,20 @@ for (let i = 0; i < 4; i++) {
   for (let i = 0; i < getRandomNum(); i++) {
     let serialNum = (i + 1) < 10 ? "0" + (i + 1).toString() : (i + 1).toString();
 
-    const productName = name + "-" + serialNum
+    const productName = typeInfo.typeName + "-" + serialNum
     const price = getRandomPrice()
+
+    const createdAt = new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24)
+    const updatedAt = new Date()
 
     productList.push({
       productName,
       price,
-      createdAt: new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-      updatedAt: new Date()
+      type: typeInfo.typeNum,
+      article: "JSON string",
+      createdAt,
+      updatedAt,
     })
-
 
     let models = []
 
@@ -107,11 +123,12 @@ for (let i = 0; i < 4; i++) {
         storage,
         sell,
         productId,
-        createdAt: new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-        updatedAt: new Date()
+        createdAt,
+        updatedAt
       }
       models.push(model)
       modelList.push(model)
+      colorTemp.push(color.abbreviation)
     }
 
     productId++
@@ -123,74 +140,8 @@ for (let i = 0; i < 4; i++) {
   }
 }
 
-
-// for (let i = 0; i < 2; i++) {
-//   const type = productTypes[i]
-//   let name = '';
-//   switch (type) {
-//     case "HP":
-//       name = "Headphone";
-//       break;
-//     case "EP":
-//       name = "Earphone";
-//       break;
-//     case "SP":
-//       name = "Speaker";
-//       break;
-//     case "AC":
-//       name = "Accessory";
-//       break;
-//     default: break;
-//   }
-
-//   for (let i = 0; i < 20; i++) {
-//     let price = Math.ceil(Math.random() * 100) * 100;
-//     let total = 100;
-//     let serialNum = (i + 1) < 10 ? "0" + (i + 1).toString() : (i + 1).toString();
-//     let colorSet = Math.floor(Math.random() * 3)
-
-//     if (colorSet > 0) {
-
-//       const temp = [] // 檢查有沒有重複的顏色
-//       for (let i = 0; i < colorSet; i++) {
-//         let sell = Math.floor(Math.random() * 10) * 10;
-//         let storage = total - sell;
-//         let color = colors[Math.floor(Math.random() * colors.length)]
-//         if (temp.indexOf(color) > 0) {
-//           i--;
-//           continue;
-//         }
-//         temp.push(color);
-//         rawProductList.push({
-//           name: `${name}-${serialNum}`,
-//           model: `${type}-${serialNum}${color.abbreviation}`,
-//           colorChip: color.chip,
-//           price,
-//           storage,
-//           sell,
-//           createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-//           updatedAt: new Date()
-//         })
-//       }
-//     } else {
-//       let sell = Math.floor(Math.random() * 10) * 10;
-//       let storage = total - sell;
-//       rawProductList.push({
-//         name: `${name}-${serialNum}`,
-//         model: `${type}-${serialNum}`,
-//         colorChip: null,
-//         price,
-//         storage,
-//         sell,
-//         createdAt: new randomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-//         updatedAt: new Date()
-//       })
-//     }
-//   }
-// }
-
 // console.log(rawProductList);
 // console.log(productList);
 // console.log(modelList);
 
-module.exports = { rawProductList, productList, modelList };
+module.exports = { rawProductList, productList, modelList, getRandomDate };

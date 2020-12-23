@@ -4,16 +4,34 @@ const { Photo } = db;
 const { imgurUpload } = require('../WebAPI/api')
 
 const photoController = {
-  index: (req, res) => {
-    res.render('upload')
-  },
+  // index: (req, res) => {
+  //   res.render('upload')
+  // },
   getAll: (req, res) => {
+    const { unlinked } = req.query
 
+    Photo.findAll({
+      where: unlinked !== undefined ? {
+        productId: null
+      } : null
+    })
+      .then(photos => {
+        res.status(200).json({
+          photos
+        })
+      })
+      .catch(err => {
+        console.log(`get photos error: ${err.toString()}`);
+        res.status(500).json({
+          message: err.toString()
+        })
+      })
   },
   upload: (req, res) => {
     if (req.files.length === 0) {
+      console.log("upload images error: no images found");
       return res.status(400).json({
-        message: "upload images error: no images found"
+        message: "no images found"
       })
     }
 
@@ -46,9 +64,32 @@ const photoController = {
         })
       })
       .catch(err => {
-        // console.log('err', err);
+        console.log(`upload images error2: ${err.toString()}`);
         res.status(500).json({
-          message: 'upload images error2: ' + err.toString()
+          message: err.toString()
+        })
+      })
+  },
+  update: (req, res) => {
+    const { productId, photos } = req.body;
+    if (!productId || !photos || photos.length === 0) {
+      console.log("update photos error: data incomplete");
+      return res.status(400).json({
+        message: "data incomplete"
+      })
+    }
+
+    Photo.update(
+      { productId },
+      { where: { id: photos } }
+    )
+      .then(photos => {
+        res.status(204).end()
+      })
+      .catch(err => {
+        console.log(`link product and photos error: ${err.toString()}`)
+        res.status(500).json({
+          message: err.toString()
         })
       })
   }
