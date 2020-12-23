@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Product, Product_model } = db;
+const { Product, Product_model, Photo } = db;
 
 const productController = {
   getAll: (req, res) => {
@@ -16,7 +16,7 @@ const productController = {
           order !== undefined ? order : "ASC"
         ],
       ],
-      include: [Product_model]
+      include: [Product_model, Photo]
     })
       .then((products) => {
         // 如果是 admin 就回傳全部；如果是 user，回傳 id, modelName, colorChip, storage
@@ -61,7 +61,7 @@ const productController = {
     const { id } = req.params
     Product.findOne({
       where: { id, isDeleted: null },
-      include: [Product_model]
+      include: [Product_model, Photo]
     })
       .then((product) => {
         // 如果找不到 => product === null
