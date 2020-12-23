@@ -4,6 +4,7 @@ npx sequelize-cli model:generate --name User --attributes username:STRING,passwo
 npx sequelize-cli model:generate --name Address_city --attributes cityName:STRING --force;
 npx sequelize-cli model:generate --name Address_district --attributes districtName:STRING --force;
 npx sequelize-cli model:generate --name Product --attributes productName:STRING,price:INTEGER,type:INTEGER,article:TEXT,isShow:INTEGER,isDeleted:INTEGER --force;
+
 npx sequelize-cli model:generate --name Product_model --attributes modelName:STRING,colorChip:STRING,storage:INTEGER,sell:INTEGER,isShow:INTEGER,isDeleted:INTEGER --force;
 npx sequelize-cli model:generate --name Photo --attributes url:TEXT --force;
 npx sequelize-cli model:generate --name Order --attributes totalPrice:INTEGER,status:INTEGER,isDeleted:INTEGER --force;
