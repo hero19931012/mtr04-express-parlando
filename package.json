@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "seed": "npx sequelize-cli db:seed:all",
+    "seed": "npx sequelize-cli db:seed:all --debug",
     "migrate": "npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migrate:undo:all",
     "demo": "npm run migrate && npm run seed",
