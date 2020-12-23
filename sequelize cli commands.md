@@ -36,6 +36,8 @@ npx sequelize-cli seed:generate --name demo-district
 npx sequelize-cli seed:generate --name demo-product
 npx sequelize-cli seed:generate --name demo-photo
 npx sequelize-cli seed:generate --name demo-model
+npx sequelize-cli seed:generate --name demo-order
+npx sequelize-cli seed:generate --name demo-order_product
 
 
 

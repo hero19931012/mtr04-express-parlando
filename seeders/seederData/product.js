@@ -88,13 +88,16 @@ for (let i = 0; i < 4; i++) {
     const productName = typeInfo.typeName + "-" + serialNum
     const price = getRandomPrice()
 
+    const createdAt = new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24)
+    const updatedAt = new Date()
+
     productList.push({
       productName,
       price,
       type: typeInfo.typeNum,
       article: "JSON string",
-      createdAt: new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-      updatedAt: new Date()
+      createdAt,
+      updatedAt,
     })
 
     let models = []
@@ -120,8 +123,8 @@ for (let i = 0; i < 4; i++) {
         storage,
         sell,
         productId,
-        createdAt: new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24),
-        updatedAt: new Date()
+        createdAt,
+        updatedAt
       }
       models.push(model)
       modelList.push(model)
@@ -141,4 +144,4 @@ for (let i = 0; i < 4; i++) {
 // console.log(productList);
 // console.log(modelList);
 
-module.exports = { rawProductList, productList, modelList };
+module.exports = { rawProductList, productList, modelList, getRandomDate };
