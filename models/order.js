@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   Order.init({
     totalPrice: DataTypes.INTEGER,
-    status: DataTypes.INTEGER
+    status: DataTypes.INTEGER,
+    isDeleted: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Order',
