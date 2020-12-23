@@ -3,10 +3,10 @@ npx sequelize-cli model:generate --name Admin --attributes username:STRING,passw
 npx sequelize-cli model:generate --name User --attributes username:STRING,password:STRING,realName:STRING,email:STRING,phone:STRING --force;
 npx sequelize-cli model:generate --name Address_city --attributes cityName:STRING --force;
 npx sequelize-cli model:generate --name Address_district --attributes districtName:STRING --force;
-npx sequelize-cli model:generate --name Product --attributes productName:STRING,price:INTEGER,article:TEXT,isDeleted:INTEGER --force;
-npx sequelize-cli model:generate --name Product_model --attributes modelName:STRING,colorChip:STRING,storage:INTEGER,sell:INTEGER,isDeleted:INTEGER --force;
+npx sequelize-cli model:generate --name Product --attributes productName:STRING,price:INTEGER,type:INTEGER,article:TEXT,isShow:INTEGER,isDeleted:INTEGER --force;
+npx sequelize-cli model:generate --name Product_model --attributes modelName:STRING,colorChip:STRING,storage:INTEGER,sell:INTEGER,isShow:INTEGER,isDeleted:INTEGER --force;
 npx sequelize-cli model:generate --name Photo --attributes url:TEXT --force;
-npx sequelize-cli model:generate --name Order --attributes totalPrice:INTEGER,status:INTEGER --force;
+npx sequelize-cli model:generate --name Order --attributes totalPrice:INTEGER,status:INTEGER,isDeleted:INTEGER --force;
 npx sequelize-cli model:generate --name Recipient --attributes name:STRING,phone:STRING,email:STRING,address:STRING --force;
 npx sequelize-cli model:generate --name Order_product --attributes count:INTEGER,unitPrice:INTEGER --force;
 npx sequelize-cli model:generate --name ECpay_result --attributes merchantId:INTEGER,merchantTradeNo:INTEGER,storeId:INTEGER,rtnCode:INTEGER,rtnMsg:STRING,tradeNo:STRING,paymenData:DATE,paymentType:STRING,paymentTypeChargeFee:INTEGER,tradeDate:DATE --force
