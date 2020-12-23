@@ -5,9 +5,6 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static associate(models) {
-      Product.hasMany(models.Order_product, {
-        foreignKey: 'productId'
-      });
       Product.hasMany(models.Product_model, {
         foreignKey: 'productId'
       });
@@ -19,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   Product.init({
     productName: DataTypes.STRING,
     price: DataTypes.INTEGER,
-    isDeleted: DataTypes.BOOLEAN
+    type: DataTypes.INTEGER,
+    article: DataTypes.TEXT,
+    isShow: DataTypes.INTEGER,
+    isDeleted: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Product',

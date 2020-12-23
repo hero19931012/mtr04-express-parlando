@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     colorChip: DataTypes.STRING,
     storage: DataTypes.INTEGER,
     sell: DataTypes.INTEGER,
-    isDeleted: DataTypes.BOOLEAN
+    isShow: DataTypes.INTEGER,
+    isDeleted: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Product_model',

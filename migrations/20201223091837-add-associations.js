@@ -102,20 +102,6 @@ module.exports = {
     );
     await queryInterface.addColumn(
       'Order_products',
-      'productId',
-      {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Products',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Order_products',
       'modelId',
       {
         type: Sequelize.INTEGER,
