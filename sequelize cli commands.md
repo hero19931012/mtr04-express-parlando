@@ -11,6 +11,11 @@ npx sequelize-cli model:generate --name Recipient --attributes name:STRING,phone
 npx sequelize-cli model:generate --name Order_product --attributes count:INTEGER,unitPrice:INTEGER --force;
 npx sequelize-cli model:generate --name ECpay_result --attributes merchantId:INTEGER,merchantTradeNo:INTEGER,storeId:INTEGER,rtnCode:INTEGER,rtnMsg:STRING,tradeNo:STRING,paymenData:DATE,paymentType:STRING,paymentTypeChargeFee:INTEGER,tradeDate:DATE --force
 
+**migration modification**
+- username / productName => unique:true
+- username / password / realName / recipient name length: 20
+
+
 ## create migration (for association)
 npx sequelize-cli migration:generate --name add-associations
 

@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       modelName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(20),
+        unique: true
       },
       colorChip: {
         type: Sequelize.STRING
