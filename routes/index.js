@@ -50,6 +50,13 @@ router.post('/models', onlyAdmin, modelController.add);
 router.patch('/models/:id', onlyAdmin, modelController.update);
 router.delete('/models/:id', onlyAdmin, modelController.delete);
 
+// image upload
+const upload = multer({});
+// router.get('/upload', photoController.index);
+router.get('/photos', onlyAdmin, photoController.getAll);
+router.post('/photos', upload.array("files"), photoController.upload);
+router.patch('/photos', onlyAdmin, photoController.update)
+
 router.get('/orders', adminAndUser, orderController.getAll);
 router.get('/orders/:id', adminAndUser, orderController.getOne);
 router.post('/orders', adminAndUser, orderController.add);
@@ -60,11 +67,7 @@ router.get('/recipients', adminAndUser, recipientController.getAll);
 router.get('/recipients/:id', adminAndUser, recipientController.getOne);
 router.patch('/recipients/:id', onlyAdmin, recipientController.update);
 
-// image upload
-const upload = multer({});
-router.get('/upload', photoController.index);
-router.get('/photos', onlyAdmin, photoController.getAll);
-router.post('/photos', upload.array("files"), photoController.upload);
+
 
 // 404 not found
 router.use((req, res) => {
