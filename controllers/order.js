@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Order, Order_product, Product, Product_model } = db;
+const { Order, Order_product, Product, Product_model, Recipient } = db;
 
 const orderController = {
   getAll: (req, res) => {
@@ -26,51 +26,56 @@ const orderController = {
         })
       });
   },
-  getOne: (req, res) => {
+  getOne: async (req, res) => {
     const { id } = req.params;
 
-    let totalPrice = 0;
-    let status = null;
+    const order = await Order.findOne({
+      where: { id },
+      include: [Recipient]
+    })
 
-    Order.findOne({ where: { id } }).then(order => {
-      // 如果是 admin 的話可以看全部的 order, user 只能看自己的
-      if (req.user.role !== 'admin' && req.user.id !== order.userId) {
-        res.status(401).end()
+    // 如果是 admin 的話可以看全部的 order, user 只能看自己的
+    if (req.user.role !== 'admin' && req.user.id !== order.userId) {
+      return res.status(401).json({
+        message: "invalid user"
+      })
+    }
+
+    const totalPrice = order.totalPrice;
+    const status = order.status;
+    const recipient = order.Recipients[0] !== undefined ? order.Recipients[0].dataValues : null
+
+    const order_prodcut = await Order_product.findAll({
+      where: { orderId: id },
+      include: [Product_model]
+    })
+
+    try {
+      const productList = order_prodcut.map((product) => {
+        return {
+          modelId: product.Product_model.id,
+          modelName: product.Product_model.modelName,
+          unitPrice: product.unitPrice,
+          count: product.count
+        }
+      })
+
+      const orderContent = {
+        totalPrice,
+        status,
+        products: productList,
+        recipient
       }
 
-      totalPrice = order.totalPrice;
-      status = order.status
-
-      return Order_product.findAll({
-        where: { orderId: id },
-        include: [Product_model]
+      res.status(200).json({
+        order: orderContent
       })
-    })
-      .then((content) => {
-        const productList = content.map((product) => {
-          return {
-            modelId: product.Product_model.id,
-            modelName: product.Product_model.modelName,
-            unitPrice: product.unitPrice,
-            count: product.count
-          }
-        })
-
-        const orderContent = {
-          totalPrice,
-          status,
-          products: productList,
-        }
-
-        res.status(200).json({
-          order: orderContent
-        })
+    } catch (err) {
+      console.log(`Get one order error: ${err.toString()}`);
+      res.status(500).json({
+        message: err.toString()
       })
-      .catch(err => {
-        res.status(500).json({
-          message: "Get one order error: " + err.toString()
-        })
-      })
+    }
   },
   add: async (req, res) => {
     // 1. 對 products 遍歷，檢查庫存，取出 price 算出 totalPrice，把 model push 到陣列
