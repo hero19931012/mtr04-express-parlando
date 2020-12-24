@@ -38,6 +38,7 @@ const userController = {
             // user info
             id: user.id,
             username,
+            role: "user"
           }
 
           const options = {
