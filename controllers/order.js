@@ -43,14 +43,12 @@ const orderController = {
 
       return Order_product.findAll({
         where: { orderId: id },
-        include: [Product, Product_model]
+        include: [Product_model]
       })
     })
       .then((content) => {
         const productList = content.map((product) => {
           return {
-            productId: product.Product.id,
-            productName: product.Product.productName,
             modelId: product.Product_model.id,
             modelName: product.Product_model.modelName,
             unitPrice: product.unitPrice,
