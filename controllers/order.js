@@ -180,8 +180,20 @@ const orderController = {
   },
   delete: (req, res) => {
     // 刪除訂單
-
-
+    const { id } = req.params;
+    Order.update(
+      { isDeleted: 1 },
+      { where: { id } }
+    )
+      .then(() => {
+        res.status(204).end()
+      })
+      .catch(err => {
+        console.log(`delete order error: ${err.toString()}`);
+        res.status(500).json({
+          message: err.toString()
+        })
+      })
   },
 }
 module.exports = orderController;
