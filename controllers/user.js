@@ -4,17 +4,15 @@ const db = require('../models');
 const { SECRET, saltRounds } = require('../env/env')
 const { User } = db;
 
-
-
 const userController = {
   handleRegister: (req, res) => {
     const {
-      username, password, realName, email,
-      phone
+      username, password, realName, email, phone
     } = req.body;
     if (
       !username || !password || !realName || !email || !phone
     ) {
+      console.log("register error1: register data incomplete");
       return res.status(400).json({
         message: "register data incomplete"
       })
@@ -22,7 +20,8 @@ const userController = {
 
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err || !hash) {
-        return res.status(400).json({
+        console.log(`register error2: ${err.toString()}`);
+        return res.status(500).json({
           message: err.toString()
         })
       }
@@ -46,7 +45,8 @@ const userController = {
           }
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err) {
-              return res.status(400).json({
+              console.log(`register error3: ${err.toString()}`);
+              return res.status(500).json({
                 message: err.toString()
               })
             }
@@ -56,6 +56,7 @@ const userController = {
           })
         })
         .catch(err => {
+          console.log(`register error4: ${err.toString()}`);
           res.status(400).json({
             message: "username had been registered"
           })
@@ -65,8 +66,9 @@ const userController = {
   handleLogin: (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
+      console.log(`login error1: username and password required`);
       return res.status(400).json({
-        message: "login error1: username and password required"
+        message: "username and password required"
       })
     }
     User.findOne({ where: { username } })
@@ -91,8 +93,9 @@ const userController = {
           }
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err || !token) {
-              return res.status(400).json({
-                message: "jwt sign error: " + err.toString()
+              console.log(`login error2: ${err.toString()}`);
+              return res.status(500).json({
+                message: "jwt sign error"
               })
             }
             res.status(200).json({
@@ -102,14 +105,15 @@ const userController = {
         })
       })
       .catch(err => {
+        console.log(`login error3: ${err.toString()}`);
         res.status(500).json({
-          message: "login error3: " + err.toString()
+          message: "invalid username and password"
         })
       })
   },
   getOne: (req, res) => {
     const id = req.user.id
-    
+
     User.findOne({ where: { id } })
       .then(user => {
         const { username, realName, email, phone } = user
@@ -125,12 +129,12 @@ const userController = {
       })
   },
   update: (req, res) => {
-    const { id } = req.user.id;
-
+    const { id } = req.user;
     const { realName, email, phone } = req.body;
     if (!realName || !email || !phone) {
+      console.log(`update user error1: user data incomplete`);
       return res.status(400).json({
-        message: "update user error1: user data incomplete"
+        message: "user data incomplete"
       })
     }
 
@@ -152,8 +156,9 @@ const userController = {
         })
       })
       .catch(err => {
+        console.log(`update user error2: ${err.toString()}`);
         res.status(500).json({
-          message: "update user error2: " + err.toString()
+          message: err.toString()
         })
       })
   }
