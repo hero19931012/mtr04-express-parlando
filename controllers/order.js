@@ -128,6 +128,8 @@ const orderController = {
       })
     }
 
+    let orderId = 0
+
     try {
       db.sequelize.transaction(async () => {
 
@@ -137,7 +139,7 @@ const orderController = {
         }
 
         const order = await Order.create(orderContent)
-        const orderId = order.id
+        orderId = order.id
 
         for (let i = 0; i < modelArray.length; i++) {
           await modelArray[i].update({
@@ -154,6 +156,7 @@ const orderController = {
       })
         .then((result) => {
           res.status(200).json({
+            orderId,
             result
           })
         })
