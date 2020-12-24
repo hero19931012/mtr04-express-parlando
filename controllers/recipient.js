@@ -5,11 +5,15 @@ const recipientController = {
   getAll: (req, res) => {
     Recipient.findAll()
       .then((recipient) => {
+        if (req.user === 'admin') {
+
+        }
         res.status(200).json(recipient);
       })
       .catch(err => {
+        console.log(`get recipients error: ${err.toString()}`);
         res.status(500).json({
-          message: "get recipients error: " + err.toString()
+          message: err.toString()
         })
       });
   },
@@ -28,8 +32,39 @@ const recipientController = {
         })
       });
   },
+  add: (req, res) => {
+    const { orderId, name, phone, email, address, cityId, districtId } = req.body;
+
+    if (
+      !orderId ||
+      !name ||
+      !phone ||
+      !email ||
+      !address ||
+      !cityId ||
+      !districtId
+    ) {
+      console.log("add recipient error1: recipient data incomplete");
+      return res.status(400).json({
+        message: "recipient data incomplete"
+      })
+    }
+
+    Recipient.create({ orderId, name, phone, email, address, cityId, districtId })
+    .then(recipient => {
+      res.status(200).json({
+        recipient
+      })
+    })
+    .catch(err => {
+      console.log(`add recipient error2: ${err.toString()}`);
+      res.status(500).json({
+        message: err.toString()
+      })
+    })
+  },
   update: (req, res) => {
-    
+
   }
 }
 

@@ -65,9 +65,8 @@ router.delete('/orders/:id', onlyAdmin, orderController.delete); // 刪除訂單
 
 router.get('/recipients', adminAndUser, recipientController.getAll);
 router.get('/recipients/:id', adminAndUser, recipientController.getOne);
+router.post('/recipients/', onlyUser, recipientController.add);
 router.patch('/recipients/:id', onlyAdmin, recipientController.update);
-
-
 
 // 404 not found
 router.use((req, res) => {
