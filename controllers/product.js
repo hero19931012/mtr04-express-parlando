@@ -103,17 +103,19 @@ const productController = {
       });
   },
   add: (req, res) => {
-    const { productName, price } = req.body;
+    const { productName, price, type } = req.body;
 
-    if (!productName || !price) {
+    if (!productName || !price || !type) {
+      console.log("add product error1: product data incomplete");
       return res.status(400).json({
-        message: "add product error1: product data incomplete"
+        message: "product data incomplete"
       })
     }
 
     Product.create({
       productName,
-      price
+      price,
+      type
     })
       .then((product) => {
         res.status(200).json({ product })

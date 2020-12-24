@@ -10,16 +10,20 @@ module.exports = {
       },
       productName: {
         type: Sequelize.STRING(20),
-        unique: true
+        unique: true,
+        allowNull: false
       },
       price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       type: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       article: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       isShow: {
         type: Sequelize.INTEGER
