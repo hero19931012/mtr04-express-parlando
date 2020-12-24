@@ -73,8 +73,9 @@ const userController = {
       .then((user) => {
         bcrypt.compare(password, user.password, (err, result) => {
           if (err || !result) {
+            console.log("login error2: invalid username and password");
             return res.status(400).json({
-              message: `login error2: invalid username and password`
+              message: "invalid username and password"
             })
           }
 
