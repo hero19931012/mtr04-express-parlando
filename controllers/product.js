@@ -103,36 +103,56 @@ const productController = {
       });
   },
   add: (req, res) => {
-    const { productName, price, type } = req.body;
+    const { productName, price, type, article } = req.body;
 
-    if (!productName || !price || !type) {
+    if (!productName || !price || !type || !article) {
       console.log("add product error1: product data incomplete");
       return res.status(400).json({
         message: "product data incomplete"
       })
     }
 
+    let typeNum = 0
+    switch (type) {
+      case "耳罩式耳機": {
+        typeNum = 1
+      }
+      case "入耳式耳機": {
+        typeNum = 2
+      }
+      case "音響": {
+        typeNum = 3
+      }
+      case "週邊配件": {
+        typeNum = 4
+      }
+      default: { }
+    }
+
     Product.create({
       productName,
       price,
-      type
+      type,
+      article
     })
       .then((product) => {
         res.status(200).json({ product })
       })
       .catch(err => {
+        console.log(`add product error2: ${err.toString()}`);
         res.status(500).json({
-          message: "add product error2: " + err.toString()
+          message: err.toString()
         })
       })
   },
   update: (req, res) => {
     const { id } = req.params
-    const { productName, price } = req.body;
+    const { productName, price, type, article } = req.body;
 
-    if (!productName || !price) {
+    if (!productName || !price || !type || !article) {
+      console.log("update product error1: product data incomplete");
       return res.status(400).json({
-        message: "update product error1: product data incomplete"
+        message: "product data incomplete"
       })
     }
 
@@ -145,15 +165,18 @@ const productController = {
         }
         return product.update({
           productName,
-          price
+          price,
+          type,
+          article
         })
       })
       .then((product) => {
         res.status(200).json({ product })
       })
       .catch(err => {
+        console.log(`update product error3: ${err.toString()}`);
         res.status(500).json({
-          message: "update product error3: " + err.toString()
+          message: err.toString()
         })
       })
   },
@@ -169,8 +192,9 @@ const productController = {
         res.status(204).end()
       })
       .catch(err => {
-        res.status(403).json({
-          message: "update product error: " + err.toString()
+        console.log(`delete product error: ${err.toString()}`);
+        res.status(500).json({
+          message: err.toString()
         })
       })
   }
