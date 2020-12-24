@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Product_model } = db;
+const { Product, Product_model } = db;
 
 const modelController = {
   getOne: (req, res) => {
@@ -19,7 +19,7 @@ const modelController = {
         })
       });
   },
-  add: (req, res) => {
+  add: async (req, res) => {
     const { productId, modelName, colorChip, storage } = req.body
     if (
       !productId ||
@@ -27,13 +27,18 @@ const modelController = {
       !colorChip ||
       !storage
     ) {
+      console.log("add model error1: model data incomplete");
       return res.status(400).json({
-        message: "add model error1: model data incomplete"
+        message: "model data incomplete"
       })
     }
+
+    const product = await Product.findOne({ where: { id: productId } })
+    const modelFullName = product.productName + modelName
+
     Product_model.create({
       productId,
-      modelName,
+      modelName: modelFullName,
       colorChip,
       storage,
       sell: 0
@@ -42,8 +47,9 @@ const modelController = {
         res.status(200).json({ model });
       })
       .catch(err => {
+        console.log(`add model error2: ${err.toString()}`);
         res.status(500).json({
-          message: "add model error2: " + err.toString()
+          message: err.toString()
         });
       })
   },
@@ -55,15 +61,17 @@ const modelController = {
       !colorChip ||
       !storage
     ) {
+      console.log("update model error1: model data incomplete");
       return res.status(400).json({
-        message: "update model error1: model data incomplete"
+        message: "model data incomplete"
       })
     }
     Product_model.findOne({ where: { id, isDeleted: null } })
       .then(model => {
         if (model === null) {
+          console.log("update model error2: model has been deleted");
           res.status(403).json({
-            message: "update model error2: model has been deleted"
+            message: "model has been deleted"
           })
         }
         return model.update({
@@ -78,8 +86,9 @@ const modelController = {
         })
       })
       .catch(err => {
+        console.log(`update model error3: ${err.toString()}`);
         res.status(500).json({
-          message: "update model error: " + err.toString()
+          message: err.toString()
         })
       })
   },
