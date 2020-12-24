@@ -9,10 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       count: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       unitPrice: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

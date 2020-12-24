@@ -14,7 +14,8 @@ npx sequelize-cli model:generate --name ECpay_result --attributes merchantId:INT
 
 **migration modification**
 - username / productName => unique:true
-- username / password / realName / recipient name length: 20
+- username / realName / recipient name length: 20
+- allowNull: false
 
 
 ## create migration (for association)
@@ -38,8 +39,6 @@ npx sequelize-cli seed:generate --name demo-photo
 npx sequelize-cli seed:generate --name demo-model
 npx sequelize-cli seed:generate --name demo-order
 npx sequelize-cli seed:generate --name demo-order_product
-
-
 
 ## Run seeds
 npx sequelize-cli db:seed:all

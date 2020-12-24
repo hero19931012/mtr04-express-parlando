@@ -10,16 +10,20 @@ module.exports = {
       },
       modelName: {
         type: Sequelize.STRING(20),
-        unique: true
+        unique: true,
+        allowNull: false
       },
       colorChip: {
-        type: Sequelize.STRING(6)
+        type: Sequelize.STRING(6),
+        allowNull: false
       },
       storage: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       sell: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       isShow: {
         type: Sequelize.INTEGER
