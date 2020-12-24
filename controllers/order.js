@@ -175,8 +175,19 @@ const orderController = {
   update: (req, res) => {
     // 完成訂單 => status: 1, order_products.findAll({where: {orderId}})
     const { id } = req.params;
-
-
+    Order.update(
+      { status: 1 },
+      { where: { id } }
+    )
+      .then((order) => {
+        res.status(204).end()
+      })
+      .catch(err => {
+        console.log(`update order error: ${err.toString()}`);
+        res.status(500).json({
+          message: err.toString()
+        })
+      })
   },
   delete: (req, res) => {
     // 刪除訂單
