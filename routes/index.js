@@ -59,9 +59,9 @@ router.patch('/photos', onlyAdmin, photoController.update)
 
 router.get('/orders', adminAndUser, orderController.getAll);
 router.get('/orders/:id', adminAndUser, orderController.getOne);
-router.post('/orders', adminAndUser, orderController.add);
-router.patch('/orders/:id', onlyAdmin, orderController.update);
-router.delete('/orders/:id', adminAndUser, orderController.delete);
+router.post('/orders', onlyUser, orderController.add);
+router.patch('/orders/:id', onlyAdmin, orderController.update); // 完成訂單
+router.delete('/orders/:id', onlyAdmin, orderController.delete); // 刪除訂單
 
 router.get('/recipients', adminAndUser, recipientController.getAll);
 router.get('/recipients/:id', adminAndUser, recipientController.getOne);

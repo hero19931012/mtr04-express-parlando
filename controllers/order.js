@@ -4,7 +4,9 @@ const { Order, Order_product, Product, Product_model } = db;
 const orderController = {
   getAll: (req, res) => {
     // 如果是 admin => 輸出全部訂單，如果是 user => where: userId
-    Order.findAll()
+    Order.findAll({
+      include: [Order_product]
+    })
       .then((orders) => {
         if (req.user.role === "admin") {
           return res.status(200).json({
@@ -18,8 +20,9 @@ const orderController = {
         })
       })
       .catch(err => {
+        console.log(`Get orders error: ${err.toString()}`);
         res.status(500).json({
-          message: "Get orders error: " + err.toString()
+          message: err.toString()
         })
       });
   },
@@ -30,7 +33,7 @@ const orderController = {
     let status = null;
 
     Order.findOne({ where: { id } }).then(order => {
-      // 如果是 admin 的話可以看全部的 order
+      // 如果是 admin 的話可以看全部的 order, user 只能看自己的
       if (req.user.role !== 'admin' && req.user.id !== order.userId) {
         res.status(401).end()
       }
@@ -72,13 +75,6 @@ const orderController = {
       })
   },
   add: async (req, res) => {
-    const { userId, products } = req.body;
-    if (!userId, !products) {
-      return res.status(400).json({
-        message: 'add order error1: order data incomplete'
-      })
-    }
-
     // 1. 對 products 遍歷，檢查庫存，取出 price 算出 totalPrice，把 model push 到陣列
     //////// transaction
     // 2. 新增一筆 order，寫入 userId, totalPrice => 拿到 orderId
@@ -86,9 +82,20 @@ const orderController = {
     // 4. 遍歷 model array，寫入 productId, modelId, unitPrice 到 Order_product
     ////////
 
+    const { products } = req.body;
+    if (!products || products.length === 0) {
+      console.log("add order error1: order data incomplete");
+      return res.status(400).json({
+        message: 'order data incomplete'
+      })
+    }
+
+    const userId = req.user.id
+
     const orderProducts = []
     const modelArray = [] // 等下用來 update
-    const modelUpdateDataArray = []
+    const modelUpdateDataArray = [] // update 的內容
+
     let totalPrice = 0
 
     for (let i = 0; i < products.length; i++) {
@@ -109,7 +116,7 @@ const orderController = {
       }
 
       const unitPrice = model.Product.dataValues.price
-      totalPrice += unitPrice
+      totalPrice += unitPrice * count
 
       modelArray.push(model)
       modelUpdateDataArray.push({
@@ -167,9 +174,13 @@ const orderController = {
   },
   update: (req, res) => {
     // 完成訂單 => status: 1, order_products.findAll({where: {orderId}})
+    const { id } = req.params;
+
 
   },
   delete: (req, res) => {
+    // 刪除訂單
+
 
   },
 }
