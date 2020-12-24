@@ -14,8 +14,8 @@ const router = express.Router();
 const checkPermission = (roles = []) => (req, res, next) => {
   const role = req.user !== undefined ? req.user.role : null
   if (
-    roles.indexOf('user') >= 0 && roles.indexOf('user') >= 0
-    && (role === 'user' || role === 'admin')
+    roles.indexOf('admin') >= 0 && roles.indexOf('user') >= 0
+    && (role === 'admin' || role === 'user')
   ) {
     return next();
   }
