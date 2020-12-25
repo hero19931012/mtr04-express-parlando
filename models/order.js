@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       Order.hasMany(models.Order_product, {
         foreignKey: 'orderId',
       });
-      Order.hasOne(models.ECpay_result, {
-        foreignKey: 'orderId'
-      });
+      // Order.hasOne(models.ECpay_result, {
+      //   foreignKey: 'orderId'
+      // });
     }
   };
   Order.init({
