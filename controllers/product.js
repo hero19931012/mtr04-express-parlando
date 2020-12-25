@@ -1,13 +1,15 @@
 const db = require('../models');
 const { Product, Product_model, Photo } = db;
 
+const typeArray = ["耳罩式耳機", "入耳式耳機", "音響", "週邊配件"]
+
 const productController = {
   getAll: (req, res) => {
-    let { sort, order, limit, offset } = req.query;
+    let { sort, order, limit, offset, type } = req.query;
+    const option = type !== undefined ? { type, isDeleted: null } : { isDeleted: null }
+
     Product.findAll({
-      where: {
-        isDeleted: null
-      },
+      where: option,
       limit: limit !== undefined ? Number(limit) : null,
       offset: offset !== undefined ? Number(offset) : 0,
       order: [
@@ -21,6 +23,11 @@ const productController = {
       .then((products) => {
         // 如果是 admin 就回傳全部；如果是 user，回傳 id, modelName, colorChip, storage
         if (req.user !== undefined && req.user.role === 'admin') {
+          products.forEach((product) => {
+            product.type = typeArray[Number(product.type) - 1];
+            return
+          })
+
           return res.status(200).json({
             products
           });
@@ -39,8 +46,13 @@ const productController = {
               }
             })
 
-          const productForUser = { ...product.dataValues } // 從 sequelize 物件拿出資料
-          productForUser.Product_models = models
+          const typeName = typeArray[Number(product.type) - 1]
+          console.log("typeName", typeName, "index", Number(product.type) - 1);
+          const productForUser = {
+            ...product.dataValues, // 從 sequelize 物件拿出資料
+            type: typeName,
+            Product_models: models
+          }
 
           return {
             ...productForUser
@@ -66,10 +78,14 @@ const productController = {
       .then((product) => {
         // 如果找不到 => product === null
         if (product === null) {
+          console.log("get product error1: product has been deleted");
           res.status(403).json({
-            message: "get product error1: " + "product has been deleted"
+            message: "product has been deleted"
           })
         }
+
+        // 設定 type
+        product.type = typeArray[Number(product.type) - 1]
 
         // 如果是 admin 就回傳全部；如果是 user 只回傳 id, modelName, colorChip, storage
         if (req.user !== undefined && req.user.role === "admin") {
@@ -132,7 +148,7 @@ const productController = {
     Product.create({
       productName,
       price,
-      type,
+      type: typeNum,
       article
     })
       .then((product) => {
