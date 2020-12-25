@@ -47,7 +47,6 @@ const productController = {
             })
 
           const typeName = typeArray[Number(product.type) - 1]
-          console.log("typeName", typeName, "index", Number(product.type) - 1);
           const productForUser = {
             ...product.dataValues, // 從 sequelize 物件拿出資料
             type: typeName,
