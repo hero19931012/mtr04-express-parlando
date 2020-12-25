@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+  <div>
+    <% payments.forEach(payment => {
+      const {
+        MerchantID,
+        MerchantTradeNo,
+        StoreID,
+        RtnCode,
+        RtnMsg,
+        TradeNo,
+        TradeAmt,
+        PaymentDate,
+        PaymentType,
+        PaymentTypeChargeFee,
+        TradeDate,
+        SimulatePaid,
+      } = payment
+    %>
+  <ul>
+    <li>MerchantID: <%= MerchantID %></li>
+    <li>MerchantTradeNo: <%= MerchantTradeNo %></li>
+    <li>StoreID: <%= StoreID %></li>
+    <li>RtnCode: <%= RtnCode %></li>
+    <li>RtnMsg: <%= RtnMsg %></li>
+    <li>TradeNo: <%= TradeNo %></li>
+    <li>TradeAmt: <%= TradeAmt %></li>
+    <li>PaymentDate: <%= PaymentDate %></li>
+    <li>PaymentType: <%= PaymentType %></li>
+    <li>PaymentTypeChargeFee: <%= PaymentTypeChargeFee %></li>
+    <li>TradeDate: <%= TradeDate %></li>
+    <li>SimulatePaid: <%= SimulatePaid %></li>
+  </ul>
+  <% }) %>
+</div>
+</body>
+</html>
