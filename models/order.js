@@ -11,9 +11,16 @@ module.exports = (sequelize, DataTypes) => {
       Order.hasMany(models.Recipient, {
         foreignKey: 'orderId'
       });
-      Order.hasMany(models.Order_product, {
-        foreignKey: 'orderId',
-      });
+      // Order.hasMany(models.Order_product, {
+      //   foreignKey: 'orderId',
+      // });
+
+      Order.belongsToMany(models.Product_model, {
+        through: models.Order_product,
+        foreignKey: 'orderId'
+      })
+
+
       Order.hasOne(models.ECpay_result, {
         foreignKey: 'orderId'
       });

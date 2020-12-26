@@ -2,21 +2,40 @@ const db = require('../models');
 const { Order, Order_product, Product, Product_model, Recipient } = db;
 
 const orderController = {
-  getAll: (req, res) => {
+  getAll: async (req, res) => {
     // 如果是 admin => 輸出全部訂單，如果是 user => where: userId
+    const role = req.user.role
+    const whereOption = role === 'admin' ? null : { userId: req.user.id }
+
     Order.findAll({
-      include: [Order_product]
+      where: whereOption,
+      include: [Product_model]
     })
       .then((orders) => {
-        if (req.user.role === "admin") {
-          return res.status(200).json({
-            orders
-          });
-        }
-        res.status(200).json({
-          orders: orders.filter((order) => {
-            return order.userId === req.user.id
+        if (role === 'admin') { return res.status(200).json({ orders }) }
+
+        const orderDataForUser = orders.map((order) => {
+          const { id, totalPrice, status, createdAt, Product_models } = order
+          const products = Product_models.map((model) => {
+            return {
+              modelId: model.id,
+              modelName: model.modelName,
+              unitPrice: model.Order_product.unitPrice,
+              count: model.Order_product.count
+            }
           })
+
+          return {
+            id,
+            totalPrice,
+            status,
+            createdAt,
+            products
+          }
+        })
+
+        res.status(200).json({
+          orders: orderDataForUser
         })
       })
       .catch(err => {
@@ -31,7 +50,7 @@ const orderController = {
 
     const order = await Order.findOne({
       where: { id },
-      include: [Recipient]
+      include: [Product_model, Recipient]
     })
 
     // 如果是 admin 的話可以看全部的 order, user 只能看自己的
@@ -41,41 +60,24 @@ const orderController = {
       })
     }
 
-    const totalPrice = order.totalPrice;
-    const status = order.status;
-    const recipient = order.Recipients[0] !== undefined ? order.Recipients[0].dataValues : null
-
-    const order_prodcut = await Order_product.findAll({
-      where: { orderId: id },
-      include: [Product_model]
+    const { totalPrice, status, createdAt } = order;
+    const products = order.Product_models.map((model) => {
+      return {
+        modelId: model.id,
+        modelName: model.modelName,
+        unitPrice: model.Order_product.unitPrice,
+        count: model.Order_product.count
+      }
     })
 
-    try {
-      const productList = order_prodcut.map((product) => {
-        return {
-          modelId: product.Product_model.id,
-          modelName: product.Product_model.modelName,
-          unitPrice: product.unitPrice,
-          count: product.count
-        }
-      })
-
-      const orderContent = {
+    res.status(200).json({
+      order: {
         totalPrice,
         status,
-        products: productList,
-        recipient
+        createdAt,
+        products
       }
-
-      res.status(200).json({
-        order: orderContent
-      })
-    } catch (err) {
-      console.log(`Get one order error: ${err.toString()}`);
-      res.status(500).json({
-        message: err.toString()
-      })
-    }
+    })
   },
   add: async (req, res) => {
     // 1. 對 products 遍歷，檢查庫存，取出 price 算出 totalPrice，把 model push 到陣列
@@ -180,7 +182,6 @@ const orderController = {
     }
   },
   update: (req, res) => {
-    // 完成訂單 => status: 1, order_products.findAll({where: {orderId}})
     const { id } = req.params;
     Order.update(
       { status: 1 },
