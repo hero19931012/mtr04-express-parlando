@@ -52,7 +52,6 @@ router.delete('/models/:id', onlyAdmin, modelController.delete);
 
 // image upload
 const upload = multer({});
-// router.get('/upload', photoController.index);
 router.get('/photos', onlyAdmin, photoController.getAll);
 router.post('/photos', upload.array("files"), photoController.upload);
 router.patch('/photos', onlyAdmin, photoController.update)
