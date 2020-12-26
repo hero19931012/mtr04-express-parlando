@@ -29,8 +29,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(checkAuth)
 app.use('/', router)
 
-const httpPort = 3001;
-const httpsPort = 3000;
+const httpPort = 3000;
+const httpsPort = 3001;
 
 server.listen(httpPort, () => {
   console.log(`Listening http on port: ${httpPort}`);
