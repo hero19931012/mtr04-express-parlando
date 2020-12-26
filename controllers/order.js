@@ -106,7 +106,8 @@ const orderController = {
 
       const model = await Product_model.findOne({
         where: { id: item.modelId },
-        include: [Product]
+        include: [Product],
+        lock: true
       })
 
       const count = item.count
