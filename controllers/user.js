@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const db = require('../models');
 const { SECRET, saltRounds } = require('../env/env')
-const { User } = db;
+const { User, Admin } = db;
 
 const userController = {
   handleRegister: (req, res) => {
@@ -112,8 +112,20 @@ const userController = {
         })
       })
   },
-  getOne: (req, res) => {
-    const id = req.user.id
+  getOne: async (req, res) => {
+    const { id, role } = req.user
+    if (role === 'admin') {
+      await Admin.findOne({ where: id })
+        .then(admin => {
+          return res.status(200).json({
+            admin: {
+              id: admin.id,
+              username: admin.username
+            }
+          })
+        })
+      return
+    }
 
     User.findOne({ where: { id } })
       .then(user => {
