@@ -1,39 +1,41 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const http = require('http');
+const https = require('https')
+const fs = require('fs');
 const morgan = require('morgan');
 const cors = require('cors')
-const router = require('./routes');
 const checkAuth = require('./middlewares/auth')
-const swaggerDocument = require('./swagger.json');
-const swaggerUi = require('swagger-ui-express');
-const app = express();
-const port = process.env.PORT || 3000;
 
+const router = require('./routes');
+const app = express();
 
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
-app.use(cors())
+// setting ssl
+app.use(express.static('static'));
+const privateKey  = fs.readFileSync(__dirname + '/ssl/private.key');
+const certificate = fs.readFileSync(__dirname + '/ssl/certificate.crt');
+const credentials = { key: privateKey, cert: certificate };
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(morgan('dev'))
+const server = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
+app.use(cors())
+app.use(morgan('combined'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(checkAuth)
-
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Request-With, Content-Type, Accept, Authorization'
-//   );
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//   next();
-// });
-
 app.use('/', router)
 
-app.listen(port, () => {
-  console.log(`Listening on port:${port}!`);
+const httpPort = 3001;
+const httpsPort = 3000;
+
+server.listen(httpPort, () => {
+  console.log(`Listening http on port: ${httpPort}`);
+});
+
+httpsServer.listen(httpsPort, () => {
+  console.log(`Listening https on port: ${httpsPort}!`);
 });
