@@ -5,12 +5,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class ECpay_result extends Model {
     static associate(models) {
-      ECpay_result.belongsTo(models.User, {
-        foreignKey: 'userId',
-      });
-      ECpay_result.belongsTo(models.Order, {
-        foreignKey: 'orderId',
-      });
+      // ECpay_result.belongsTo(models.Order, {
+      //   foreignKey: 'orderId',
+      // });
     }
   };
   ECpay_result.init({
