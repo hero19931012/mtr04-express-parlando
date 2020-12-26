@@ -100,7 +100,7 @@ const productController = {
               id,
               modelName,
               colorChip,
-              storage
+              storage: storage > 10 ? "庫存充足" : storage
             }
           })
 
