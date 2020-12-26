@@ -3,4 +3,5 @@ node_modules/
 config/firebase.json
 config/config.json
 env/
+ssl/
 sequelize cli commands.md
