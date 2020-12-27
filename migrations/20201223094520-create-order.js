@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      UUID: {
+        allowNull: false,
+        type: Sequelize.UUID,
+      },
       totalPrice: {
         type: Sequelize.INTEGER,
         allowNull: false
