@@ -1,8 +1,9 @@
 const ecpay_payment = require('ecpay-payment');
 const db = require('../models');
-const { ECpay_result } = db;
 
-const getRandomUid = () => {
+const { ECpay_result, Order, Product_model } = db;
+
+const getRandomMerchantTradeNo = () => {
   let result = '';
   for (let i = 0; i < 20; i++) {
     if (i % 2 === 0) {
@@ -14,21 +15,56 @@ const getRandomUid = () => {
   return result;
 };
 
-const paymentController = {
-  renderPaymentPage: (req, res) => {
+function getDate() {
+  const date = new Date().toLocaleString()
+  let [Day, Time] = date.split(', ')
+  let [month, day, year] = Day.split('/')
+  let [time, noon] = Time.split(' ')
+  let [hr, min, sec] = time.split(':')
+  if (noon === 'PM') { hr = Number(hr) + 12 }
 
-    const tradeDate = (new Date()).toLocaleString().replace('-', '/').replace('-', '/')
-    console.log(tradeDate);
+  return `${year}/${month}/${day} ${hr}:${min}:${sec}`
+}
+
+const paymentController = {
+  handlePayment: async (req, res) => {
+    const UUID = req.params.id;
+
+    // 透過 uuid 取出 order
+    const order = await Order.findOne({ where: { UUID }, include: [Product_model] });
+    if (order === null) {
+      return res.status(400).json({
+        message: "invalid id"
+      })
+    }
+
+    // 產生 20 uid 寫入 order
+    const MerchantTradeNo = getRandomMerchantTradeNo()
+    try {
+      order.update({ MerchantTradeNo })
+    } catch (err) {
+      console.log(`payment error1: ${err.toString()}`);
+      return res.status(500).json({
+        message: err.toString()
+      })
+    }
+
+    const { totalPrice, Product_models } = order
+    let productList = ''
+    Product_models.forEach((product, index) => {
+      const { modelName } = product
+      const { count } = product.Order_product
+      productList += `${index !== 0 ? " " : ""}${modelName}*${count}`
+    })
 
     // 結帳資訊
     const base_param = {
-      MerchantTradeNo: getRandomUid(),
-      MerchantTradeDate: tradeDate,
-      TotalAmount: '100',
-      TradeDesc: 'TradeDesc test',
-      ItemName: 'ItemName test123',
-      ReturnURL: 'http://18.236.235.107:3000/paymentResult',
-      // Remark: '交易備註123',
+      MerchantTradeNo: getRandomMerchantTradeNo(), // 不重複的 20 碼 uid
+      MerchantTradeDate: getDate(), // 格式：2017/02/13 15:45:30
+      TotalAmount: totalPrice,
+      TradeDesc: 'test',
+      ItemName: productList,
+      ReturnURL: 'https://parlando.tw/payment-result',
     };
 
     const inv_params = {};
@@ -38,17 +74,14 @@ const paymentController = {
       (parameters = base_param),
       (invoice = inv_params)
     );
-
     res.send(htm);
   },
   renderAdminPage: (req, res) => {
-    ECpay_result.findAll()
-      .then((payments) => {
-        res.render('paymentResult', { payments });
-      });
+    Payment_result.findAll().then((payments) => {
+      res.render('admin', { payments });
+    });
   },
   handlePaymentResult: (req, res) => {
-    console.log("get payment result");
     const {
       MerchantID,
       MerchantTradeNo,
@@ -56,26 +89,15 @@ const paymentController = {
       RtnCode,
       RtnMsg,
       TradeNo,
-      // TradeAmt,
+      TradeAmt,
       PaymentDate,
       PaymentType,
-      // PaymentTypeChargeFee,
+      PaymentTypeChargeFee,
       TradeDate,
-      // SimulatePaid,
+      SimulatePaid,
     } = req.body;
 
-    console.log(
-      MerchantID,
-      MerchantTradeNo,
-      StoreID,
-      RtnCode,
-      RtnMsg,
-      TradeNo,
-      PaymentDate,
-      PaymentType,
-      TradeDate);
-
-    Payment_result.create({
+    ECpay_result.create({
       MerchantID,
       MerchantTradeNo,
       StoreID,
@@ -88,13 +110,7 @@ const paymentController = {
       // PaymentTypeChargeFee,
       TradeDate,
       // SimulatePaid,
-    })
-      .then(result => {
-        console.log(result);
-        res.statsu(200).json({
-          ok: 1
-        })
-      })
+    });
   },
 };
 
