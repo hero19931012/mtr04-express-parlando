@@ -1,7 +1,11 @@
 const ecpay_payment = require('ecpay-payment');
 const db = require('../models');
 
+<<<<<<< HEAD
 const { ECpay_result, Order, Product_model } = db;
+=======
+const { ECpay_result, Order } = db;
+>>>>>>> 58f9d55e0be90f591730b6252bc9eff2f1713f42
 
 const getRandomMerchantTradeNo = () => {
   let result = '';
