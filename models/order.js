@@ -16,11 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'orderId'
       })
       Order.hasOne(models.ECpay_result, {
-        foreignKey: 'orderId'
+        foreignKey: 'orderUUID'
       });
     }
   };
   Order.init({
+    UUID: DataTypes.UUID,
     totalPrice: DataTypes.INTEGER,
     status: DataTypes.INTEGER,
     isDeleted: DataTypes.INTEGER

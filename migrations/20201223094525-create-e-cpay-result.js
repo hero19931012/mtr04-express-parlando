@@ -8,34 +8,34 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      merchantId: {
+      MerchantId: {
         type: Sequelize.INTEGER
       },
-      merchantTradeNo: {
+      MerchantTradeNo: {
         type: Sequelize.INTEGER
       },
-      storeId: {
+      StoreId: {
         type: Sequelize.INTEGER
       },
-      rtnCode: {
+      RtnCode: {
         type: Sequelize.INTEGER
       },
-      rtnMsg: {
+      RtnMsg: {
         type: Sequelize.STRING
       },
-      tradeNo: {
+      TradeNo: {
         type: Sequelize.STRING
       },
-      paymenData: {
+      PaymenData: {
         type: Sequelize.DATE
       },
-      paymentType: {
+      PaymentType: {
         type: Sequelize.STRING
       },
-      paymentTypeChargeFee: {
+      PaymentTypeChargeFee: {
         type: Sequelize.INTEGER
       },
-      tradeDate: {
+      TradeDate: {
         type: Sequelize.DATE
       },
       createdAt: {
