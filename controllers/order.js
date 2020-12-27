@@ -1,4 +1,5 @@
 const db = require('../models');
+const { v4: uuidv4 } = require('uuid');
 const { Order, Order_product, Product, Product_model, Recipient } = db;
 
 const orderController = {
@@ -15,7 +16,7 @@ const orderController = {
         if (role === 'admin') { return res.status(200).json({ orders }) }
 
         const orderDataForUser = orders.map((order) => {
-          const { id, totalPrice, status, createdAt, Product_models } = order
+          const { UUID, totalPrice, status, createdAt, Product_models } = order
           const products = Product_models.map((model) => {
             return {
               modelId: model.id,
@@ -26,9 +27,9 @@ const orderController = {
           })
 
           return {
-            id,
+            UUID,
             totalPrice,
-            status,
+            status: status === null ? "處理中" : "已出貨",
             createdAt,
             products
           }
@@ -46,10 +47,10 @@ const orderController = {
       });
   },
   getOne: async (req, res) => {
-    const { id } = req.params;
-
+    // order/:uuid => req.params.id
+    const UUID = req.params.id;
     const order = await Order.findOne({
-      where: { id },
+      where: { UUID },
       include: [Product_model, Recipient]
     })
 
@@ -149,6 +150,7 @@ const orderController = {
       db.sequelize.transaction(async () => {
 
         const orderContent = {
+          UUID: uuidv4(),
           userId,
           totalPrice
         }
