@@ -122,7 +122,7 @@ const orderController = {
       }
 
       const unitPrice = model.Product.dataValues.price
-      totalPrice += unitPrice * count
+      totalPrice += (unitPrice * count)
 
       modelArray.push(model)
       modelUpdateDataArray.push({
@@ -165,6 +165,7 @@ const orderController = {
         .then((result) => {
           res.status(200).json({
             orderId,
+            totalPrice,
             result
           })
         })
