@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const { rawProductList, modelList } = require('./product');
 const { userList } = require('./user');
 const { getRandomDate } = require('./product');
@@ -65,6 +66,7 @@ function getOrderContent(orderRequestData, orderId) {
   })
 
   const orderContent = {
+    UUID: uuidv4(),
     userId,
     totalPrice,
     createdAt,
