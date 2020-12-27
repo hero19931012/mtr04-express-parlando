@@ -1,7 +1,11 @@
 const ecpay_payment = require('ecpay-payment');
 const db = require('../models');
 
+<<<<<<< HEAD
+const { ECpay_result, Order, Product_model } = db;
+=======
 const { ECpay_result, Order } = db;
+>>>>>>> 58f9d55e0be90f591730b6252bc9eff2f1713f42
 
 const getRandomMerchantTradeNo = () => {
   let result = '';
@@ -31,7 +35,7 @@ const paymentController = {
     const UUID = req.params.id;
 
     // 透過 uuid 取出 order
-    const order = await Order.findOne({ where: { UUID } });
+    const order = await Order.findOne({ where: { UUID }, include: [Product_model] });
     if (order === null) {
       return res.status(400).json({
         message: "invalid id"
@@ -49,11 +53,12 @@ const paymentController = {
       })
     }
 
-    const { totalPrice, products } = order
+    const { totalPrice, Product_models } = order
     let productList = ''
-    products.forEach((product, index) => {
-      const { modelName, count } = product
-      productList += `${index !== 0 ? " ": ""}${modelName}*${count}`
+    Product_models.forEach((product, index) => {
+      const { modelName } = product
+      const { count } = product.Order_product
+      productList += `${index !== 0 ? " " : ""}${modelName}*${count}`
     })
 
     // 結帳資訊

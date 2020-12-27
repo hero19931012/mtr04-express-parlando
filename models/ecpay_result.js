@@ -11,16 +11,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   ECpay_result.init({
-    merchantId: DataTypes.INTEGER,
-    merchantTradeNo: DataTypes.INTEGER,
-    storeId: DataTypes.INTEGER,
-    rtnCode: DataTypes.INTEGER,
-    rtnMsg: DataTypes.STRING,
-    tradeNo: DataTypes.STRING,
-    paymenData: DataTypes.DATE,
-    paymentType: DataTypes.STRING,
-    paymentTypeChargeFee: DataTypes.INTEGER,
-    tradeDate: DataTypes.DATE
+    MerchantId: DataTypes.INTEGER,
+    MerchantTradeNo: DataTypes.STRING,
+    StoreId: DataTypes.INTEGER,
+    RtnCode: DataTypes.INTEGER,
+    RtnMsg: DataTypes.STRING,
+    RradeNo: DataTypes.STRING,
+    PaymenData: DataTypes.DATE,
+    PaymentType: DataTypes.STRING,
+    PaymentTypeChargeFee: DataTypes.INTEGER,
+    TradeDate: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'ECpay_result',

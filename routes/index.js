@@ -72,7 +72,7 @@ const paymentController = require('../controllers/payment')
 router.get('/payment', (req, res) => {
   res.render('paymentIndex')
 })
-router.post('/payment', paymentController.handlePayment)
+router.post('/payment/:id', paymentController.handlePayment)
 router.post('/payment-result', paymentController.handlePaymentResult)
 
 // 404 not found
