@@ -52,7 +52,7 @@ function getOrderContent(orderRequestData, orderId) {
     let productId = modelList[product.modelId].productId
     let price = productList[productId - 1].price
 
-    totalPrice += price
+    totalPrice += (price * product.count)
 
     orderProductContent.push({
       orderId: orderId + 1,
