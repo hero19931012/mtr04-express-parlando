@@ -193,12 +193,10 @@ const productController = {
   },
   delete: (req, res) => {
     const { id } = req.params
-    Product.findOne({ where: { id } })
-      .then(product => {
-        return product.update({
-          isDeleted: 1
-        })
-      })
+    Product.update(
+      { isDeleted: 1 },
+      { where: { id } }
+    )
       .then(() => {
         res.status(204).end()
       })
