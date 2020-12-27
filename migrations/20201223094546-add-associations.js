@@ -74,6 +74,21 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
+      'Orders',
+      'MerchantTradeNo',
+      {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        unique: true,
+        references: {
+          model: 'ECpay_results',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      }
+    );
+    await queryInterface.addColumn(
       'Product_models',
       'productId',
       {
@@ -131,5 +146,5 @@ module.exports = {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {}
+  down: async (queryInterface, Sequelize) => { }
 };
