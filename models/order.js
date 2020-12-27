@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         through: models.Order_product,
         foreignKey: 'orderId'
       })
-      Order.belongsTo(models.ECpay_result, {
-        foreignKey: 'MerchantTradeNo'
+      Order.hasOne(models.ECpay_result, {
+        foreignKey: 'orderUUID'
       });
     }
   };
