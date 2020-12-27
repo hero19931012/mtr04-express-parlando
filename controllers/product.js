@@ -148,7 +148,8 @@ const productController = {
       productName,
       price,
       type: typeNum,
-      article
+      article,
+      isShow: 0
     })
       .then((product) => {
         res.status(200).json({ product })
@@ -162,34 +163,29 @@ const productController = {
   },
   update: (req, res) => {
     const { id } = req.params
-    const { productName, price, type, article } = req.body;
-
-    if (!productName || !price || !type || !article) {
-      console.log("update product error1: product data incomplete");
-      return res.status(400).json({
-        message: "product data incomplete"
-      })
-    }
+    const { productName, price, type, article, isShow, isDeleted } = req.body;
 
     Product.findOne({ where: { id, isDeleted: null } })
       .then(product => {
         if (product === null) {
           return res.status(403).json({
-            message: "update product error2: product has been deleted"
+            message: "update product error1: product has been deleted"
           })
         }
         return product.update({
-          productName,
-          price,
-          type,
-          article
+          productName: productName !== undefined ? productName : product.productName,
+          price: price !== undefined ? price : product.price,
+          type: type !== undefined ? type : product.type,
+          article: article !== undefined ? article : product.article,
+          isShow: isShow !== undefined ? isShow : product.isShow,
+          isDeleted: isDeleted !== undefined ? isDeleted : product.isDeleted,
         })
       })
       .then((product) => {
         res.status(200).json({ product })
       })
       .catch(err => {
-        console.log(`update product error3: ${err.toString()}`);
+        console.log(`update product error2: ${err.toString()}`);
         res.status(500).json({
           message: err.toString()
         })
