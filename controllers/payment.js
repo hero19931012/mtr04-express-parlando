@@ -86,7 +86,7 @@ const paymentController = {
       res.render('admin', { payments });
     });
   },
-  handlePaymentResult: (req, res) => {
+  handlePaymentResult: async (req, res) => {
     const {
       MerchantID,
       MerchantTradeNo,

@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       MerchantTradeNo: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       StoreId: {
         type: Sequelize.INTEGER

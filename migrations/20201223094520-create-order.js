@@ -10,6 +10,7 @@ module.exports = {
       },
       UUID: {
         allowNull: false,
+        unique: true,
         type: Sequelize.UUID,
       },
       totalPrice: {
