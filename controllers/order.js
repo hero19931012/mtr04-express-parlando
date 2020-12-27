@@ -53,6 +53,13 @@ const orderController = {
       include: [Product_model, Recipient]
     })
 
+    if (order === null) {
+      console.log("get one order error1: invalid orderId");
+      return res.status(400).json({
+        message: "invalid orderId"
+      })
+    }
+
     // 如果是 admin 的話可以看全部的 order, user 只能看自己的
     if (req.user.role !== 'admin' && req.user.id !== order.userId) {
       return res.status(401).json({
