@@ -7,10 +7,10 @@ npx sequelize-cli model:generate --name Product --attributes productName:STRING,
 
 npx sequelize-cli model:generate --name Product_model --attributes modelName:STRING,colorChip:STRING,storage:INTEGER,sell:INTEGER,isShow:INTEGER,isDeleted:INTEGER --force;
 npx sequelize-cli model:generate --name Photo --attributes url:TEXT --force;
-npx sequelize-cli model:generate --name Order --attributes totalPrice:INTEGER,status:INTEGER,isDeleted:INTEGER --force;
+npx sequelize-cli model:generate --name Order --attributes UUID:UUID,totalPrice:INTEGER,status:INTEGER,isDeleted:INTEGER --force;
 npx sequelize-cli model:generate --name Recipient --attributes name:STRING,phone:STRING,email:STRING,address:STRING --force;
 npx sequelize-cli model:generate --name Order_product --attributes count:INTEGER,unitPrice:INTEGER --force;
-npx sequelize-cli model:generate --name ECpay_result --attributes merchantId:INTEGER,merchantTradeNo:INTEGER,storeId:INTEGER,rtnCode:INTEGER,rtnMsg:STRING,tradeNo:STRING,paymenData:DATE,paymentType:STRING,paymentTypeChargeFee:INTEGER,tradeDate:DATE --force
+npx sequelize-cli model:generate --name ECpay_result --attributes MerchantId:INTEGER,MerchantTradeNo:INTEGER,StoreId:INTEGER,RtnCode:INTEGER,RtnMsg:STRING,TradeNo:STRING,PaymenData:DATE,PaymentType:STRING,PaymentTypeChargeFee:INTEGER,TradeDate:DATE --force
 
 **migration modification**
 - username / productName => unique:true

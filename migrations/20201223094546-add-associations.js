@@ -74,6 +74,21 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
+      'ECpay_results',
+      'orderUUID',
+      {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        references: {
+          model: 'Order',
+          key: 'UUID',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      }
+    );
+    await queryInterface.addColumn(
       'Product_models',
       'productId',
       {
@@ -131,5 +146,5 @@ module.exports = {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {}
+  down: async (queryInterface, Sequelize) => { }
 };
