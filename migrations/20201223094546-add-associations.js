@@ -129,20 +129,6 @@ module.exports = {
         onDelete: 'RESTRICT',
       }
     );
-    await queryInterface.addColumn(
-      'Order',
-      'Id',
-      {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Products',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
   },
 
   down: async (queryInterface, Sequelize) => {}
