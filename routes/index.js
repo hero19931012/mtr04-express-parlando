@@ -69,15 +69,11 @@ router.patch('/recipients/:id', onlyAdmin, recipientController.update);
 
 // payment-test
 const paymentController = require('../controllers/payment')
-router.get('/payment-index', (req, res) => {
+router.get('/payment', (req, res) => {
   res.render('paymentIndex')
 })
-router.get('/payment-test', paymentController.renderPaymentPage)
-router.get('/payment-result', paymentController.renderAdminPage)
-router.post('/paymentResult', (req, res) => {
-  console.log("reciving payment result");
-  return next()
-}, paymentController.handlePaymentResult)
+router.post('/payment', paymentController.handlePayment)
+router.post('/payment-result', paymentController.handlePaymentResult)
 
 // 404 not found
 router.use((req, res) => {
