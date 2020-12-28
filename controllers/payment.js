@@ -73,10 +73,10 @@ const paymentController = {
     const base_param = {
       MerchantTradeNo, // 不重複的 20 碼 uid
       MerchantTradeDate: getDate(), // 格式：YYYY/MM/DD 15:45:30
-      TotalAmount: totalPrice,
+      TotalAmount: 10000,
       TradeDesc: 'test',
-      ItemName: "productsString",
-      ReturnURL: `https://parlando.tw/payment`,
+      ItemName: "product names",
+      ReturnURL: "https://parlando.tw/payment",
     };
 
     console.log(base_param);
