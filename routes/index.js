@@ -73,7 +73,7 @@ router.get('/payment', (req, res) => {
   res.render('paymentIndex')
 })
 router.get('/payment/:uuid', paymentController.handlePayment)
-router.post('/payment/:uuid', paymentController.handlePaymentResult)
+router.post('/payment', paymentController.handlePaymentResult)
 
 // 404 not found
 router.use((req, res) => {
