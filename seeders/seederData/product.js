@@ -26,7 +26,7 @@ function getRandomNum() {
 }
 
 function getRandomPrice() {
-  return Math.ceil(Math.random() * 100) * 100
+  return Math.ceil(Math.random() * 10) * 500
 }
 
 function getRandomColor(colors) {
