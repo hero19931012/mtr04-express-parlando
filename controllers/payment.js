@@ -23,6 +23,12 @@ function getDate() {
   let [hr, min, sec] = time.split(':')
   if (noon === 'PM') { hr = Number(hr) + 12 }
 
+  month = Number(month) > 10 ? month : "0" + month
+  day = Number(day) > 10 ? day : "0" + day
+  hr = Number(hr) > 10 ? hr : "0" + hr
+  min = Number(min) > 10 ? min : "0" + min
+  // sec = Number(sec) > 10 ? sec : "0" + sec
+
   const dateString = `${year}/${month}/${day} ${hr}:${min}:${sec}`
   console.log(dateString);
   return dateString
