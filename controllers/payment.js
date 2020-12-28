@@ -39,10 +39,13 @@ const paymentController = {
     const UUID = req.params.uuid;
 
     // 透過 uuid 取出 order
-    const order = await Order.findOne({ where: { UUID }, include: [Product_model] });
+    const order = await Order.findOne({
+      where: { UUID, status: null },
+      include: [Product_model]
+    });
     if (order === null) {
       return res.status(400).json({
-        message: "invalid id"
+        message: "invalid order id or already paid"
       })
     }
 
@@ -50,10 +53,17 @@ const paymentController = {
     const { id, totalPrice, Product_models } = order
     const MerchantTradeNo = getRandomMerchantTradeNo(); // 長度 20 的隨機字串
     try {
-      await ECpay_result.create({
-        orderId: id,
-        MerchantTradeNo
-      })
+      const payment = ECpay_result.fineOne({ where: { orderId: id } })
+      if (payment !== null) {
+        await payment.update({
+          MerchantTradeNo
+        })
+      } else {
+        await ECpay_result.create({
+          orderId: id,
+          MerchantTradeNo
+        })
+      }
     } catch (err) {
       console.log(`payment error1: ${err.toString()}`);
       return res.status(500).json({
@@ -73,9 +83,9 @@ const paymentController = {
     const base_param = {
       MerchantTradeNo, // 不重複的 20 碼 uid
       MerchantTradeDate: getDate(), // 格式：YYYY/MM/DD 15:45:30
-      TotalAmount: 10000,
+      TotalAmount: totalPrice.toString(), // 必須是字串
       TradeDesc: 'test',
-      ItemName: "product names",
+      ItemName: productsString,
       ReturnURL: "https://parlando.tw/payment",
     };
 
@@ -96,10 +106,6 @@ const paymentController = {
     });
   },
   handlePaymentResult: async (req, res) => {
-    const UUID = req.params.uuid
-
-    res.status(204).end()
-
     const {
       MerchantID,
       MerchantTradeNo,
@@ -114,8 +120,6 @@ const paymentController = {
       TradeDate,
       SimulatePaid,
     } = req.body;
-
-    console.log("MerchantTradeNo", MerchantTradeNo);
 
     try {
       const payment = await ECpay_result.findOne({ where: { MerchantTradeNo } })
@@ -139,6 +143,12 @@ const paymentController = {
         TradeDate,
         // SimulatePaid,
       })
+
+      const { orderId } = payment;
+      await Order.update(
+        { status: 1 },
+        { where: orderId }
+      )
 
       return res.status(200).json({
         ok: 1
