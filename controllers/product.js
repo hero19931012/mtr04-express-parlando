@@ -78,7 +78,7 @@ const productController = {
         // 如果找不到 => product === null
         if (product === null) {
           console.log("get product error1: product has been deleted");
-          res.status(403).json({
+          return res.status(403).json({
             message: "product has been deleted"
           })
         }
