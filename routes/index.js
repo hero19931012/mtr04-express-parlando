@@ -8,6 +8,7 @@ const modelController = require('../controllers/model');
 const orderController = require('../controllers/order');
 const recipientController = require('../controllers/recipient');
 const photoController = require('../controllers/photo');
+const paymentController = require('../controllers/payment')
 
 const router = express.Router();
 
@@ -68,12 +69,11 @@ router.post('/recipients/', onlyUser, recipientController.add);
 router.patch('/recipients/:id', onlyAdmin, recipientController.update);
 
 // payment-test
-const paymentController = require('../controllers/payment')
 router.get('/payment', (req, res) => {
   res.render('paymentIndex')
 })
-router.post('/payment/:id', paymentController.handlePayment)
-router.post('/payment-result', paymentController.handlePaymentResult)
+router.get('/payment/:uuid', paymentController.handlePayment)
+router.post('/payment/:uuid', paymentController.handlePaymentResult)
 
 // 404 not found
 router.use((req, res) => {

@@ -30,19 +30,6 @@ const paymentController = {
     // 用 {uuid, MerchantTradeNo} create 一筆付款資訊, uuid 是 ecpay_result 對 order 的 foreignKey，MerchantTradeNo 在之後付款結果回傳時用來查詢要寫入的資料
 
     const UUID = req.params.id;
-    const MerchantTradeNo = getRandomMerchantTradeNo(); // 長度 20 的隨機字串
-
-    try {
-      await ECpay_result.create({
-        orderUUID: UUID,
-        MerchantTradeNo
-      })
-    } catch (err) {
-      console.log(`payment error1: ${err.toString()}`);
-      return res.status(500).json({
-        message: err.toString()
-      })
-    }
 
     // 透過 uuid 取出 order
     const order = await Order.findOne({ where: { UUID }, include: [Product_model] });
@@ -52,7 +39,20 @@ const paymentController = {
       })
     }
 
-    const { totalPrice, Product_models } = order
+    // 寫入 orderId & MerchantTradeNo 進 ECpay_result
+    const { id, totalPrice, Product_models } = order
+    const MerchantTradeNo = getRandomMerchantTradeNo(); // 長度 20 的隨機字串
+    try {
+      await ECpay_result.create({
+        orderId: id,
+        MerchantTradeNo
+      })
+    } catch (err) {
+      console.log(`payment error1: ${err.toString()}`);
+      return res.status(500).json({
+        message: err.toString()
+      })
+    }
 
     // 產生購買商品的字串
     let productsString = ''
