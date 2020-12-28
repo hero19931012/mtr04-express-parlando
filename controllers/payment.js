@@ -78,7 +78,7 @@ const paymentController = {
       TotalAmount: totalPrice,
       TradeDesc: 'test',
       ItemName: productsString,
-      ReturnURL: 'https://parlando.tw/payment-result',
+      ReturnURL: `https://parlando.tw/payment/${UUID}`,
     };
 
     const inv_params = {};
