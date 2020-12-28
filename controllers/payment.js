@@ -53,7 +53,7 @@ const paymentController = {
     const { id, totalPrice, Product_models } = order
     const MerchantTradeNo = getRandomMerchantTradeNo(); // 長度 20 的隨機字串
     try {
-      const payment = ECpay_result.findOne({ where: { orderId: id } })
+      const payment = await ECpay_result.findOne({ where: { orderId: id } })
       if (payment !== null) {
         await payment.update({
           MerchantTradeNo
