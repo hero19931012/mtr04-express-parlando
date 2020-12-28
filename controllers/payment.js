@@ -23,7 +23,9 @@ function getDate() {
   let [hr, min, sec] = time.split(':')
   if (noon === 'PM') { hr = Number(hr) + 12 }
 
-  return `${year}/${month}/${day} ${hr}:${min}:${sec}`
+  const dateString = `${year}/${month}/${day} ${hr}:${min}:${sec}`
+  console.log(dateString);
+  return dateString
 }
 
 const paymentController = {
