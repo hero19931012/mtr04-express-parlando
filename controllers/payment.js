@@ -29,7 +29,7 @@ const paymentController = {
   handlePayment: async (req, res) => {
     // 用 {uuid, MerchantTradeNo} create 一筆付款資訊, uuid 是 ecpay_result 對 order 的 foreignKey，MerchantTradeNo 在之後付款結果回傳時用來查詢要寫入的資料
 
-    const UUID = req.params.id;
+    const UUID = req.params.uuid;
 
     // 透過 uuid 取出 order
     const order = await Order.findOne({ where: { UUID }, include: [Product_model] });
