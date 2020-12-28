@@ -102,6 +102,8 @@ const paymentController = {
       SimulatePaid,
     } = req.body;
 
+    console.log("MerchantTradeNo", MerchantTradeNo);
+
     try {
       const payment = await ECpay_result.findOne({ where: { MerchantTradeNo } })
       if (payment === null) {
@@ -131,7 +133,7 @@ const paymentController = {
     } catch (err) {
       console.log(`payment error4: ${err.toString()}`);
       return res.status(500).json({
-        message: err.tostring()
+        message: err.toString()
       })
     }
   },
