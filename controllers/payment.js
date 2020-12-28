@@ -151,7 +151,7 @@ const paymentController = {
 
         await Order.update(
           { status: 1 },
-          { where: { orderId } }
+          { where: { id: orderId } }
         )
       })
         .then(() => {
