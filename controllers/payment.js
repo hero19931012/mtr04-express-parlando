@@ -77,9 +77,11 @@ const paymentController = {
       MerchantTradeDate: getDate(), // 格式：YYYY/MM/DD 15:45:30
       TotalAmount: totalPrice,
       TradeDesc: 'test',
-      ItemName: productsString,
+      ItemName: "productsString",
       ReturnURL: `https://parlando.tw/payment/${UUID}`,
     };
+
+    console.log(base_param);
 
     const inv_params = {};
 
