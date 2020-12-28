@@ -131,14 +131,14 @@ module.exports = {
     );
     await queryInterface.addColumn(
       'ECpay_results',
-      'orderUUID',
+      'orderId',
       {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         allowNull: false,
         unique: true,
         references: {
           model: 'Orders',
-          key: 'UUID',
+          key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
