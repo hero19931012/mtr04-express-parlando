@@ -141,9 +141,9 @@ const paymentController = {
         }
 
         await payment.update({
-          MerchantID,
-          StoreID,
-          RtnCode,
+          MerchantID: Number(MerchantID),
+          StoreID: Number(StoreID),
+          RtnCode: Number(RtnCode),
           RtnMsg,
           TradeNo,
           PaymentDate,
