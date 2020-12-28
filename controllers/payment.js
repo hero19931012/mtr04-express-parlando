@@ -78,7 +78,7 @@ const paymentController = {
       TotalAmount: totalPrice,
       TradeDesc: 'test',
       ItemName: "productsString",
-      ReturnURL: `https://parlando.tw/payment/${UUID}`,
+      ReturnURL: `https://parlando.tw/payment/${UUID.replace(/-/g, "%23")}`,
     };
 
     console.log(base_param);
@@ -98,6 +98,10 @@ const paymentController = {
     });
   },
   handlePaymentResult: async (req, res) => {
+    const UUID = req.params.uuid
+
+    res.status(204).end()
+
     const {
       MerchantID,
       MerchantTradeNo,
