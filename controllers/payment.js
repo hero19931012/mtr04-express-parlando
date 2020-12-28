@@ -122,39 +122,51 @@ const paymentController = {
     } = req.body;
 
     try {
-      const payment = await ECpay_result.findOne({ where: { MerchantTradeNo } })
-      if (payment === null) {
-        console.log("payment error3: payment data not exist");
-        return res.status(500).json({
-          message: "payment data not exist"
+      db.sequelize.transaction(async () => {
+        const payment = await ECpay_result.findOne({ where: { MerchantTradeNo } })
+        if (payment === null) {
+          console.log("payment error3: payment data not exist");
+          return res.status(500).json({
+            message: "payment data not exist"
+          })
+        }
+
+        await payment.update({
+          MerchantID,
+          StoreID,
+          RtnCode,
+          RtnMsg,
+          TradeNo,
+          // TradeAmt,
+          PaymentDate,
+          PaymentType,
+          // PaymentTypeChargeFee,
+          TradeDate,
+          // SimulatePaid,
         })
-      }
 
-      await payment.update({
-        MerchantID,
-        StoreID,
-        RtnCode,
-        RtnMsg,
-        TradeNo,
-        // TradeAmt,
-        PaymentDate,
-        PaymentType,
-        // PaymentTypeChargeFee,
-        TradeDate,
-        // SimulatePaid,
+        const { orderId } = payment;
+
+        console.log("orderId", orderId);
+
+        await Order.update(
+          { status: 1 },
+          { where: { orderId } }
+        )
       })
-
-      const { orderId } = payment;
-      await Order.update(
-        { status: 1 },
-        { where: orderId }
-      )
-
-      return res.status(200).json({
-        ok: 1
-      })
+        .then(() => {
+          return res.status(200).json({
+            ok: 1
+          })
+        })
+        .catch(err => {
+          console.log(`payment error5: ${err.toString()}`);
+          return res.status(500).json({
+            ok: 0
+          })
+        })
     } catch (err) {
-      console.log(`payment error4: ${err.toString()}`);
+      console.log(`payment error5: ${err.toString()}`);
       return res.status(500).json({
         message: err.toString()
       })
