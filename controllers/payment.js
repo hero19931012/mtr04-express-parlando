@@ -11,6 +11,7 @@ const getRandomMerchantTradeNo = () => {
       result += String.fromCharCode(48 + Math.floor(Math.random() * 10));
     }
   }
+  console.log("MerchantTradeNo", result);
   return result;
 };
 
