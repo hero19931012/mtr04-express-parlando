@@ -53,7 +53,7 @@ const paymentController = {
     const { id, totalPrice, Product_models } = order
     const MerchantTradeNo = getRandomMerchantTradeNo(); // 長度 20 的隨機字串
     try {
-      const payment = ECpay_result.fineOne({ where: { orderId: id } })
+      const payment = ECpay_result.findOne({ where: { orderId: id } })
       if (payment !== null) {
         await payment.update({
           MerchantTradeNo
@@ -86,7 +86,7 @@ const paymentController = {
       TotalAmount: totalPrice.toString(), // 必須是字串
       TradeDesc: 'test',
       ItemName: productsString,
-      ReturnURL: "https://parlando.tw/payment",
+      ReturnURL: "https://parlando.tw/payment"
     };
 
     console.log(base_param);

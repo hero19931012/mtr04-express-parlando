@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     StoreId: DataTypes.INTEGER,
     RtnCode: DataTypes.INTEGER,
     RtnMsg: DataTypes.STRING,
-    RradeNo: DataTypes.STRING,
+    TradeNo: DataTypes.STRING,
     PaymenData: DataTypes.DATE,
     PaymentType: DataTypes.STRING,
     PaymentTypeChargeFee: DataTypes.INTEGER,
