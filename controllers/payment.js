@@ -113,13 +113,22 @@ const paymentController = {
       RtnCode,
       RtnMsg,
       TradeNo,
-      TradeAmt,
       PaymentDate,
       PaymentType,
-      PaymentTypeChargeFee,
-      TradeDate,
-      SimulatePaid,
+      TradeDate
     } = req.body;
+
+    // console.log(
+    //   "MerchantID", MerchantID, '\n',
+    //   "MerchantTradeNo", MerchantTradeNo, '\n',
+    //   "StoreID", StoreID, '\n',
+    //   "RtnCode", RtnCode, '\n',
+    //   "RtnMsg", RtnMsg, '\n',
+    //   "TradeNo", TradeNo, '\n',
+    //   "PaymentDate", PaymentDate, '\n',
+    //   "PaymentType", PaymentType, '\n',
+    //   "TradeDate", TradeDate, '\n',
+    // );
 
     try {
       db.sequelize.transaction(async () => {
@@ -137,12 +146,9 @@ const paymentController = {
           RtnCode,
           RtnMsg,
           TradeNo,
-          // TradeAmt,
           PaymentDate,
           PaymentType,
-          // PaymentTypeChargeFee,
           TradeDate,
-          // SimulatePaid,
         })
 
         const { orderId } = payment;

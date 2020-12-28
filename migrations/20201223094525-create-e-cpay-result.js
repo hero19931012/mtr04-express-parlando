@@ -8,13 +8,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      MerchantId: {
+      MerchantID: {
         type: Sequelize.INTEGER
       },
       MerchantTradeNo: {
         type: Sequelize.STRING
       },
-      StoreId: {
+      StoreID: {
         type: Sequelize.INTEGER
       },
       RtnCode: {
@@ -26,14 +26,11 @@ module.exports = {
       TradeNo: {
         type: Sequelize.STRING
       },
-      PaymenData: {
+      PaymentDate: {
         type: Sequelize.DATE
       },
       PaymentType: {
         type: Sequelize.STRING
-      },
-      PaymentTypeChargeFee: {
-        type: Sequelize.INTEGER
       },
       TradeDate: {
         type: Sequelize.DATE
