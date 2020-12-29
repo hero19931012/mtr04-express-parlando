@@ -8,7 +8,8 @@ const modelController = require('../controllers/model');
 const orderController = require('../controllers/order');
 const recipientController = require('../controllers/recipient');
 const photoController = require('../controllers/photo');
-const paymentController = require('../controllers/payment')
+const imageController = require('../controllers/image');
+const paymentController = require('../controllers/payment');
 
 const router = express.Router();
 
@@ -53,9 +54,15 @@ router.delete('/models/:id', onlyAdmin, modelController.delete);
 
 // image upload
 const upload = multer({});
+router.get('/upload', (req, res) => {
+  res.render('upload')
+})
 router.get('/photos', onlyAdmin, photoController.getAll);
-router.post('/photos', upload.array("files"), photoController.upload);
+router.post('/photos', onlyAdmin, upload.array("files"), photoController.upload);
 router.patch('/photos', onlyAdmin, photoController.update)
+
+// upload article images
+router.post('/images', onlyAdmin, upload.array("files"), imageController.upload)
 
 router.get('/orders', adminAndUser, orderController.getAll);
 router.get('/orders/:id', adminAndUser, orderController.getOne);

@@ -1,12 +1,10 @@
 const { render } = require('ejs');
 const db = require('../models');
 const { Photo } = db;
+const { ALBUM_HASH_PRODUCT } = require('../env/env')
 const { imgurUpload } = require('../WebAPI/api')
 
 const photoController = {
-  // index: (req, res) => {
-  //   res.render('upload')
-  // },
   getAll: (req, res) => {
     const { unlinked } = req.query
 
@@ -28,8 +26,8 @@ const photoController = {
       })
   },
   upload: (req, res) => {
-    if (req.files.length === 0) {
-      console.log("upload images error: no images found");
+    if (req.files === undefined || req.files.length === 0) {
+      console.log("upload images error1: no images found");
       return res.status(400).json({
         message: "no images found"
       })
@@ -39,8 +37,8 @@ const photoController = {
       return file.buffer.toString('base64')
     })
 
-    const result = new Promise((resolve, reject) => {
-      let result = imgurUpload(encodedFiles)
+    const imageUpload = new Promise((resolve, reject) => {
+      let result = imgurUpload(encodedFiles, ALBUM_HASH_PRODUCT)
       try {
         resolve(result)
       }
