@@ -1,7 +1,7 @@
 const axios = require('axios');
-const { ACCESS_TOKEN, albumHash } = require('../env/env')
+const { ACCESS_TOKEN } = require('../env/env')
 
-async function imgurUpload(encodedFiles) {
+async function imgurUpload(encodedFiles, albumHash) {
 
   const links = []
   let finished = false
@@ -21,7 +21,7 @@ async function imgurUpload(encodedFiles) {
       },
     })
       .then(result => {
-        // console.log(result.data.data.link);
+        console.log(result.data.data.link);
         links.push(result.data.data.link)
         if (index === encodedFiles.length - 1) {
           finished = true;
@@ -30,9 +30,8 @@ async function imgurUpload(encodedFiles) {
       })
       .catch((err) => {
         finished = true
-        // console.log(err.response.config);
-        // console.log("err.response.data", err.response.data);
-        throw new Error("Too Many Requests")
+        console.log(`upload iamges error (WebAPI): ${err.toString()}`);
+        throw new Error(err.toString)
       })
   }
   return links
