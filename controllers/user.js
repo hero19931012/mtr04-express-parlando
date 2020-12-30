@@ -42,7 +42,7 @@ const userController = {
           }
 
           const options = {
-            expiresIn: "1 day"
+            expiresIn: "7 day"
           }
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err) {
@@ -90,7 +90,7 @@ const userController = {
             role: "user"
           }
           const options = {
-            expiresIn: "1 day"
+            expiresIn: "7 day"
           }
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err || !token) {
