@@ -55,29 +55,30 @@ const modelController = {
   },
   update: (req, res) => {
     const { id } = req.params
-    const { modelName, colorChip, storage } = req.body;
-    if (
-      !modelName ||
-      !colorChip ||
-      !storage
-    ) {
-      console.log("update model error1: model data incomplete");
-      return res.status(400).json({
-        message: "model data incomplete"
-      })
-    }
+    const {
+      modelName,
+      colorChip,
+      storage,
+      sell,
+      isShow,
+      isDeleted
+    } = req.body;
+
     Product_model.findOne({ where: { id, isDeleted: null } })
       .then(model => {
         if (model === null) {
-          console.log("update model error2: model has been deleted");
+          console.log("update model error1: model has been deleted");
           res.status(403).json({
             message: "model has been deleted"
           })
         }
         return model.update({
-          modelName,
-          colorChip,
-          storage
+          modelName: modelName !== undefined ? modelName : model.modelName,
+          colorChip: colorChip !== undefined ? colorChip : model.colorChip,
+          storage: storage !== undefined ? storage : model.storage,
+          sell: sell !== undefined ? sell : model.sell,
+          isShow: isShow !== undefined ? isShow : model.isShow,
+          isDeleted: isDeleted !== undefined ? isDeleted : model.isDeleted,
         })
       })
       .then((model) => {
@@ -86,7 +87,7 @@ const modelController = {
         })
       })
       .catch(err => {
-        console.log(`update model error3: ${err.toString()}`);
+        console.log(`update model error2: ${err.toString()}`);
         res.status(500).json({
           message: err.toString()
         })

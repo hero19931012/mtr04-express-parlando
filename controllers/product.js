@@ -32,7 +32,7 @@ const productController = {
             products
           });
         }
-
+     
         const productListForUser = products.map((product) => {
           const models = product.Product_models
             .filter((model) => { return model.storage > 0 })
