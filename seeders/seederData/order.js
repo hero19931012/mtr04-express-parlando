@@ -16,7 +16,7 @@ function getRandomModelId() {
   return getRamdomNum(modelList.length - 1) // id: 1-20
 }
 
-// 產生 10 筆訂單 request data
+// 產生 30 筆訂單 request data
 // 1. 隨機 userId
 // 2. 下訂 1-3 件商品，隨機 modelId
 // 3. count: 1-3
@@ -69,6 +69,8 @@ function getOrderContent(orderRequestData, orderId) {
     UUID: uuidv4(),
     userId,
     totalPrice,
+    status: 0,
+    isDeleted: 0,
     createdAt,
     updatedAt
   }
@@ -81,7 +83,7 @@ function getOrderContent(orderRequestData, orderId) {
 
 const orderRequestDataList = []
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 30; i++) {
   orderRequestDataList.push(getRandomOrderRequestData())
 }
 

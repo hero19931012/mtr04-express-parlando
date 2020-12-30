@@ -6,7 +6,7 @@ const typeArray = ["耳罩式耳機", "入耳式耳機", "音響", "週邊配件
 const productController = {
   getAll: (req, res) => {
     let { sort, order, limit, offset, type } = req.query;
-    const option = type !== undefined ? { type, isDeleted: null } : { isDeleted: null }
+    const option = type !== undefined ? { type, isDeleted: 0 } : { isDeleted: 0 }
 
     Product.findAll({
       where: option,
@@ -71,7 +71,7 @@ const productController = {
   getOne: (req, res) => {
     const { id } = req.params
     Product.findOne({
-      where: { id, isDeleted: null },
+      where: { id, isDeleted: 0 },
       include: [Product_model, Photo]
     })
       .then((product) => {
@@ -130,16 +130,20 @@ const productController = {
     let typeNum = 0
     switch (type) {
       case "耳罩式耳機": {
-        typeNum = 1
+        typeNum = 1;
+        break;
       }
       case "入耳式耳機": {
-        typeNum = 2
+        typeNum = 2;
+        break;
       }
       case "音響": {
-        typeNum = 3
+        typeNum = 3;
+        break;
       }
       case "週邊配件": {
-        typeNum = 4
+        typeNum = 4;
+        break;
       }
       default: { }
     }
@@ -165,7 +169,7 @@ const productController = {
     const { id } = req.params
     const { productName, price, type, article, isShow, isDeleted } = req.body;
 
-    Product.findOne({ where: { id, isDeleted: null } })
+    Product.findOne({ where: { id, isDeleted: 0 } })
       .then(product => {
         if (product === null) {
           return res.status(403).json({
