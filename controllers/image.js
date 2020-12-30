@@ -1,4 +1,4 @@
-const { ALBUM_HASH_ARTICLE } = require('../env/env')
+const { ALBUM_HASH_ARTICLE } = process.env;
 const { imgurUpload } = require('../WebAPI/api')
 
 const imageController = {

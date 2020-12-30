@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const saltRounds = require('../../env/env')
 
 const users = [
   "Oliver",
