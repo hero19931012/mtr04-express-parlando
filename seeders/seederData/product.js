@@ -96,6 +96,8 @@ for (let i = 0; i < 4; i++) {
       price,
       type: typeInfo.typeNum,
       article: "JSON string",
+      isShow: 0,
+      isDeleted: 0,
       createdAt,
       updatedAt,
     })
@@ -123,6 +125,8 @@ for (let i = 0; i < 4; i++) {
         storage,
         sell,
         productId,
+        isShow: 0,
+        isDeleted: 0,
         createdAt,
         updatedAt
       }

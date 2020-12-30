@@ -4,7 +4,7 @@ const { Product, Product_model } = db;
 const modelController = {
   getOne: (req, res) => {
     const { id } = req.params
-    Product_model.findOne({ where: { id, isDeleted: null } })
+    Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then((model) => {
         if (model === null) {
           return res.status(403).json({
@@ -65,7 +65,7 @@ const modelController = {
       isDeleted
     } = req.body;
 
-    Product_model.findOne({ where: { id, isDeleted: null } })
+    Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then(model => {
         if (model === null) {
           console.log("update model error1: model has been deleted");
@@ -96,7 +96,7 @@ const modelController = {
   },
   delete: (req, res) => {
     const { id } = req.params
-    Product_model.findOne({ where: { id, isDeleted: null } })
+    Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then(model => {
         if (model === null) {
           res.status(403).json({

@@ -1,5 +1,5 @@
 const db = require('../models');
-const { v4: uuidv4 } = require('uuid'); 
+const { v4: uuidv4 } = require('uuid');
 const { Order, Order_product, Product, Product_model, Recipient } = db;
 
 const orderController = {
@@ -19,6 +19,7 @@ const orderController = {
           const { UUID, totalPrice, status, createdAt, Product_models } = order
           const products = Product_models.map((model) => {
             return {
+              productId: model.productId,
               modelId: model.id,
               modelName: model.modelName,
               unitPrice: model.Order_product.unitPrice,
@@ -26,10 +27,27 @@ const orderController = {
             }
           })
 
+          let orderStatus = ''
+          switch(status) {
+            case 0: {
+              orderStatus = "未付款";
+              break;
+            }
+            case 1: {
+              orderStatus = "處理中";
+              break;
+            }
+            case 2: {
+              orderStatus = "已出貨";
+              break;
+            }
+            default: "處理中"
+          }
+
           return {
             UUID,
             totalPrice,
-            status: status === null ? "處理中" : "已出貨",
+            status: orderStatus,
             createdAt,
             products
           }
