@@ -8,16 +8,18 @@ const adminController = {
   handleLogin: (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
+      console.log("admin login error1: username and password required");
       return res.status(400).json({
-        message: "login error1: username and password required"
+        message: "username and password required"
       })
     }
     Admin.findOne({ where: { username } })
       .then((user) => {
         bcrypt.compare(password, user.password, (err, result) => {
           if (err || !result) {
+            console.log(`admin login error2: ${err.toString()}`);
             return res.status(400).json({
-              message: `login error2: invalid username and password`
+              message: "invalid username and password"
             })
           }
 
@@ -29,12 +31,13 @@ const adminController = {
             role: "admin"
           }
           const options = {
-            expiresIn: "1 day"
+            expiresIn: "7 day"
           }
           jwt.sign(payload, SECRET, options, (err, token) => {
             if (err || !token) {
-              return res.status(400).json({
-                message: "jwt sign error: " + err.toString()
+              console.log(`jwt sign error: ${err.toString()}`);
+              return res.status(500).json({
+                message: "jwt sign error"
               })
             }
             res.status(200).json({
@@ -44,8 +47,9 @@ const adminController = {
         })
       })
       .catch(err => {
+        console.log(`admin login error3: ${err.toString()}`);
         res.status(500).json({
-          message: "login error3: " + err.toString()
+          message: err.toString()
         })
       })
   },
