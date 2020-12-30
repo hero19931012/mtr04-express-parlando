@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -9,6 +10,8 @@ const checkAuth = require('./middlewares/auth')
 
 const router = require('./routes');
 const app = express();
+
+console.log("TEST", process.env.TEST);
 
 app.set('views', 'views');
 app.set('view engine', 'ejs');
