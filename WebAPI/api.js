@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { ACCESS_TOKEN } = require('../env/env')
+const { ACCESS_TOKEN } = process.env
 
 async function imgurUpload(encodedFiles, albumHash) {
 

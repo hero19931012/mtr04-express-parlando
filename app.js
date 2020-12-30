@@ -11,8 +11,6 @@ const checkAuth = require('./middlewares/auth')
 const router = require('./routes');
 const app = express();
 
-console.log("TEST", process.env.TEST);
-
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
@@ -36,7 +34,7 @@ const httpPort = 3000;
 const httpsPort = 3001;
 
 server.listen(httpPort, () => {
-  console.log(`Listening http on port: ${httpPort}`);
+  console.log(`Listening http on port: ${httpPort}!`);
 });
 
 httpsServer.listen(httpsPort, () => {
