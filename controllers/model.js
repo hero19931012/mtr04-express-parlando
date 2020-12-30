@@ -41,7 +41,8 @@ const modelController = {
       modelName: modelFullName,
       colorChip,
       storage,
-      sell: 0
+      sell: 0,
+      isShow: 0
     })
       .then((model) => {
         res.status(200).json({ model });
