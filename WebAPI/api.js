@@ -31,7 +31,7 @@ async function imgurUpload(encodedFiles, albumHash) {
       .catch((err) => {
         finished = true
         console.log(`upload iamges error (WebAPI): ${err.toString()}`);
-        throw new Error(err.toString)
+        throw new Error(err.toString())
       })
   }
   return links
