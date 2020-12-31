@@ -153,7 +153,8 @@ const productController = {
       price,
       type: typeNum,
       article,
-      isShow: 0
+      isShow: 0,
+      isDeleted: 0
     })
       .then((product) => {
         res.status(200).json({ product })
