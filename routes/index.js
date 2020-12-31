@@ -81,6 +81,11 @@ router.get('/payment', (req, res) => {
 })
 router.get('/payment/:uuid', paymentController.handlePayment)
 router.post('/payment', paymentController.handlePaymentResult)
+router.post('/payment_result', (req, res) => {
+  console.log(req);
+  console.log(req.data);
+  res.status(204).end()
+})
 
 // 404 not found
 router.use((req, res) => {
