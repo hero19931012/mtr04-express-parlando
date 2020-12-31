@@ -33,6 +33,13 @@ const modelController = {
       })
     }
 
+    if (storage >= 1000) {
+      console.log("add model error2: model storage must below 1,000");
+      return res.status(400).json({
+        message: "model storage must below 1,000"
+      })
+    }
+
     const product = await Product.findOne({ where: { id: productId } })
     const modelFullName = product.productName + modelName
 
@@ -49,7 +56,7 @@ const modelController = {
         res.status(200).json({ model });
       })
       .catch(err => {
-        console.log(`add model error2: ${err.toString()}`);
+        console.log(`add model error3: ${err.toString()}`);
         res.status(500).json({
           message: err.toString()
         });
@@ -66,10 +73,17 @@ const modelController = {
       isDeleted
     } = req.body;
 
+    if (storage >= 1000) {
+      console.log("update model error1: model storage must below 1,000");
+      return res.status(400).json({
+        message: "model storage must below 1,000"
+      })
+    }
+
     Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then(model => {
         if (model === null) {
-          console.log("update model error1: model has been deleted");
+          console.log("update model error2: model has been deleted");
           res.status(403).json({
             message: "model has been deleted"
           })
@@ -81,6 +95,7 @@ const modelController = {
           sell: sell !== undefined ? sell : model.sell,
           isShow: isShow !== undefined ? isShow : model.isShow,
           isDeleted: isDeleted !== undefined ? isDeleted : model.isDeleted,
+          updatedAt: new Date()
         })
       })
       .then((model) => {
@@ -89,7 +104,7 @@ const modelController = {
         })
       })
       .catch(err => {
-        console.log(`update model error2: ${err.toString()}`);
+        console.log(`update model error3: ${err.toString()}`);
         res.status(500).json({
           message: err.toString()
         })
@@ -100,12 +115,14 @@ const modelController = {
     Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then(model => {
         if (model === null) {
+          console.log("delete model error1: model has been deleted");
           res.status(403).json({
-            message: "delete model error1: model has been deleted"
+            message: "model has been deleted"
           })
         }
         return model.update({
-          isDeleted: 1
+          isDeleted: 1,
+          updatedAt: new Date()
         })
       })
       .then(() => {
