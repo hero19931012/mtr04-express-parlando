@@ -56,7 +56,7 @@ const userController = {
                   message: err.toString()
                 })
               }
-              res.status(200).json({
+              res.status(201).json({
                 success: true,
                 data: { token },
               })
