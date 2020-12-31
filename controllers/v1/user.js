@@ -18,51 +18,62 @@ const userController = {
       })
     }
 
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err || !hash) {
-        console.log(`register error2: ${err.toString()}`);
-        return res.status(500).json({
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        console.log(`bcrypt genSalt error: ${err.toString()}`);
+        return res.status(500).jsno({
+          "success": false,
+          "data": null,
           message: err.toString()
         })
       }
-      User.create({
-        username,
-        password: hash,
-        realName,
-        email,
-        phone
-      })
-        .then((user) => {
-          // JWT signing
-          const payload = {
-            // user info
-            id: user.id,
-            username,
-            role: "user"
-          }
-
-          const options = {
-            expiresIn: "7 day"
-          }
-          jwt.sign(payload, SECRET, options, (err, token) => {
-            if (err) {
-              console.log(`register error3: ${err.toString()}`);
-              return res.status(500).json({
-                message: err.toString()
-              })
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err || !hash) {
+          console.log(`register error2: ${err.toString()}`);
+          return res.status(500).json({
+            message: err.toString()
+          })
+        }
+        User.create({
+          username,
+          password: hash,
+          realName,
+          email,
+          phone
+        })
+          .then((user) => {
+            // JWT signing
+            const payload = {
+              // user info
+              id: user.id,
+              username,
+              role: "user"
             }
-            res.status(200).json({
-              token
+
+            const options = {
+              expiresIn: "7 day"
+            }
+            jwt.sign(payload, SECRET, options, (err, token) => {
+              if (err) {
+                console.log(`register error3: ${err.toString()}`);
+                return res.status(500).json({
+                  message: err.toString()
+                })
+              }
+              res.status(200).json({
+                token
+              })
             })
           })
-        })
-        .catch(err => {
-          console.log(`register error4: ${err.toString()}`);
-          res.status(400).json({
-            message: "username had been registered"
-          })
-        });
+          .catch(err => {
+            console.log(`register error4: ${err.toString()}`);
+            res.status(400).json({
+              message: "username had been registered"
+            })
+          });
+      })
     })
+
   },
   handleLogin: (req, res) => {
     const { username, password } = req.body;
