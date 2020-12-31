@@ -173,6 +173,10 @@ const orderController = {
           totalPrice
         }
 
+        if (totalPrice >= 30000) {
+          throw new Error("total price must below 30,000")
+        }
+
         const order = await Order.create(orderContent)
         orderId = order.id
 
