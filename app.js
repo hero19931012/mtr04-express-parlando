@@ -29,8 +29,9 @@ app.use(morgan('combined'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(checkAuth)
-app.use('/', v0)
+
 app.use('/v1', v1)
+app.use('/', v0)
 
 const httpPort = process.env.PORT || 3000;
 const httpsPort = 3001;
