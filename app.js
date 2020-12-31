@@ -8,7 +8,8 @@ const morgan = require('morgan');
 const cors = require('cors')
 const checkAuth = require('./middlewares/auth')
 
-const router = require('./routes');
+const v0 = require('./routes/v0');
+const v1 = require('./routes/v1');
 const app = express();
 
 app.set('views', 'views');
@@ -28,7 +29,8 @@ app.use(morgan('combined'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(checkAuth)
-app.use('/', router)
+app.use('/', v0)
+app.use('/v1', v1)
 
 const httpPort = process.env.PORT || 3000;
 const httpsPort = 3001;

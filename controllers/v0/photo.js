@@ -1,8 +1,8 @@
 const { render } = require('ejs');
-const db = require('../models');
+const db = require('../../models');
 const { Photo } = db;
 const { ALBUM_HASH_PRODUCT } = process.env;
-const { imgurUpload } = require('../WebAPI/api')
+const { imgurUpload } = require('../../WebAPI/api')
 
 const photoController = {
   getAll: (req, res) => {

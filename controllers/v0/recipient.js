@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../../models');
 const { Recipient, User, Order, Address_city, Address_district } = db;
 
 const recipientController = {
