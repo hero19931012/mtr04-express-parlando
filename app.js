@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(checkAuth)
 app.use('/', router)
 
-const httpPort = 3000;
+const httpPort = process.env.PORT || 3000;
 const httpsPort = 3001;
 
 server.listen(httpPort, () => {

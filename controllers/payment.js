@@ -1,4 +1,5 @@
 const ecpay_payment = require('ecpay-payment');
+const { restart } = require('nodemon');
 const db = require('../models');
 const { ECpay_result, Order, Product_model } = db;
 
@@ -51,6 +52,14 @@ const paymentController = {
 
     // 寫入 orderId & MerchantTradeNo 進 ECpay_result
     const { id, totalPrice, Product_models } = order
+
+    if(totalPrice >= 30000) {
+      console.log("post payment error: total price must below 30,000");
+      return res.status(400).json({
+        message: "total price must below 30,000"
+      })
+    }
+
     const MerchantTradeNo = getRandomMerchantTradeNo(); // 長度 20 的隨機字串
     try {
       const payment = await ECpay_result.findOne({ where: { orderId: id } })
@@ -76,7 +85,7 @@ const paymentController = {
     Product_models.forEach((product, index) => {
       const { modelName } = product
       const { count } = product.Order_product
-      productsString += `${index !== 0 ? " " : ""}${modelName}*${count}`
+      productsString += `${index !== 0 ? "#" : ""}${modelName}*${count}`
     })
 
     // 設定結帳資訊
