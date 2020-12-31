@@ -1,15 +1,15 @@
 const express = require('express')
 const multer = require('multer');
 
-const adminController = require('../controllers/admin');
-const userController = require('../controllers/user');
-const productController = require('../controllers/product');
-const modelController = require('../controllers/model');
-const orderController = require('../controllers/order');
-const recipientController = require('../controllers/recipient');
-const photoController = require('../controllers/photo');
-const imageController = require('../controllers/image');
-const paymentController = require('../controllers/payment');
+const adminController = require('../controllers/v1/admin');
+const userController = require('../controllers/v1/user');
+const productController = require('../controllers/v1/product');
+const modelController = require('../controllers/v1/model');
+const orderController = require('../controllers/v1/order');
+const recipientController = require('../controllers/v1/recipient');
+const photoController = require('../controllers/v1/photo');
+const imageController = require('../controllers/v1/image');
+const paymentController = require('../controllers/v1/payment');
 
 const router = express.Router();
 
