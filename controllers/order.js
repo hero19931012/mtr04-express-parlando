@@ -210,10 +210,10 @@ const orderController = {
     }
   },
   update: (req, res) => {
-    const { id } = req.params;
+    const { UUID } = req.params;
     Order.update(
       { status: 1 },
-      { where: { id } }
+      { where: { UUID } }
     )
       .then((order) => {
         res.status(204).end()
