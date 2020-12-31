@@ -32,7 +32,7 @@ const productController = {
             products
           });
         }
-     
+
         const productListForUser = products.map((product) => {
           const models = product.Product_models
             .filter((model) => { return model.storage > 0 })
@@ -184,6 +184,7 @@ const productController = {
           article: article !== undefined ? article : product.article,
           isShow: isShow !== undefined ? isShow : product.isShow,
           isDeleted: isDeleted !== undefined ? isDeleted : product.isDeleted,
+          updatedAt: new Date()
         })
       })
       .then((product) => {
@@ -199,7 +200,10 @@ const productController = {
   delete: (req, res) => {
     const { id } = req.params
     Product.update(
-      { isDeleted: 1 },
+      {
+         isDeleted: 1,
+        updatedAt: new Date()
+      },
       { where: { id } }
     )
       .then(() => {

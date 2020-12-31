@@ -28,7 +28,7 @@ const orderController = {
           })
 
           let orderStatus = ''
-          switch(status) {
+          switch (status) {
             case 0: {
               orderStatus = "未付款";
               break;
@@ -216,7 +216,7 @@ const orderController = {
   update: (req, res) => {
     const { UUID } = req.params;
     Order.update(
-      { status: 1 },
+      { status: 1, updatedAt: new Date() },
       { where: { UUID } }
     )
       .then((order) => {
@@ -233,7 +233,7 @@ const orderController = {
     // 刪除訂單
     const { id } = req.params;
     Order.update(
-      { isDeleted: 1 },
+      { isDeleted: 1, updatedAt: new Date() },
       { where: { id } }
     )
       .then(() => {
