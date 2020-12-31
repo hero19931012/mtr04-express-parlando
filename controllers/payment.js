@@ -40,7 +40,7 @@ const paymentController = {
 
     // 透過 uuid 取出 order
     const order = await Order.findOne({
-      where: { UUID, status: null },
+      where: { UUID, status: 0 },
       include: [Product_model]
     });
     if (order === null) {
@@ -86,7 +86,8 @@ const paymentController = {
       TotalAmount: totalPrice.toString(), // 必須是字串
       TradeDesc: 'test',
       ItemName: productsString,
-      ReturnURL: "https://parlando.tw/payment"
+      ReturnURL: "https://huiming.tw/payment",
+      OrderResultURL: "https://huiming.tw/payment_result"
     };
 
     console.log(base_param);
