@@ -6,7 +6,11 @@ const typeArray = ["耳罩式耳機", "入耳式耳機", "音響", "週邊配件
 const productController = {
   getAll: (req, res) => {
     let { sort, order, limit, offset, type } = req.query;
-    const option = type !== undefined ? { type, isDeleted: 0 } : { isDeleted: 0 }
+    const option = {
+      isDeleted: 0
+    }
+    if (type !== undefined) { option.type = type }
+    if (req.user === undefined || req.user.role !== 'admin') { option.isShow = 1 }
 
     Product.findAll({
       where: option,
@@ -71,7 +75,7 @@ const productController = {
   getOne: (req, res) => {
     const { id } = req.params
     Product.findOne({
-      where: { id, isDeleted: 0 },
+      where: { id, isDeleted: 0, isShow: 1 },
       include: [Product_model, Photo]
     })
       .then((product) => {
@@ -79,7 +83,7 @@ const productController = {
         if (product === null) {
           console.log("get product error1: product has been deleted");
           return res.status(403).json({
-            message: "product has been deleted"
+            message: "product not exist"
           })
         }
 
@@ -93,7 +97,9 @@ const productController = {
           })
         }
         const models = product.Product_models
-          .filter((model) => { return model.storage > 0 })
+          .filter((model) => {
+            return model.storage > 0 && model.isShow === 1
+          })
           .map((model) => {
             const { id, modelName, colorChip, storage } = model
             return {
@@ -103,6 +109,13 @@ const productController = {
               storage: storage > 10 ? "庫存充足" : storage
             }
           })
+
+        if (models.length === 0) {
+          console.log("get one product error: no model available");
+          return res.status(200).json({
+            message: "no model available"
+          })
+        }
 
         const productForUser = { ...product.dataValues } // 從 sequelize 物件拿出資料
         productForUser.Product_models = models
@@ -201,7 +214,7 @@ const productController = {
     const { id } = req.params
     Product.update(
       {
-         isDeleted: 1,
+        isDeleted: 1,
         updatedAt: new Date()
       },
       { where: { id } }
