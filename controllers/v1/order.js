@@ -239,24 +239,48 @@ const orderController = {
         })
       })
   },
-  delete: (req, res) => {
-    const { UUID } = req.params;
-    Order.update(
-      { isDeleted: 1, updatedAt: new Date() },
-      { where: { UUID } }
-    )
-      .then(() => {
-        res.status(200).json({
-          success: true
-        })
+  delete: async (req, res) => {
+    // 1. 刪除訂單
+    // 2. 更新庫存
+    try {
+      const { UUID } = req.params;
+      const order = await Order.findOne({
+        where: { UUID, isDeleted: 0 },
+        include: [Product_model]
       })
-      .catch(err => {
-        console.log(`delete order error: ${err.toString()}`);
-        res.status(500).json({
+
+      if (order === null) {
+        console.log("delete order error: invalid orderId");
+        return res.status(403).json({
           success: false,
-          message: err.toString()
+          message: "invalid orderId"
         })
+      }
+
+      const products = order.Product_models.map((product) => {
+        return {
+          modelId: product.id,
+          count: product.Order_product.count
+        }
       })
+
+      order.update({ isDeleted: 1 })
+      for (let i = 0; i < products.length; i++) {
+        const productModel = await Product_model.findOne({ where: { id: products[i].modelId } })
+        await productModel.update({
+          storage: productModel.storage + products[i].count,
+          sell: productModel.sell - products[i].count
+        })
+      }
+      res.status(200).json({
+        success: true
+      })
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.toString()
+      })
+    }
   },
 }
 module.exports = orderController;
