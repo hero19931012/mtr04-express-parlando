@@ -65,10 +65,10 @@ router.patch('/photos', onlyAdmin, photoController.update)
 router.post('/images', onlyAdmin, upload.array("files"), imageController.upload)
 
 router.get('/orders', adminAndUser, orderController.getAll);
-router.get('/orders/:id', adminAndUser, orderController.getOne);
+router.get('/orders/:UUID', adminAndUser, orderController.getOne);
 router.post('/orders', onlyUser, orderController.add);
-router.patch('/orders/:id', onlyAdmin, orderController.update); // 完成訂單
-router.delete('/orders/:id', onlyAdmin, orderController.delete); // 刪除訂單
+router.patch('/orders/:UUID', onlyAdmin, orderController.update); // 完成訂單
+router.delete('/orders/:UUID', onlyAdmin, orderController.delete); // 刪除訂單
 
 router.get('/recipients', adminAndUser, recipientController.getAll);
 router.get('/recipients/:id', adminAndUser, recipientController.getOne);
@@ -79,7 +79,7 @@ router.patch('/recipients/:id', onlyAdmin, recipientController.update);
 router.get('/payment', (req, res) => {
   res.render('paymentIndex')
 })
-router.get('/payment/:uuid', paymentController.handlePayment)
+router.get('/payment/:UUID', paymentController.handlePayment)
 router.post('/payment', paymentController.handlePaymentResult)
 router.post('/payment_result', (req, res) => {
   console.log(req);
