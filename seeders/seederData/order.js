@@ -69,8 +69,8 @@ function getOrderContent(orderRequestData, orderId) {
     UUID: uuidv4(),
     userId,
     totalPrice,
-    status: 0,
-    isDeleted: 0,
+    // status: 0,
+    // isDeleted: 0,
     createdAt,
     updatedAt
   }
