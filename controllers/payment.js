@@ -17,19 +17,14 @@ const getRandomMerchantTradeNo = () => {
 };
 
 function getDate() {
-  const date = new Date().toLocaleString()
-  let [Day, Time] = date.split(', ')
-  let [month, day, year] = Day.split('/')
-  let [time, noon] = Time.split(' ')
-  let [hr, min, sec] = time.split(':')
-  if (noon === 'PM') { hr = Number(hr) + 12 }
+  const date = new Date().toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })
+  const time = new Date().toLocaleTimeString('zh-TW', { hour12: false, timeZone: 'Asia/Taipei' })
 
+  let [day, month, year] = date.split('/')
   month = Number(month) > 10 ? month : "0" + month
   day = Number(day) > 10 ? day : "0" + day
-  hr = Number(hr) > 10 ? hr : "0" + hr
 
-  const dateString = `${year}/${month}/${day} ${hr}:${min}:${sec}`
-  console.log(dateString);
+  const dateString = `${year}/${month}/${day} ${time}`
   return dateString
 }
 
