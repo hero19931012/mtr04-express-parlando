@@ -74,8 +74,19 @@ const productController = {
   },
   getOne: (req, res) => {
     const { id } = req.params
+    const whereOption = {
+      id,
+      isDeleted: 0
+    }
+
+    if(req.user === undefined || req.user.role !== "admin") {
+      whereOption.isShow = 1
+    }
+
+    console.log("whereOption", whereOption);
+
     Product.findOne({
-      where: { id, isDeleted: 0, isShow: 1 },
+      where: whereOption,
       include: [Product_model, Photo]
     })
       .then((product) => {
@@ -83,7 +94,7 @@ const productController = {
         if (product === null) {
           console.log("get product error1: product has been deleted");
           return res.status(403).json({
-            message: "product not exist"
+            message: "product not exist or not launched"
           })
         }
 
