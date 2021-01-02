@@ -1,20 +1,42 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
+const http = require('http');
+const https = require('https')
+const fs = require('fs');
+const morgan = require('morgan');
+const cors = require('cors')
+const checkAuth = require('./middlewares/auth')
+
 const router = require('./routes');
-const port = process.env.PORT || 3000;
+const app = express();
 
-app.set('views', 'views'); // setting views directory
-app.set('view engine', 'ejs'); // setting template engine
+app.set('views', 'views');
+app.set('view engine', 'ejs');
 
-const swaggerDocument = require('./swagger.json');
-const swaggerUi = require('swagger-ui-express');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// setting ssl
+app.use(express.static('static'));
+const privateKey  = fs.readFileSync(__dirname + '/ssl/private.key');
+const certificate = fs.readFileSync(__dirname + '/ssl/certificate.crt');
+const credentials = { key: privateKey, cert: certificate };
 
-app.use(bodyParser.urlencoded({ extended: true }));
+const server = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
+app.use(cors())
+app.use(morgan('combined'))
 app.use(bodyParser.json());
-app.use('/', router);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(checkAuth)
+app.use('/', router)
 
-app.listen(port, () => {
-  console.log(`Listening on port:${port}!`);
+const httpPort = process.env.PORT || 3000;
+const httpsPort = 3001;
+
+server.listen(httpPort, () => {
+  console.log(`Listening http on port: ${httpPort}!`);
+});
+
+httpsServer.listen(httpsPort, () => {
+  console.log(`Listening https on port: ${httpsPort}!`);
 });

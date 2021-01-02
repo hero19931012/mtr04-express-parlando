@@ -1,13 +1,21 @@
 ## 建立 model
-npx sequelize-cli model:generate --name Address_city --attributes cityName:STRING --force;
-npx sequelize-cli model:generate --name Product --attributes name:STRING,model:STRING,colorChip:STRING,price:INTEGER,storage:INTEGER,sell:INTEGER --force;
-npx sequelize-cli model:generate --name User --attributes username:STRING,password:STRING,realName:STRING,email:STRING,phone:STRING --force;
-npx sequelize-cli model:generate --name Photo --attributes url:TEXT --force;
 npx sequelize-cli model:generate --name Admin --attributes username:STRING,password:STRING --force;
-npx sequelize-cli model:generate --name Order --attributes totalPrice:INTEGER,status:INTEGER --force;
+npx sequelize-cli model:generate --name User --attributes username:STRING,password:STRING,realName:STRING,email:STRING,phone:STRING --force;
+npx sequelize-cli model:generate --name Address_city --attributes cityName:STRING --force;
 npx sequelize-cli model:generate --name Address_district --attributes districtName:STRING --force;
+npx sequelize-cli model:generate --name Product --attributes productName:STRING,price:INTEGER,type:INTEGER,article:TEXT,isShow:INTEGER,isDeleted:INTEGER --force;
+
+npx sequelize-cli model:generate --name Product_model --attributes modelName:STRING,colorChip:STRING,storage:INTEGER,sell:INTEGER,isShow:INTEGER,isDeleted:INTEGER --force;
+npx sequelize-cli model:generate --name Photo --attributes url:TEXT --force;
+npx sequelize-cli model:generate --name Order --attributes UUID:UUID,totalPrice:INTEGER,status:INTEGER,isDeleted:INTEGER --force;
 npx sequelize-cli model:generate --name Recipient --attributes name:STRING,phone:STRING,email:STRING,address:STRING --force;
-npx sequelize-cli model:generate --name Order_product --attributes count:INTEGER,unitPrice:INTEGER --force
+npx sequelize-cli model:generate --name Order_product --attributes count:INTEGER,unitPrice:INTEGER --force;
+npx sequelize-cli model:generate --name ECpay_result --attributes MerchantID:INTEGER,MerchantTradeNo:INTEGER,StoreID:INTEGER,RtnCode:INTEGER,RtnMsg:STRING,TradeNo:STRING,PaymentDate:DATE,PaymentType:STRING,TradeDate:DATE --force
+
+**migration modification**
+- username / productName => unique:true
+- username / realName / recipient name length: 20
+- allowNull: false
 
 
 ## create migration (for association)
@@ -28,164 +36,12 @@ npx sequelize-cli seed:generate --name demo-city
 npx sequelize-cli seed:generate --name demo-district
 npx sequelize-cli seed:generate --name demo-product
 npx sequelize-cli seed:generate --name demo-photo
+npx sequelize-cli seed:generate --name demo-model
 npx sequelize-cli seed:generate --name demo-order
 npx sequelize-cli seed:generate --name demo-order_product
-npx sequelize-cli seed:generate --name demo-recipient_info
-
 
 ## Run seeds
 npx sequelize-cli db:seed:all
 
 ## Undo all seeds
 npx sequelize-cli db:seed:undo:all
-
---- 
-### association migration
-'use strict';
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn(
-      'Address_districts',
-      'cityId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Address_cities',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Addresses',
-      'cityId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Address_cities',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Addresses',
-      'districtId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Address_districts',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Addresses',
-      'userId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Orders',
-      'addressId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Addresses',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Orders',
-      'userId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Order_products',
-      'orderId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Orders',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    await queryInterface.addColumn(
-      'Order_products',
-      'productId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Products',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      }
-    );
-    // await queryInterface.addColumn(
-    //   'Product_photos',
-    //   'productId',
-    //   {
-    //     type: Sequelize.INTEGER,
-    //     references: {
-    //       model: 'Products',
-    //       key: 'id',
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'RESTRICT',
-    //   }
-    // );
-    // await queryInterface.addColumn(
-    //   'Product_photos',
-    //   'photoId',
-    //   {
-    //     type: Sequelize.INTEGER,
-    //     references: {
-    //       model: 'Photos',
-    //       key: 'id',
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'RESTRICT',
-    //   }
-    // );
-  },
-
-  down: async (queryInterface, Sequelize) => {
-    // not necessary
-    // await queryInterface.removeColumn('Address_districts', 'cityId');
-    // await queryInterface.removeColumn('Addresses', 'cityId');
-    // await queryInterface.removeColumn('Addresses', 'districtId');
-    // await queryInterface.removeColumn('Addresses', 'userId');
-    // await queryInterface.removeColumn('Order', 'addressId');
-    // await queryInterface.removeColumn('Order', 'userId');
-    // await queryInterface.removeColumn('Order_products', 'orderId');
-    // await queryInterface.removeColumn('Order_products', 'productId');
-  }
-};

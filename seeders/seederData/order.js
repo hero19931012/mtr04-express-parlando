@@ -1,5 +1,7 @@
-const { rawProductList } = require('./product');
-const { userList } = require('./user')
+const { v4: uuidv4 } = require('uuid');
+const { rawProductList, modelList } = require('./product');
+const { userList } = require('./user');
+const { getRandomDate } = require('./product');
 const productList = [...rawProductList]
 
 function getRamdomNum(max) {
@@ -10,114 +12,92 @@ function getRandomUserId() {
   return getRamdomNum(userList.length - 1) // id: 1-20
 }
 
-function getRandomProductId() {
-  return getRamdomNum(rawProductList.length - 1) // id: 1-20
+function getRandomModelId() {
+  return getRamdomNum(modelList.length - 1) // id: 1-20
 }
 
+// 產生 30 筆訂單 request data
+// 1. 隨機 userId
+// 2. 下訂 1-3 件商品，隨機 modelId
+// 3. count: 1-3
 
+function getRandomOrderRequestData() {
+  let userId = getRandomUserId()
+  let products = []
 
-// 產生訂單
-// 1. 隨機挑 1-3 件產品，訂購 1-3 件
-// 2. 產生 10 筆訂單
-function getRandomOrderContent() {
-  let type = getRamdomNum(3) // 隨機產生要買幾種商品
-  let temp = [] // 用於記錄已經買的商品，如同一訂單已經有同樣商品就跳過
-  const orderContent = [] // 記錄訂單內容
-
-  for (let i = 0; i < type; i++) {
-    let productId = getRandomProductId() // 隨機取用商品
-    if (temp.indexOf(productId) >= 0) { // 檢查是曾已存在
-      i--
-      continue;
-    }
-    temp.push(productId)
-    let count = getRamdomNum(3) // 隨機產生購買數量
-    orderContent.push({ // 加入訂單
-      productId,
+  for (let i = 0; i < getRamdomNum(3); i++) {
+    const modelId = getRandomModelId()
+    const count = getRamdomNum(3)
+    products.push({
+      modelId,
       count
     })
   }
-  return orderContent
-}
-
-function getTotalPrice(orderContent) { // 計算總價
-  let totalPrice = 0;
-  orderContent.forEach((product) => {
-    let unitPrice = rawProductList[product.productId - 1].price
-    totalPrice += (unitPrice * product.count)
-  })
-  return totalPrice;
-}
-
-// 產生前端發送的 req 格式
-function genarateOrderRequestData() { 
-  const orderContent = getRandomOrderContent()
 
   return {
-    userId: getRandomUserId(),
-    orderContent,
-    totalPrice: getTotalPrice(orderContent)
+    userId,
+    products
   }
 }
 
-// 根據 orderRequests 更新 product 的資料
-function updateProductList(requestData) { 
-  let { orderContent } = requestData
-  orderContent.forEach((item) => {
-    let { productId, count } = item
-    productList.forEach((product, index) => {
-      if (productId === product.id) {
-        productList[index] = {
-          ...product,
-          storage: product.storage - count,
-          sell: product.sell + count
-        }
-      }
+function getOrderContent(orderRequestData, orderId) {
+  let totalPrice = 0
+  const userId = orderRequestData.userId
+
+  const orderProductContent = []
+
+  const createdAt = new getRandomDate(new Date(2020, 0, 1), new Date(), 0, 24)
+  const updatedAt = new Date()
+
+  orderRequestData.products.forEach((product, index) => {
+    let productId = modelList[product.modelId].productId
+    let price = productList[productId - 1].price
+
+    totalPrice += (price * product.count)
+
+    orderProductContent.push({
+      orderId: orderId + 1,
+      modelId: product.modelId,
+      count: product.count,
+      unitPrice: price,
+      createdAt,
+      updatedAt
     })
   })
-}
 
-// 產生一串訂單的 req
-const orderRequests = []
-for (let i = 0; i < 10; i++) {
-  let requestData = genarateOrderRequestData()
-  updateProductList(requestData)
-  orderRequests.push(requestData)
-}
-
-// 產生 訂單 的資料
-const orderList = []
-orderRequests.forEach((order) => {
-  let { userId, totalPrice } = order
-  orderList.push({
+  const orderContent = {
+    UUID: uuidv4(),
     userId,
     totalPrice,
     status: 0,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  })
-})
+    isDeleted: 0,
+    createdAt,
+    updatedAt
+  }
 
-// 產生 訂單X商品 的 table
+  return {
+    orderContent,
+    orderProductContent
+  }
+}
+
+const orderRequestDataList = []
+
+for (let i = 0; i < 30; i++) {
+  orderRequestDataList.push(getRandomOrderRequestData())
+}
+
+// 產生訂單
+const orderList = []
 const orderProductList = []
-orderRequests.forEach((order, index) => {
-  const orderId = index + 1;
-  order.orderContent.forEach((item) => {
-    const { productId, count } = item
-    orderProductList.push({
-      orderId,
-      productId,
-      count,
-      unitPrice: rawProductList[productId - 1].price,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    })
-  })
-})
 
-// console.log("orderRequests", orderRequests);
-// console.log("orderList", orderList);
-// console.log("orderProductList", orderProductList);
-// console.log("productList", productList);
+for (let i = 0; i < orderRequestDataList.length; i++) {
+  const result = getOrderContent(orderRequestDataList[i], i)
+  orderList.push(result.orderContent)
+  orderProductList.push(...result.orderProductContent)
+}
 
-module.exports = { orderList, orderProductList, productList };
+// console.log(orderList);
+// console.log(orderProductList);
+
+module.exports = { orderList, orderProductList };

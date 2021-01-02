@@ -98,7 +98,36 @@
         }
       }
     },
-    "/products": {},
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      }
+    },
     "/orders": {
       "get": {
         "tags": [
@@ -160,6 +189,15 @@
               "minimum": 1
             },
             "description": "The order id"
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string",
+              "format": "Bearer {{token}}"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -330,20 +368,14 @@
     "Product": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
-        },
-        "model": {
+        "productName": {
           "type": "string"
         },
         "price": {
-          "type": "string"
+          "type": "integer"
         },
-        "storage": {
-          "type": "string"
-        },
-        "sell": {
-          "type": "string"
+        "models": {
+          "type": "array"
         }
       }
     },

@@ -49,6 +49,7 @@ module.exports = {
       'orderId',
       {
         type: Sequelize.INTEGER,
+        unique: true,
         allowNull: false,
         references: {
           model: 'Orders',
@@ -73,6 +74,20 @@ module.exports = {
       }
     );
     await queryInterface.addColumn(
+      'Product_models',
+      'productId',
+      {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Products',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      }
+    );
+    await queryInterface.addColumn(
       'Order_products',
       'orderId',
       {
@@ -88,12 +103,12 @@ module.exports = {
     );
     await queryInterface.addColumn(
       'Order_products',
-      'productId',
+      'modelId',
       {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Products',
+          model: 'Product_models',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -105,7 +120,7 @@ module.exports = {
       'productId',
       {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'Products',
           key: 'id',
@@ -114,16 +129,22 @@ module.exports = {
         onDelete: 'RESTRICT',
       }
     );
+    await queryInterface.addColumn(
+      'ECpay_results',
+      'orderId',
+      {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: true,
+        references: {
+          model: 'Orders',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      }
+    );
   },
 
-  down: async (queryInterface, Sequelize) => {
-    // await queryInterface.removeColumn('Order_products', 'productId');
-    // await queryInterface.removeColumn('Order_products', 'orderId');
-    // await queryInterface.removeColumn('Orders', 'addressId');
-    // await queryInterface.removeColumn('Orders', 'userId');
-    // await queryInterface.removeColumn('Addresses', 'cityId');
-    // await queryInterface.removeColumn('Addresses', 'userId');
-    // await queryInterface.removeColumn('Addresses', 'districtId');
-    // await queryInterface.removeColumn('Address_districts', 'cityId');
-  }
+  down: async (queryInterface, Sequelize) => { }
 };

@@ -6,62 +6,46 @@ const users = [
   "George",
   "Noah",
   "Jack",
-  "Jacob",
-  "Leo",
-  "Oscar",
-  "Charlie",
-  "Muhammad",
   "Olivia",
-  "Amelia",
+  "Leo",
   "Isla",
   "Ava",
-  "Emily",
-  "Isabella",
-  "Mia",
-  "Poppy",
-  "Ella",
-  "Lily"
+  "Emily"
 ]
 
-const passwords = [
-  "$2b$10$0z1Gl7Wjjx261s3sTOor7ernUp7M6LWJFquMZyuawkQdck30E6Tci",
-  "$2b$10$Tc2TeTJBlCx0slfPXXuRKejQa4yz.WwLolWCNzrQbJZQAFpEz6j6C",
-  "$2b$10$xQzvq00V7X336UFTzu/A0evnrpyqeO9FUyXLpPscfPWAZ6s7BGjfm",
-  "$2b$10$z4Umo3QXlku0hbU28ei8k.zh3w9jfNZdQiHxpYfKA4UmTFw2p4qQO",
-  "$2b$10$cryQer0U6KVEQjAfXDWFh.CAgEGbecHiZ5p1n040jLU8Jhb56f0te",
-  "$2b$10$Vd0MgnqcVlvf7dFzg9yb8uFd9PwxetWTrybnV28uOVevFtXiLkbvi",
-  "$2b$10$9rmDS8OIL5RrpOUqVuA8hOkNsRkNlr34eMhwc9MQNR0G3Fgt3COZq",
-  "$2b$10$c6bWb9MCjk.VsA4VVORmtOw7IRJkjN0um93KKzViLX/Qi3MxML5Hi",
-  "$2b$10$prxpPi.qsYFRcZryM4R0gu68fWqxv/YYyyw3XPtFQzaq1XVDQGhvS",
-  "$2b$10$UTOLI4XFx0Q./J/Ti0Cv5./uZJkbyXTr29UIzPFvYsnKdwLOYDezu",
-  "$2b$10$3Kd6sUpwy4Jo.0Hvp2jmHu0Da5ESYHOacpOrjkmWzaT2RXgjMBlBq",
-  "$2b$10$vU3IO5OhEYJwIirSuZ18q.2hl0vHzoAfNol5FZamUtZy5jUhVKZ3W",
-  "$2b$10$pI5BeRnmkmx2ZZNbRdtKAOh2BDxdWmbWE0G2p4.pZ8gewDvRX64we",
-  "$2b$10$WGQ7bncRLTyy90M3EQBRj.9bF0qAU.FYeoBZ6rTCkpJrJ7yN5PwTe",
-  "$2b$10$wrzyemEnOE24z0SDgGWY9.vz9Trkg1vS4cbitPO7mcPuvHJ1JRhq.",
-  "$2b$10$4nY9nab/Rn/aT7pA08o4h.0jPiuh4me3jjlyWqoNeyXyLgVLKRRpm",
-  "$2b$10$f9.99BRE.iJ4teRwC35G7efd3hu7shy8jldLx3wW2RIUh/W1UMRVS",
-  "$2b$10$2047G13UUj9fNCpiYcSI6.ni6ntNb1Zx0h.fih8nIlnT3Eq/z7q2W",
-  "$2b$10$/Ymv6XKR7y0bKAmqVZpNOOBLFLjbYUl5.sPN3IJpc0Ifsikkd.pp6",
-  "$2b$10$6DdQ85iqFPiuBWU66o0JGeG2O7iUCOCCJ7UYaI4/wackdnT.1wceG"
+const userData = [
+  { username: "Oliver", password: "$2b$10$jj6ePpAwjb4O4F4VL9M6eezQPT5OOQTfZHO9zQChnHfaqHFM4kCH2" },
+  { username: "Harry", password: "$2b$10$E1bFzoRqItXckhHz2gQEfOiGzNA13yKmEL3ZrdZtuoEteyNltiEVK" },
+  { username: "Noah", password: "$2b$10$yDBYNIF/AFxvjdF3AFiHK.xpHssouCfYCNzCPA6swIZ1uXEmZTHlm" },
+  { username: "Olivia", password: "$2b$10$C3LI8ipQ9R.3h7qi265QSeb0o5TvgteN2QbWZbH6qfcmYN5Wgx9je" },
+  { username: "George", password: "$2b$10$Erh/jDabCAJYfIAsj2rGJuYI85FeOYWIvZHGAeVhWe5xitKnVRTkm" },
+  { username: "Isla", password: "$2b$10$cBLwG8kT80FK09V45abhTu5Zef1BPeak5z1OAWIlM0obzjUP9sM6." },
+  { username: "Leo", password: "$2b$10$k.Hgev9pd4m3TnqBAlX34OMJCY0sCJl/tyzxQRnWbqRAcMz3DHybe" },
+  { username: "Jack", password: "$2b$10$M.bohndeLuQzUbcLJEVaOeRv6tUOiLUWCRYox.covyfHDCYpEh3zu" },
+  { username: "Emily", password: "$2b$10$1VrJm9C19JA2eL0R.MHPRekpCaRNbl5yOkeuXflmQog03gK8nUDju" },
+  { username: "Ava", password: "$2b$10$RtR7IAyco/.gg/6rP8sfSeU8Pdk5.5JjdtREfGjH/Rxj8nLXVLEoa" },
 ]
 
 const userList = []
-const saltRounds = 10
-for (let i = 0; i < 20; i++) {
-  // bcrypt.hash(users[i], saltRounds, (err, hash) => {
-  //   if (err || !hash) { return }
+for (let i = 0; i < userData.length; i++) {
+  // bcrypt.hash(users[i], Number(saltRounds), (err, hash) => {
+  //   if (err) {
+  //     console.log(err.toString());
+  //   }
   //   console.log(users[i], hash);
   // })
+
   userList.push({
-    username: users[i],
-    password: passwords[i],
-    realName: users[i],
+    username: userData[i].username,
+    password: userData[i].password,
+    realName: userData[i].username,
     email: "email@mail.com",
     phone: "0987654321",
     createdAt: new Date(),
     updatedAt: new Date()
   })
 }
+
+// console.log(userList);
 
 module.exports = { userList };
