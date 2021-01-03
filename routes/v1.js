@@ -76,11 +76,11 @@ router.post('/recipients/', onlyUser, recipientController.add);
 router.patch('/recipients/:id', onlyAdmin, recipientController.update);
 
 // payment-test
-router.get('/payment', (req, res) => {
+router.get('/payments', (req, res) => {
   res.render('paymentIndex')
 })
-router.get('/payment/:UUID', paymentController.handlePayment)
-router.post('/payment', paymentController.handlePaymentResult)
+router.get('/payments/:UUID', paymentController.handlePayment)
+router.post('/payments', paymentController.handlePaymentResult)
 router.post('/payment_result', (req, res) => {
   console.log(req);
   console.log(req.data);

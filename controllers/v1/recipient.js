@@ -5,9 +5,9 @@ const recipientController = {
   getAll: (req, res) => {
     Recipient.findAll()
       .then((recipient) => {
-        if (req.user === 'admin') {
+        // if (req.user === 'admin') {
 
-        }
+        // }
         res.status(200).json(recipient);
       })
       .catch(err => {
@@ -50,7 +50,7 @@ const recipientController = {
       !cityId ||
       !districtId
     ) {
-      console.log("add recipient error1: recipient data incomplete");
+      console.log("add recipient error: recipient data incomplete");
       return res.status(400).json({
         message: "recipient data incomplete"
       })
@@ -71,7 +71,7 @@ const recipientController = {
         })
       })
       .catch(err => {
-        console.log(`add recipient error2: ${err.toString()}`);
+        console.log(`add recipient error: ${err.toString()}`);
         res.status(500).json({
           message: err.toString()
         })
@@ -88,7 +88,7 @@ const recipientController = {
       !cityId ||
       !districtId
     ) {
-      console.log("update recipient error1: recipient data incomplete");
+      console.log("update recipient error: recipient data incomplete");
       return res.status(400).json({
         message: "recipient data incomplete"
       })
