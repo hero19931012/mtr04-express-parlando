@@ -35,6 +35,7 @@ const adminController = {
             if (err || !token) {
               console.log(`jwt sign error: ${err.toString()}`);
               return res.status(500).json({
+                success: false,
                 message: "jwt sign error"
               })
             }
