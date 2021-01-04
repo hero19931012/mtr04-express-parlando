@@ -231,10 +231,10 @@ const orderController = {
   },
   delete: (req, res) => {
     // 刪除訂單
-    const { id } = req.params;
+    const { UUID } = req.params;
     Order.update(
       { isDeleted: 1, updatedAt: new Date() },
-      { where: { id } }
+      { where: { UUID } }
     )
       .then(() => {
         res.status(204).end()
