@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
-const http = require('http');
 const https = require('https')
 const fs = require('fs');
 const morgan = require('morgan');
@@ -21,7 +20,6 @@ const privateKey  = fs.readFileSync(__dirname + '/ssl/private.key');
 const certificate = fs.readFileSync(__dirname + '/ssl/certificate.crt');
 const credentials = { key: privateKey, cert: certificate };
 
-const server = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
 
 app.use(cors())
@@ -33,13 +31,7 @@ app.use(checkAuth)
 app.use('/v1', v1)
 app.use('/', v0)
 
-const httpPort = process.env.PORT || 3000;
 const httpsPort = 3001;
-
-server.listen(httpPort, () => {
-  console.log(`Listening http on port: ${httpPort}!`);
-});
-
 httpsServer.listen(httpsPort, () => {
   console.log(`Listening https on port: ${httpsPort}!`);
 });
