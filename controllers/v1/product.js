@@ -3,126 +3,227 @@ const { Product, Product_model, Photo } = db;
 const { productTypes } = require('../../constants/constants')
 
 const productController = {
-  getAll: (req, res) => {
+  getAll: async (req, res) => {
     let { sort, order, limit, offset, type } = req.query;
-    const option = { isDeleted: 0 }
-    if (type !== undefined) { option.type = type }
-    if ((req.user === undefined || req.user !== "admin")) { option.isShow = 1 }
 
-    Product.findAll({
-      where: option,
-      limit: limit !== undefined ? Number(limit) : null,
-      offset: offset !== undefined ? Number(offset) : 0,
-      order: [
-        [
-          sort !== undefined ? sort : "id",
-          order !== undefined ? order : "ASC"
-        ],
-      ],
+    const whereOption = { isDeleted: 0 }
+    if (type !== undefined) { whereOption.type = type }
+    if (req.user === undefined || req.user.role !== "admin") {
+      whereOption.isShow = 1
+    }
+
+    const options = {
+      where: whereOption,
+      order: [],
       include: [Product_model, Photo]
-    })
-      .then((products) => {
-        // 如果是 admin 就回傳全部；如果是 user，回傳 id, modelName, colorChip, storage
-        if (req.user !== undefined && req.user.role === 'admin') {
-          products.forEach((product) => {
-            product.type = productTypes[Number(product.type) - 1];
-            return
+    }
+
+    if (limit !== undefined) { options.limit = Number(limit) }
+    if (offset !== undefined) { options.offset = Number(offset) }
+    if (sort !== undefined) { options.order[0] = sort }
+    if (order !== undefined) { options.order[1] = order }
+
+    try {
+      const products = await Product.findAll(options);
+      if (req.user !== undefined && req.user.role === "admin") {
+        // 如果 product 底下沒有 model 就顯示空陣列
+        const responseData = products.map((product) => {
+          const {
+            id,
+            productName,
+            price,
+            type,
+            article,
+            isShow,
+            createdAt,
+            updatedAt,
+            Product_models,
+            Photos: photos
+          } = product
+
+          const models = Product_models.filter((model) => {
+            return model.dataValues.isDeleted !== 1
           })
 
-          return res.status(200).json({
-            products
-          });
-        }
+          const productInfo = {
+            id,
+            productName,
+            price,
+            type,
+            article,
+            isShow,
+            createdAt,
+            updatedAt,
+            models,
+            photos
+          }
 
-        const productListForUser = products.map((product) => {
-          const models = product.Product_models
-            .filter((model) => { return model.storage > 0 })
+          return { ...productInfo }
+        })
+
+        return res.status(200).json({
+          success: true,
+          data: {
+            products: responseData
+          }
+        })
+      }
+
+      let responseData = products
+        .filter((product) => {
+          // 如果 product 底下沒有 model 可以顯示就不列入
+          return product.Product_models.filter((model) => {
+            return model.isDeleted !== 1
+          }).length !== 0
+        })
+        .map((product) => {
+          let {
+            id,
+            productName,
+            price,
+            type,
+            article,
+            createdAt,
+            Product_models,
+            Photos
+          } = product;
+
+          const productInfo = {
+            id,
+            productName,
+            price,
+            type: productTypes[Number(type) - 1],
+            article,
+            createdAt
+          }
+
+          const productModelInfo = Product_models
+            .filter((model) => {
+              return model.isShow === 1 && model.isDeleted === 0
+            })
             .map((model) => {
-              const { id, modelName, colorChip, storage } = model
+              const { colorChip, storage } = model
               return {
-                id,
-                modelName,
                 colorChip,
                 storage: storage > 10 ? "庫存充足" : storage
               }
             })
 
-          const typeName = productTypes[Number(product.type) - 1]
-          const productForUser = {
-            ...product.dataValues, // 從 sequelize 物件拿出資料
-            type: typeName,
-            Product_models: models
-          }
+          const productPhotoInfo = Photos.map((photo) => {
+            return { url: photo.url }
+          })
 
           return {
-            ...productForUser
+            ...productInfo,
+            models: productModelInfo,
+            photos: productPhotoInfo
           }
         })
 
-        res.status(200).json({
-          products: productListForUser
-        })
+      res.status(200).json({
+        success: true,
+        data: {
+          products: responseData
+        }
       })
-      .catch(err => {
-        res.status(400).json({
-          message: "get products error: " + err.toString()
-        })
-      });
+    } catch (err) {
+      console.log(`get products error: ${err.toString()}`);
+      res.status(500).json({
+        success: false,
+        message: err.toString()
+      })
+    }
   },
-  getOne: (req, res) => {
+  getOne: async (req, res) => {
     const { id } = req.params
-    Product.findOne({
-      where: { id, isDeleted: 0, isShow: 1 },
-      include: [Product_model, Photo]
-    })
-      .then((product) => {
-        // 如果找不到 => product === null
-        if (product === null) {
-          console.log("get product error: product has been deleted");
-          return res.status(403).json({
-            success: false,
-            message: "product has been deleted"
-          })
-        }
+    const whereOption = {
+      id,
+      isDeleted: 0
+    }
 
-        // 設定 type
-        product.type = productTypes[Number(product.type) - 1]
+    if (req.user === undefined || req.user.role !== "admin") {
+      whereOption.isShow = 1
+    }
 
-        // 如果是 admin 就回傳全部；如果是 user 只回傳 id, modelName, colorChip, storage
-        if (req.user !== undefined && req.user.role === "admin") {
-          return res.status(200).json({
-            success: true,
-            data: { product }
-          })
-        }
-
-        const models = product.Product_models
-          .filter((model) => { return model.storage > 0 })
-          .map((model) => {
-            const { id, modelName, colorChip, storage } = model
-            return {
-              id,
-              modelName,
-              colorChip,
-              storage: storage > 10 ? "庫存充足" : storage
-            }
-          })
-
-        const productForUser = { ...product.dataValues } // 從 sequelize 物件拿出資料
-        productForUser.Product_models = models
-
-        res.status(200).json({
-          success: true,
-          data: { product: productForUser }
-        })
+    try {
+      const product = await Product.findOne({
+        where: whereOption,
+        include: [Product_model, Photo]
       })
-      .catch(err => {
-        console.log(`get one product error: ${err.toString()}`);
-        res.status(500).json({
+
+      // 如果找不到 product === null 或無 model 可顯示
+      if (
+        product === null ||
+        product.Product_models.filter((model) => {
+          return model.isDeleted !== 1
+        }).length === 0
+      
+      
+        ) {
+        console.log("get product error: product has been deleted");
+        return res.status(403).json({
           success: false,
-          message: err.toString()
+          message: "product has been deleted"
         })
-      });
+      }
+
+      if (req.user !== undefined && req.user.role === "admin") {
+        return res.status(200).json({
+          success: true,
+          data: { product }
+        })
+      }
+
+      const {
+        productName,
+        price,
+        type,
+        article,
+        createdAt,
+        Product_models,
+        Photos
+      } = product
+
+      const productInfo = {
+        productName,
+        price,
+        type: productTypes[Number(type) - 1],
+        article,
+        createdAt
+      }
+
+      const models = Product_models
+        .filter((model) => { return model.storage > 0 && model.isDeleted !== 1 })
+        .map((model) => {
+          const { colorChip, storage } = model
+          return {
+            colorChip,
+            storage: storage > 10 ? "庫存充足" : storage
+          }
+        })
+
+
+      const photos = Photos.map((photo) => {
+        return { url: photo.url }
+      })
+
+      res.status(200).json({
+        success: true,
+        data: {
+          product: {
+            ...productInfo,
+            models,
+            photos
+          }
+        }
+      })
+    } catch (err) {
+      console.log(`get one product error: ${err.toString()}`);
+      res.status(500).json({
+        success: false,
+        message: err.toString()
+      })
+    }
   },
   add: (req, res) => {
     const { productName, price, type, article } = req.body;
