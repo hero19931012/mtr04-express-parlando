@@ -7,15 +7,22 @@ const modelController = {
     Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then((model) => {
         if (model === null) {
+          console.log("get models error: model has been deleted");
           return res.status(403).json({
-            message: "get models error1: model has been deleted"
+            success: false,
+            message: "model has been deleted"
           })
         }
-        return res.status(200).json({ model })
+        return res.status(200).json({
+          success: true,
+          data: { model }
+        })
       })
       .catch(err => {
+        console.log(`get one model error: ${err.toString()}`);
         res.status(500).json({
-          errorMessage: "get models error2" + err.toString()
+          success: false,
+          message: err.toString()
         })
       });
   },
@@ -27,15 +34,17 @@ const modelController = {
       !colorChip ||
       !storage
     ) {
-      console.log("add model error1: model data incomplete");
-      return res.status(400).json({
+      console.log("add model error: model data incomplete");
+      return res.status(403).json({
+        success: false,
         message: "model data incomplete"
       })
     }
 
     if (storage >= 1000) {
-      console.log("add model error2: model storage must below 1,000");
-      return res.status(400).json({
+      console.log("add model error: model storage must below 1,000");
+      return res.status(403).json({
+        success: false,
         message: "model storage must below 1,000"
       })
     }
@@ -53,11 +62,15 @@ const modelController = {
       isDeleted: 0
     })
       .then((model) => {
-        res.status(200).json({ model });
+        res.status(200).json({
+          success: true,
+          data: { model }
+        });
       })
       .catch(err => {
-        console.log(`add model error3: ${err.toString()}`);
+        console.log(`add model error: ${err.toString()}`);
         res.status(500).json({
+          success: false,
           message: err.toString()
         });
       })
@@ -73,9 +86,22 @@ const modelController = {
       isDeleted
     } = req.body;
 
+    if (
+      !modelName ||
+      !colorChip ||
+      !storage
+    ) {
+      console.log("udpate model error: model data incomplete");
+      return res.status(403).json({
+        success: false,
+        message: "model data incomplete"
+      })
+    }
+
     if (storage >= 1000) {
-      console.log("update model error1: model storage must below 1,000");
+      console.log("update model error: model storage must below 1,000");
       return res.status(400).json({
+        success: false,
         message: "model storage must below 1,000"
       })
     }
@@ -83,8 +109,9 @@ const modelController = {
     Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then(model => {
         if (model === null) {
-          console.log("update model error2: model has been deleted");
+          console.log("update model error: model has been deleted");
           res.status(403).json({
+            success: false,
             message: "model has been deleted"
           })
         }
@@ -100,12 +127,14 @@ const modelController = {
       })
       .then((model) => {
         res.status(200).json({
-          model
+          success: true,
+          data: { model }
         })
       })
       .catch(err => {
-        console.log(`update model error3: ${err.toString()}`);
+        console.log(`update model error: ${err.toString()}`);
         res.status(500).json({
+          success: false,
           message: err.toString()
         })
       })
@@ -115,8 +144,9 @@ const modelController = {
     Product_model.findOne({ where: { id, isDeleted: 0 } })
       .then(model => {
         if (model === null) {
-          console.log("delete model error1: model has been deleted");
+          console.log("delete model error: model has been deleted");
           res.status(403).json({
+            success: false,
             message: "model has been deleted"
           })
         }
@@ -126,11 +156,14 @@ const modelController = {
         })
       })
       .then(() => {
-        res.status(204).end()
+        res.status(200).json({
+          success: true
+        })
       })
       .catch(err => {
         res.status(500).json({
-          message: "delete model error2: " + err.toString()
+          success: false,
+          message: "delete model error: " + err.toString()
         })
       })
   }
