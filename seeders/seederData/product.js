@@ -97,7 +97,6 @@ for (let i = 0; i < 4; i++) {
       type: typeInfo.typeNum,
       article: "JSON string",
       isShow: 1,
-      // isDeleted: 0,
       createdAt,
       updatedAt,
     })
