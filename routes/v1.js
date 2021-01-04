@@ -75,19 +75,9 @@ router.get('/recipients/:id', adminAndUser, recipientController.getOne);
 router.post('/recipients/', onlyUser, recipientController.add);
 router.patch('/recipients/:id', onlyAdmin, recipientController.update);
 
-// payment-test
-router.get('/payments', (req, res) => {
-  res.render('paymentIndex')
-})
 router.get('/payments/:UUID', paymentController.handlePayment)
 router.post('/payments', paymentController.handlePaymentResult)
-router.post('/payment_result', (req, res) => {
-  console.log(req);
-  console.log(req.data);
-  res.status(204).end()
-})
 
-// 404 not found
 router.use((req, res) => {
   res.status(404).send("404 Not found");
 });
