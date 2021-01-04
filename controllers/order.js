@@ -65,45 +65,51 @@ const orderController = {
       });
   },
   getOne: async (req, res) => {
-    // order/:uuid => req.params.id
-    const UUID = req.params.id;
-    const order = await Order.findOne({
-      where: { UUID },
-      include: [Product_model, Recipient]
-    })
+    const { UUID } = req.params;
+    try {
+      const order = await Order.findOne({
+        where: { UUID },
+        include: [Product_model, Recipient]
+      })
 
-    if (order === null) {
-      console.log("get one order error1: invalid orderId");
-      return res.status(400).json({
-        message: "invalid orderId"
+      if (order === null) {
+        console.log("get one order error1: invalid orderId");
+        return res.status(400).json({
+          message: "invalid orderId"
+        })
+      }
+
+      // 如果是 admin 的話可以看全部的 order, user 只能看自己的
+      if (req.user.role !== 'admin' && req.user.id !== order.userId) {
+        return res.status(401).json({
+          message: "invalid user"
+        })
+      }
+
+      const { totalPrice, status, createdAt } = order;
+      const products = order.Product_models.map((model) => {
+        return {
+          modelId: model.id,
+          modelName: model.modelName,
+          unitPrice: model.Order_product.unitPrice,
+          count: model.Order_product.count
+        }
+      })
+
+      res.status(200).json({
+        order: {
+          totalPrice,
+          status,
+          createdAt,
+          products
+        }
+      })
+    } catch (err) {
+      console.log(`get one order error: ${err.toString()}`);
+      return res.status(500).json({
+        message: err.toString()
       })
     }
-
-    // 如果是 admin 的話可以看全部的 order, user 只能看自己的
-    if (req.user.role !== 'admin' && req.user.id !== order.userId) {
-      return res.status(401).json({
-        message: "invalid user"
-      })
-    }
-
-    const { totalPrice, status, createdAt } = order;
-    const products = order.Product_models.map((model) => {
-      return {
-        modelId: model.id,
-        modelName: model.modelName,
-        unitPrice: model.Order_product.unitPrice,
-        count: model.Order_product.count
-      }
-    })
-
-    res.status(200).json({
-      order: {
-        totalPrice,
-        status,
-        createdAt,
-        products
-      }
-    })
   },
   add: async (req, res) => {
     // 1. 對 products 遍歷，檢查庫存，取出 price 算出 totalPrice，把 model push 到陣列
@@ -143,6 +149,7 @@ const orderController = {
       if (count > model.storage) {
         console.log("add order error1: no storage");
         return res.status(500).json({
+          success: false,
           message: `${model.modelName} no storage`
         })
       }
@@ -215,9 +222,6 @@ const orderController = {
   },
   update: (req, res) => {
     const { UUID } = req.params;
-
-    console.log(UUID);
-
     Order.update(
       { status: 1, updatedAt: new Date() },
       { where: { UUID } }
