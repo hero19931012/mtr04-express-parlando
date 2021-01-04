@@ -95,12 +95,8 @@ for (let i = 0; i < 4; i++) {
       productName,
       price,
       type: typeInfo.typeNum,
-      article: "JSON string",
+      article: JSON.stringify({"ops":[{"attributes":{"size":"huge"},"insert":"FEATURES"},{"insert":"\n 請於此輸入你的特色說 \n"}]}),
       isShow: 1,
-<<<<<<< HEAD
-      isDeleted: 0,
-=======
->>>>>>> apiV1
       createdAt,
       updatedAt,
     })
@@ -129,11 +125,6 @@ for (let i = 0; i < 4; i++) {
         sell,
         productId,
         isShow: 1,
-<<<<<<< HEAD
-        isDeleted: 0,
-=======
-        // isDeleted: 0,
->>>>>>> apiV1
         createdAt,
         updatedAt
       }
