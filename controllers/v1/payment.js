@@ -15,6 +15,7 @@ const paymentController = {
 
     if (order === null) {
       return res.status(400).json({
+        success: false,
         message: "invalid order id or already paid"
       })
     }
@@ -25,6 +26,7 @@ const paymentController = {
     if (totalPrice >= 30000) {
       console.log("post payment error: total price must below 30,000");
       return res.status(400).json({
+        success: false,
         message: "total price must below 30,000"
       })
     }
@@ -45,6 +47,7 @@ const paymentController = {
     } catch (err) {
       console.log(`payment error: ${err.toString()}`);
       return res.status(500).json({
+        success: false,
         message: err.toString()
       })
     }
@@ -65,24 +68,16 @@ const paymentController = {
       TradeDesc: 'test',
       ItemName: productsString,
       ReturnURL: "https://huiming.tw/payment",
-      OrderResultURL: "https://huiming.tw/payment_result"
+      ClientBackURL: ""
     };
 
-    console.log(base_param);
-
     const inv_params = {};
-
     const create = new ecpay_payment();
     const htm = create.payment_client.aio_check_out_all(
       (parameters = base_param),
       (invoice = inv_params)
     );
     res.send(htm);
-  },
-  renderAdminPage: (req, res) => {
-    Payment_result.findAll().then((payments) => {
-      res.render('admin', { payments });
-    });
   },
   handlePaymentResult: async (req, res) => {
     const {
@@ -97,24 +92,13 @@ const paymentController = {
       TradeDate
     } = req.body;
 
-    // console.log(
-    //   "MerchantID", MerchantID, '\n',
-    //   "MerchantTradeNo", MerchantTradeNo, '\n',
-    //   "StoreID", StoreID, '\n',
-    //   "RtnCode", RtnCode, '\n',
-    //   "RtnMsg", RtnMsg, '\n',
-    //   "TradeNo", TradeNo, '\n',
-    //   "PaymentDate", PaymentDate, '\n',
-    //   "PaymentType", PaymentType, '\n',
-    //   "TradeDate", TradeDate, '\n',
-    // );
-
     try {
       db.sequelize.transaction(async () => {
         const payment = await ECpay_result.findOne({ where: { MerchantTradeNo } })
         if (payment === null) {
-          console.log("payment error3: payment data not exist");
+          console.log("payment error: payment data not exist");
           return res.status(500).json({
+            success: false,
             message: "payment data not exist"
           })
         }
@@ -131,9 +115,6 @@ const paymentController = {
         })
 
         const { orderId } = payment;
-
-        console.log("orderId", orderId);
-
         await Order.update(
           { status: 1 },
           { where: { id: orderId } }
@@ -141,18 +122,20 @@ const paymentController = {
       })
         .then(() => {
           return res.status(200).json({
-            ok: 1
+            success: true
           })
         })
         .catch(err => {
-          console.log(`payment error5: ${err.toString()}`);
+          console.log(`payment error: ${err.toString()}`);
           return res.status(500).json({
-            ok: 0
+            success: false,
+            message: err.toString()
           })
         })
     } catch (err) {
-      console.log(`payment error5: ${err.toString()}`);
+      console.log(`payment error: ${err.toString()}`);
       return res.status(500).json({
+        success: false,
         message: err.toString()
       })
     }
