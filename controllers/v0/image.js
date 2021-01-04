@@ -1,5 +1,5 @@
 const { ALBUM_HASH_ARTICLE } = process.env;
-const { imgurUpload } = require('../../WebAPI/api')
+const { imgurUpload } = require('../../webAPI')
 
 const imageController = {
   upload: async (req, res) => {

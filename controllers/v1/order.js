@@ -105,13 +105,6 @@ const orderController = {
     })
   },
   add: async (req, res) => {
-    // 1. 對 products 遍歷，檢查庫存，取出 price 算出 totalPrice，把 model push 到陣列
-    //////// transaction
-    // 2. 新增一筆 order，寫入 userId, totalPrice => 拿到 orderId
-    // 3. 更新 Product_model
-    // 4. 遍歷 model array，寫入 productId, modelId, unitPrice 到 Order_product
-    ////////
-
     const userId = req.user.id
     const { products } = req.body;
     if (products === undefined || products.length === 0) {
@@ -123,8 +116,6 @@ const orderController = {
     }
 
     const orderProducts = []
-    // const modelArray = [] // 等一下用來 update
-    // const modelUpdateDataArray = [] // update 的內容
 
     const UUID = uuidv4();
     const newModels = []
@@ -160,11 +151,6 @@ const orderController = {
         }
       })
 
-      // modelArray.push(model)
-      // modelUpdateDataArray.push({
-      // storage: model.storage - count,
-      // sell: model.sell + count
-      // })
       orderProducts.push({
         modelId: model.id,
         count: count,
