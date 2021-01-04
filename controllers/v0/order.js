@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../../models');
 const { v4: uuidv4 } = require('uuid');
 const { Order, Order_product, Product, Product_model, Recipient } = db;
 

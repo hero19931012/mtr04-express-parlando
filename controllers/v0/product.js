@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../../models');
 const { Product, Product_model, Photo } = db;
 
 const typeArray = ["耳罩式耳機", "入耳式耳機", "音響", "週邊配件"]

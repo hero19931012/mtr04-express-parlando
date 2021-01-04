@@ -1,6 +1,6 @@
 const ecpay_payment = require('ecpay-payment');
 const { restart } = require('nodemon');
-const db = require('../models');
+const db = require('../../models');
 const { ECpay_result, Order, Product_model } = db;
 
 const getRandomMerchantTradeNo = () => {

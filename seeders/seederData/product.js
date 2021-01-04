@@ -97,7 +97,10 @@ for (let i = 0; i < 4; i++) {
       type: typeInfo.typeNum,
       article: "JSON string",
       isShow: 1,
+<<<<<<< HEAD
       isDeleted: 0,
+=======
+>>>>>>> apiV1
       createdAt,
       updatedAt,
     })
@@ -126,7 +129,11 @@ for (let i = 0; i < 4; i++) {
         sell,
         productId,
         isShow: 1,
+<<<<<<< HEAD
         isDeleted: 0,
+=======
+        // isDeleted: 0,
+>>>>>>> apiV1
         createdAt,
         updatedAt
       }
