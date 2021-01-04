@@ -215,6 +215,9 @@ const orderController = {
   },
   update: (req, res) => {
     const { UUID } = req.params;
+
+    console.log(UUID);
+
     Order.update(
       { status: 1, updatedAt: new Date() },
       { where: { UUID } }
