@@ -14,9 +14,18 @@ const paymentController = {
     });
 
     if (order === null) {
-      return res.status(400).json({
+      console.log("payment error: invalid order id or already paid");
+      return res.status(403).json({
         success: false,
         message: "invalid order id or already paid"
+      })
+    }
+
+    if (order.userId !== req.user.id) {
+      console.log("payment error: invalid user");
+      return res.status(403).json({
+        success: false,
+        message: "invalid user"
       })
     }
 
@@ -68,7 +77,7 @@ const paymentController = {
       TradeDesc: 'test',
       ItemName: productsString,
       ReturnURL: "https://huiming.tw/payment",
-      ClientBackURL: ""
+      ClientBackURL: `https://awuuu0716.github.io/MTR04-Parlando/#/transaction/${UUID}`
     };
 
     const inv_params = {};
