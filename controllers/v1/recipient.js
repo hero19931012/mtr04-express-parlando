@@ -51,7 +51,8 @@ const recipientController = {
       !districtId
     ) {
       console.log("add recipient error: recipient data incomplete");
-      return res.status(400).json({
+      return res.status(403).json({
+        success: false,
         message: "recipient data incomplete"
       })
     }
@@ -67,12 +68,14 @@ const recipientController = {
     Recipient.create({ orderId, name, phone, email, address, cityId, districtId })
       .then(recipient => {
         res.status(200).json({
-          recipient
+          success: true,
+          data: { recipient }
         })
       })
       .catch(err => {
         console.log(`add recipient error: ${err.toString()}`);
         res.status(500).json({
+          success: false,
           message: err.toString()
         })
       })
@@ -90,6 +93,7 @@ const recipientController = {
     ) {
       console.log("update recipient error: recipient data incomplete");
       return res.status(400).json({
+        success: false,
         message: "recipient data incomplete"
       })
     }
@@ -99,11 +103,14 @@ const recipientController = {
       { where: { id } }
     )
       .then(() => {
-        res.status(204).end()
+        res.status(200).json({
+          success: true
+        })
       })
       .catch(err => {
         console.log(`update recipient error: ${err.toString()}`);
         res.status(500).json({
+          success: false,
           message: err.toString()
         })
       })

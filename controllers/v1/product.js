@@ -204,7 +204,7 @@ const productController = {
 
 
       const photos = Photos.map((photo) => {
-        return { url: photo.url }
+        return photo.url
       })
 
       res.status(200).json({
@@ -244,6 +244,7 @@ const productController = {
       isDeleted: 0
     })
       .then((product) => {
+        product.type = productTypes[Number(product.type) - 1]
         res.status(200).json({
           success: true,
           data: { product }
@@ -259,7 +260,7 @@ const productController = {
   },
   update: async (req, res) => {
     const { id } = req.params
-    const { productName, price, type, article, isShow, isDeleted } = req.body;
+    const { productName, price, type, article, isShow } = req.body;
     const product = await Product.findOne({ where: { id, isDeleted: 0 } })
 
     if (product === null) {
@@ -274,12 +275,13 @@ const productController = {
     product.update({
       productName: productName !== undefined ? productName : product.productName,
       price: price !== undefined ? price : product.price,
-      type: type !== undefined ? type : product.type,
+      type: type !== undefined ? productTypes.indexOf(type) + 1 : product.type,
       article: article !== undefined ? article : product.article,
       isShow: isShow !== undefined ? isShow : product.isShow,
       updatedAt: new Date()
     })
       .then((product) => {
+        product.type = productTypes[Number(product.type) - 1]
         res.status(200).json({
           success: true,
           data: { product }

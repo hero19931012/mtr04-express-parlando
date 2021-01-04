@@ -15,12 +15,14 @@ const photoController = {
     })
       .then(photos => {
         res.status(200).json({
-          photos
+          success: true,
+          data: { photos }
         })
       })
       .catch(err => {
         console.log(`get photos error: ${err.toString()}`);
         res.status(500).json({
+          success: false,
           message: err.toString()
         })
       })
@@ -29,6 +31,7 @@ const photoController = {
     if (req.files === undefined || req.files.length === 0) {
       console.log("upload images error1: no images found");
       return res.status(400).json({
+        success: false,
         message: "no images found"
       })
     }
@@ -58,12 +61,14 @@ const photoController = {
       .then((photos) => {
         // console.log("bulkCreate result: ", photos);
         res.status(200).json({
-          photos
+          success: true,
+          data: { photos }
         })
       })
       .catch(err => {
-        console.log(`upload images error2: ${err.toString()}`);
+        console.log(`upload images error: ${err.toString()}`);
         res.status(500).json({
+          success: true,
           message: err.toString()
         })
       })
@@ -73,6 +78,7 @@ const photoController = {
     if (!productId || !photos || photos.length === 0) {
       console.log("update photos error: data incomplete");
       return res.status(400).json({
+        success: true,
         message: "data incomplete"
       })
     }
@@ -81,12 +87,15 @@ const photoController = {
       { productId },
       { where: { id: photos } }
     )
-      .then(photos => {
-        res.status(204).end()
+      .then(() => {
+        res.status(200).json({
+          success: true
+        })
       })
       .catch(err => {
         console.log(`link product and photos error: ${err.toString()}`)
         res.status(500).json({
+          success: false,
           message: err.toString()
         })
       })

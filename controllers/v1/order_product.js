@@ -5,11 +5,16 @@ const orderProductController = {
   getAll: (req, res) => {
     Order_product.findAll()
       .then((products) => {
-        res.status(200).json({ products });
+        res.status(200).json({
+          success: true,
+          data: { products }
+        });
       })
       .catch(err => {
+        console.log(`get order_products error: ${err.toString()}`);
         res.status(500).json({
-          message: "get order_products error: " + err.toString()
+          success: false,
+          message: err.toString()
         })
       });
   },

@@ -64,7 +64,7 @@ const userController = {
           })
           .catch(err => {
             console.log(`register error: ${err.toString()}`);
-            return res.status(400).json({
+            return res.status(403).json({
               success: false,
               message: "username has been registered"
             })
@@ -76,7 +76,7 @@ const userController = {
     const { username, password } = req.body;
     if (!username || !password) {
       console.log(`login error: username and password required`);
-      return res.status(400).json({
+      return res.status(403).json({
         success: false,
         message: "username and password required"
       })
@@ -186,6 +186,7 @@ const userController = {
       .catch(err => {
         console.log(`update user error: ${err.toString()}`);
         res.status(500).json({
+          success: true,
           message: err.toString()
         })
       })

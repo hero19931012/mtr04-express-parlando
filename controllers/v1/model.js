@@ -165,7 +165,7 @@ const modelController = {
           success: false,
           message: "delete model error: " + err.toString()
         })
-      })
+      })                                                                                                                                                       
   }
 }
 
