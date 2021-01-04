@@ -10,6 +10,8 @@ const recipientController = require('../controllers/v1/recipient');
 const photoController = require('../controllers/v1/photo');
 const imageController = require('../controllers/v1/image');
 const paymentController = require('../controllers/v1/payment');
+const cityController = require('../controllers/v1/city')
+const districtController = require('../controllers/v1/district')
 
 const router = express.Router();
 
@@ -70,10 +72,10 @@ router.post('/orders', onlyUser, orderController.add);
 router.patch('/orders/:UUID', onlyAdmin, orderController.update); // 完成訂單
 router.delete('/orders/:UUID', onlyAdmin, orderController.delete); // 刪除訂單
 
-router.get('/recipients', adminAndUser, recipientController.getAll);
-router.get('/recipients/:id', adminAndUser, recipientController.getOne);
-router.post('/recipients/', onlyUser, recipientController.add);
-router.patch('/recipients/:id', onlyAdmin, recipientController.update);
+router.get('/cities', cityController.getAll)
+router.get('/districts', districtController.getAll)
+
+router.post('/recipients/UUID', onlyUser, recipientController.add);
 
 router.get('/payments/:UUID', paymentController.handlePayment)
 router.post('/payments', paymentController.handlePaymentResult)
