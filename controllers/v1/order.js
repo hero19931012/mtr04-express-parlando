@@ -80,8 +80,8 @@ const orderController = {
       })
     }
 
-    const { totalPrice, status, createdAt, updatedAt } = order;
-    const products = order.Product_models.map((model) => {
+    const { totalPrice, status, createdAt, updatedAt, Product_models, Recipients } = order;
+    const products = Product_models.map((model) => {
       return {
         productId: model.productId,
         modelId: model.id,
@@ -99,7 +99,8 @@ const orderController = {
           status,
           createdAt,
           updatedAt,
-          products
+          products,
+          recipient: Recipients
         }
       }
     })
