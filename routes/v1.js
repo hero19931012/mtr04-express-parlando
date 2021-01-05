@@ -78,7 +78,7 @@ router.delete('/orders/:UUID', onlyAdmin, orderController.delete); // 刪除訂�
 router.get('/cities', cityController.getAll)
 router.get('/districts', districtController.getAll)
 
-router.post('/recipients/UUID', onlyUser, recipientController.add);
+router.post('/recipients/:UUID', onlyUser, recipientController.add);
 
 router.get('/payments/:UUID', onlyUser, paymentController.handlePayment)
 router.post('/payments', paymentController.handlePaymentResult)
