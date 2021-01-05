@@ -8,7 +8,9 @@ async function checkProdcutAvailability(productId) {
     include: [Product_model]
   })
 
-  const modelsAvailable = product.Product_models.filter((model) => {
+  if (product === null) return
+
+  const modelsAvailable = product.Product_model.filter((model) => {
     return model.isShow === 1 && model.isDeleted === 0
   })
 
