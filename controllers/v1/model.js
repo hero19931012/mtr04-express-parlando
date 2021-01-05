@@ -1,6 +1,25 @@
 const db = require('../../models');
 const { Product, Product_model } = db;
 
+async function checkProdcutAvailability(productId) {
+  // 檢查 product 是否有可顯示的 model, 若沒有則更新 product isShow = 0
+  const product = await Product.findOne({
+    where: { id: productId, isDeleted: 0 },
+    include: [Product_model]
+  })
+
+  const modelsAvailable = product.Product_models.filter((model) => {
+    return model.isShow === 1 && model.isDeleted === 0
+  })
+
+  if (modelsAvailable.length === 0 && product.isShow === 1) {
+    await product.update({
+      isShow: 0
+    })
+    console.log(`product id:${product.id} ${product.productName} has been hidden`);
+  }
+}
+
 const modelController = {
   getOne: (req, res) => {
     const { id } = req.params
@@ -115,23 +134,7 @@ const modelController = {
         updatedAt: new Date()
       })
 
-      // 檢查 product 是否有可顯示的 model, 若沒有則更新 product isShow = 0
-      const productId = model.Product.id
-      const product = await Product.findOne({
-        where: { id: productId, isDeleted: 0 },
-        include: [Product_model]
-      })
-
-      const modelsAvailable = product.Product_models.filter((model) => {
-        return model.isShow === 1 && model.isDeleted === 0
-      })
-
-      if (modelsAvailable.length === 0) {
-        await product.update({
-          isShow: 0
-        })
-        console.log(`id:${product.id} ${product.productName} has been hidden`);
-      }
+      checkProdcutAvailability(model.Product.id)
 
       res.status(200).json({
         success: true,
@@ -165,6 +168,8 @@ const modelController = {
         isDeleted: 1,
         updatedAt: new Date()
       })
+
+      checkProdcutAvailability(model.Product.id)
 
       res.status(200).json({
         success: true
