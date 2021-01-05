@@ -18,10 +18,16 @@ const productController = {
       include: [Product_model, Photo]
     }
 
+    console.log("limit", limit);
+    console.log("offset", offset);
+    console.log("sort", sort);
+    console.log("order", order);
+
+
     if (limit !== undefined) { options.limit = Number(limit) }
     if (offset !== undefined) { options.offset = Number(offset) }
-    if (sort !== undefined) { options.order[0] = sort }
-    if (order !== undefined) { options.order[1] = order }
+    if (sort !== undefined) { options.order[0] = [sort] }
+    if (sort !== undefined && order !== undefined) { options.order[0][1] = order }
 
     try {
       const products = await Product.findAll(options);
@@ -45,7 +51,7 @@ const productController = {
             return model.dataValues.isDeleted !== 1
           })
 
-          const productInfo = {
+          return {
             id,
             productName,
             price,
@@ -57,8 +63,6 @@ const productController = {
             models,
             photos
           }
-
-          return { ...productInfo }
         })
 
         return res.status(200).json({
@@ -157,9 +161,9 @@ const productController = {
         product.Product_models.filter((model) => {
           return model.isDeleted !== 1
         }).length === 0
-      
-      
-        ) {
+
+
+      ) {
         console.log("get product error: product has been deleted");
         return res.status(403).json({
           success: false,
