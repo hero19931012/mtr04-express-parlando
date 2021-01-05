@@ -158,7 +158,7 @@ const paymentController = {
 
         const { orderId } = payment;
 
-        console.log("orderId", orderId);
+        // console.log("orderId", orderId);
 
         await Order.update(
           { status: 1 },

@@ -21,13 +21,13 @@ const paymentController = {
       })
     }
 
-    if (order.userId !== req.user.id) {
-      console.log("payment error: invalid user");
-      return res.status(403).json({
-        success: false,
-        message: "invalid user"
-      })
-    }
+    // if (order.userId !== req.user.id) {
+    //   console.log("payment error: invalid user");
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "invalid user"
+    //   })
+    // }
 
     // 寫入 orderId & MerchantTradeNo 進 ECpay_result
     const { id, totalPrice, Product_models } = order
@@ -100,6 +100,8 @@ const paymentController = {
       PaymentType,
       TradeDate
     } = req.body;
+
+    console.log(req.body);
 
     try {
       db.sequelize.transaction(async () => {
