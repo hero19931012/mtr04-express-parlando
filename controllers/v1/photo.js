@@ -73,32 +73,50 @@ const photoController = {
         })
       })
   },
-  update: (req, res) => {
-    const { productId, photos } = req.body;
-    if (!productId || !photos || photos.length === 0) {
+  update: async (req, res) => {
+    const { productId, photos: photoIdList } = req.body;
+
+    if (!productId || !photoIdList || photoIdList.length === 0) {
       console.log("update photos error: data incomplete");
       return res.status(400).json({
-        success: true,
+        success: false,
         message: "data incomplete"
       })
     }
 
-    Photo.update(
-      { productId },
-      { where: { id: photos } }
-    )
-      .then(() => {
-        res.status(200).json({
-          success: true
-        })
+    try {
+      db.sequelize.transaction(async () => {
+        for (let i = 0; i < photoIdList.length; i++) {
+          const photo = await Photo.findOne({
+            where: { id: photoIdList[i] }
+          })
+
+          if (photo === null) {
+            throw new Error("invalid photo id")
+          }
+
+          await photo.update({ productId })
+        }
       })
-      .catch(err => {
-        console.log(`link product and photos error: ${err.toString()}`)
-        res.status(500).json({
-          success: false,
-          message: err.toString()
+        .then(() => {
+          res.status(200).json({
+            success: true
+          })
         })
+        .catch(err => {
+          console.log(`link product and photos error: ${err.toString()}`);
+          res.status(403).json({
+            success: false,
+            message: err.toString()
+          })
+        })
+    } catch (err) {
+      console.log(`link product and photos error: ${err.toString()}`);
+      res.status(403).json({
+        success: false,
+        message: err.toString()
       })
+    }
   }
 }
 module.exports = photoController;
