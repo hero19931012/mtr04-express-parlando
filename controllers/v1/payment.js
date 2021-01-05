@@ -44,10 +44,12 @@ const paymentController = {
     try {
       const payment = await ECpay_result.findOne({ where: { orderId: id } })
       if (payment !== null) {
+        console.log("payment already exist, updating data")
         await payment.update({
           MerchantTradeNo
         })
       } else {
+        console.log("payment not exist, creating data");
         await ECpay_result.create({
           orderId: id,
           MerchantTradeNo
@@ -76,7 +78,7 @@ const paymentController = {
       TotalAmount: totalPrice.toString(), // 必須是字串
       TradeDesc: 'test',
       ItemName: productsString,
-      ReturnURL: "https://huiming.tw/payment",
+      ReturnURL: "https://huiming.tw/v1/payments",
       ClientBackURL: `https://awuuu0716.github.io/MTR04-Parlando/#/transaction/${UUID}`
     };
 
@@ -114,7 +116,9 @@ const paymentController = {
           })
         }
 
-        await payment.update({
+        console.log("payment", payment);
+
+        const result = await payment.update({
           MerchantID: Number(MerchantID),
           StoreID: Number(StoreID),
           RtnCode: Number(RtnCode),
@@ -124,6 +128,8 @@ const paymentController = {
           PaymentType,
           TradeDate,
         })
+
+        console.log("result", result);
 
         const { orderId } = payment;
         await Order.update(
