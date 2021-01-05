@@ -21,13 +21,13 @@ const paymentController = {
       })
     }
 
-    // if (order.userId !== req.user.id) {
-    //   console.log("payment error: invalid user");
-    //   return res.status(403).json({
-    //     success: false,
-    //     message: "invalid user"
-    //   })
-    // }
+    if (order.userId !== req.user.id) {
+      console.log("payment error: invalid user");
+      return res.status(403).json({
+        success: false,
+        message: "invalid user"
+      })
+    }
 
     // 寫入 orderId & MerchantTradeNo 進 ECpay_result
     const { id, totalPrice, Product_models } = order
