@@ -29,7 +29,10 @@ const checkPermission = (roles = []) => (req, res, next) => {
   if (roles.indexOf('user') >= 0 && role === 'user') {
     return next();
   }
-  res.status(401).end();
+  res.status(401).json({
+    success: false,
+    message: "invalid user"
+  });
 }
 
 const onlyAdmin = checkPermission(['admin'])

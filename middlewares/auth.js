@@ -11,6 +11,7 @@ function checkAuth(req, res, next) {
   jwt.verify(token, SECRET, (err, decodedToken) => {
     if (err) {
       return res.status(401).json({
+        success: false,
         message: "invalid token"
       })
     }
@@ -25,6 +26,7 @@ function checkAuth(req, res, next) {
         })
         .catch(err => {
           res.status(401).json({
+            success: false,
             message: "Admin verify error: " + err.toString()
           })
         })
@@ -40,6 +42,7 @@ function checkAuth(req, res, next) {
         })
         .catch(err => {
           res.status(401).json({
+            success: false,
             message: "User verify error: " + err.toString()
           })
         })
