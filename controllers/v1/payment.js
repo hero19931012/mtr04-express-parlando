@@ -49,14 +49,12 @@ const paymentController = {
           MerchantTradeNo
         })
       } else {
-        console.log("payment not exist, creating data");
         await ECpay_result.create({
           orderId: id,
           MerchantTradeNo
         })
       }
     } catch (err) {
-      console.log(`payment error: ${err.toString()}`);
       return res.status(500).json({
         success: false,
         message: err.toString()
@@ -116,8 +114,6 @@ const paymentController = {
           })
         }
 
-        console.log("payment", payment);
-
         const result = await payment.update({
           MerchantID: Number(MerchantID),
           StoreID: Number(StoreID),
@@ -128,8 +124,6 @@ const paymentController = {
           PaymentType,
           TradeDate,
         })
-
-        console.log("result", result);
 
         const { orderId } = payment;
         await Order.update(
