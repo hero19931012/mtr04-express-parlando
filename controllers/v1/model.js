@@ -14,9 +14,6 @@ async function checkProdcutAvailability(productId) {
     return model.isShow === 1 && model.isDeleted === 0
   })
 
-  console.log("product.isShow", product.isShow);
-  console.log("modelsAvailable", modelsAvailable);
-
   if (modelsAvailable.length === 0 && product.isShow === 1) {
     await product.update({
       isShow: 0
