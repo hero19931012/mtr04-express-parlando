@@ -191,7 +191,7 @@ const productController = {
               id,
               productName,
               price,
-              type,
+              type: productTypes[Number(type) - 1],
               article,
               isShow,
               isDeleted,
