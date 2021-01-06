@@ -10,9 +10,12 @@ async function checkProdcutAvailability(productId) {
 
   if (product === null) return
 
-  const modelsAvailable = product.Product_model.filter((model) => {
+  const modelsAvailable = product.Product_models.filter((model) => {
     return model.isShow === 1 && model.isDeleted === 0
   })
+
+  console.log("product.isShow", product.isShow);
+  console.log("modelsAvailable", modelsAvailable);
 
   if (modelsAvailable.length === 0 && product.isShow === 1) {
     await product.update({
