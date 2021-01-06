@@ -181,24 +181,25 @@ const productController = {
         } = product
 
         const modelsAvailable = models.filter((model) => {
-          console.log("model.isDeleted", model.isDeleted);
           return model.isDeleted !== 1
         })
 
         return res.status(200).json({
           success: true,
           data: {
-            id,
-            productName,
-            price,
-            type,
-            article,
-            isShow,
-            isDeleted,
-            createdAt,
-            updatedAt,
-            Product_models: modelsAvailable,
-            Photos
+            product: {
+              id,
+              productName,
+              price,
+              type,
+              article,
+              isShow,
+              isDeleted,
+              createdAt,
+              updatedAt,
+              Product_models: modelsAvailable,
+              Photos
+            }
           }
         })
       }
