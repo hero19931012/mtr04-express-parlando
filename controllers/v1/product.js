@@ -197,10 +197,11 @@ const productController = {
       }
 
       const models = Product_models
-        .filter((model) => { return model.storage > 0 && model.isDeleted !== 1 })
+        .filter((model) => { return model.storage > 0 && model.isDeleted !== 1 && model.isShow === 1})
         .map((model) => {
-          const { colorChip, storage } = model
+          const { id, colorChip, storage } = model
           return {
+            id,
             colorChip,
             storage: storage > 10 ? "庫存充足" : storage
           }
