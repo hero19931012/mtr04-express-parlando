@@ -29,7 +29,7 @@ const photoController = {
   },
   upload: (req, res) => {
     if (req.files === undefined || req.files.length === 0) {
-      console.log("upload images error1: no images found");
+      console.log("upload images error: no images found");
       return res.status(400).json({
         success: false,
         message: "no images found"

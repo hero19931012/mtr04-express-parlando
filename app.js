@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(checkAuth)
 
 app.use('/v1', v1)
-app.use('/', v0)
+// app.use('/', v0)
 
 const httpsPort = 3001;
 httpsServer.listen(httpsPort, () => {

@@ -63,7 +63,7 @@ const orderController = {
     })
 
     if (order === null) {
-      console.log("get one order error1: invalid orderId");
+      console.log("get one order error: invalid orderId");
       return res.status(400).json({
         success: false,
         message: "invalid orderId"
