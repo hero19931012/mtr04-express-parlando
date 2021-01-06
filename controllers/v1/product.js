@@ -166,9 +166,40 @@ const productController = {
       }
 
       if (req.user !== undefined && req.user.role === "admin") {
+        const {
+          id,
+          productName,
+          price,
+          type,
+          article,
+          isShow,
+          isDeleted,
+          createdAt,
+          updatedAt,
+          Product_models: models,
+          Photos
+        } = product
+
+        const modelsAvailable = models.filter((model) => {
+          console.log("model.isDeleted", model.isDeleted);
+          return model.isDeleted !== 1
+        })
+
         return res.status(200).json({
           success: true,
-          data: { product }
+          data: {
+            id,
+            productName,
+            price,
+            type,
+            article,
+            isShow,
+            isDeleted,
+            createdAt,
+            updatedAt,
+            Product_models: modelsAvailable,
+            Photos
+          }
         })
       }
 
@@ -191,7 +222,7 @@ const productController = {
       }
 
       const models = Product_models
-        .filter((model) => { return model.storage > 0 && model.isDeleted !== 1 && model.isShow === 1})
+        .filter((model) => { return model.storage > 0 && model.isDeleted !== 1 && model.isShow === 1 })
         .map((model) => {
           const { id, colorChip, storage } = model
           return {
@@ -260,7 +291,10 @@ const productController = {
   update: async (req, res) => {
     const { id } = req.params
     const { productName, price, type, article, isShow } = req.body;
-    const product = await Product.findOne({ where: { id, isDeleted: 0 } })
+    const product = await Product.findOne({
+      where: { id, isDeleted: 0 },
+      include: [Product_model]
+    })
 
     if (product === null) {
       console.log("update product error: product has been deleted");
@@ -268,6 +302,25 @@ const productController = {
         success: false,
         message: "product has been deleted"
       })
+    }
+
+    if (isShow !== undefined && isShow === 1) {
+      const product = await Product.findOne({
+        where: { id: productId, isDeleted: 0 },
+        include: [Product_model]
+      })
+
+      const modelsAvailable = product.Product_models.filter((model) => {
+        return model.isShow === 1 && model.isDeleted === 0
+      })
+
+      if (modelsAvailable.length === 0) {
+        console.log("udpate product error: this product has no model available");
+        return res.status(403).json({
+          success: false,
+          message: "this product has no model available"
+        })
+      }
     }
 
     // 根據傳進什麼內容進行更新
