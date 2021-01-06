@@ -307,7 +307,7 @@ const productController = {
 
     if (isShow !== undefined && isShow === 1) {
       const product = await Product.findOne({
-        where: { id: productId, isDeleted: 0 },
+        where: { id, isDeleted: 0 },
         include: [Product_model]
       })
 
