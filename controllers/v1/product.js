@@ -18,12 +18,6 @@ const productController = {
       include: [Product_model, Photo]
     }
 
-    console.log("limit", limit);
-    console.log("offset", offset);
-    console.log("sort", sort);
-    console.log("order", order);
-
-
     if (limit !== undefined) { options.limit = Number(limit) }
     if (offset !== undefined) { options.offset = Number(offset) }
     if (sort !== undefined) { options.order[0] = [sort] }
@@ -55,7 +49,7 @@ const productController = {
             id,
             productName,
             price,
-            type,
+            type: productTypes[Number(type) - 1],
             article,
             isShow,
             createdAt,
