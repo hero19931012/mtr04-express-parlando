@@ -3,9 +3,9 @@ const { Recipient, User, Order, Address_city, Address_district } = db;
 
 const recipientController = {
   add: async (req, res) => {
-    const { orderId, name, phone, email, address, cityId, districtId } = req.body;
+    const { UUID } = req.params;
+    const { name, phone, email, address, cityId, districtId } = req.body;
     if (
-      !orderId ||
       !name ||
       !phone ||
       !email ||
@@ -21,9 +21,11 @@ const recipientController = {
     }
 
     // 檢查 order.userId === req.user.id
-    let order = await Order.findOne({ where: orderId })
+    let order = await Order.findOne({ where: { UUID } })
+    const { id: orderId } = order
+
     if (req.user.role !== 'admin' && order.userId !== req.user.id) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: "invalid user"
       })
     }
