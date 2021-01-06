@@ -83,6 +83,13 @@ const userController = {
     }
     User.findOne({ where: { username } })
       .then((user) => {
+        if (user === null) {
+          console.log(`login error: invalid username`);
+          return res.status(401).json({
+            success: false,
+            message: "invalid username"
+          })
+        }
         bcrypt.compare(password, user.password, (err, result) => {
           if (err || !result) {
             console.log(`login error: bcrypt compare false`);
