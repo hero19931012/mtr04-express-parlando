@@ -11,6 +11,8 @@
 - [資料庫關連](#資料庫關連)
 - [API 文件](#API-文件)
 - [如何使用](#如何使用)
+- [聲明](#聲明)
+- [資料來源](#資料來源)
 
 ## 使用套件
 ### axios
@@ -36,7 +38,6 @@
 
 ### sequelize
 實作資料庫的 ORM 操作。
-
 
 ## 資料庫關連
 
@@ -104,3 +105,13 @@ npm run start
 ```bash=
 pm2 start app.js
 ```
+
+## 聲明
+本網站僅作為個人練習，註冊時請勿使用真實資料。另本網站包含之圖片與內容僅作練習使用，不作任何商業用途。
+
+## 資料來源
+[Lorem Picsum](https://picsum.photos/)  
+[pxhere](https://pxhere.com/)  
+[unsplash](https://unsplash.com/)  
+[pexels](https://www.pexels.com/zh-tw/)  
+[pixabay](https://www.pexels.com/zh-tw/@pixabay)
