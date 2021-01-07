@@ -1,40 +1,104 @@
 # MTR04-Express-Parlando
-## 簡介
-此專案為 [程式導師實驗計畫第四期](https://github.com/Lidemy/mentor-program-4th) 的 Final project，藉由實作過程練習課程所學。團隊成員包含 [awuuu0716](https://github.com/awuuu0716), [vick12052002](https://github.com/vick12052002) 與 [huiming](https://github.com/hero19931012)，使用 React + Express 前後端分離開發，專案主題為音樂品牌官網，主要功能為使用者註冊、查看商品、加入購物車、結帳，管理員可以上架與管理商品。
+![](https://i.imgur.com/jqlYdUm.png)
 
-### 任務分配
-awuuu0716: 前端開發 (前台使用者註冊、登入、商品列表、後台管理員登入)  
-vick12052002: 前端開發 (後台管理員上架、管理商品)
-huiming: 後端開發 (RESTful API 開發、資料庫設計、串接第三方 API、AWS EC2 部署)
+## 簡介
+此專案為 [程式導師實驗計畫第四期](https://github.com/Lidemy/mentor-program-4th) 的 Final project - Parlando 後端專案，藉由實作過程練習課程所學。團隊成員包含 [awuuu0716](https://github.com/awuuu0716), [vick12052002](https://github.com/vick12052002) 與 [huiming](https://github.com/hero19931012)，使用 React + Express 前後端分離開發，專案主題為音樂品牌官網，主要功能為使用者註冊、查看商品、加入購物車、結帳，管理員可以上架與管理商品。
 
 ## 目錄
-- [使用技術](#使用技術)
-- [使用者故事](#使用者故事)
-- [專案功能](#專案功能)
+- [使用套件](#使用套件)
 - [資料庫關連](#資料庫關連)
 - [API 文件](#API-文件)
 - [如何使用](#如何使用)
 
-## 使用技術
+## 使用套件
+### axios
+向第三方 API 發送請求。
 
-- Node.js
-  - ES6 async / await, promise
-  - MVC 架構
-- Express.js
-  - RESTful API
-  - express router 集中管理 API
-  - 使用 JWT 驗證使用者身分
-  - 透過自訂 middleware 自動對使用者進行身分驗證
-- MySQL
-- Sequelize / Sequelize cli
-  - transaction
+### bcrypt
+將使用者密碼雜湊之後存進資料庫。
 
-## 使用者故事
-## 專案功能
+### cors
+設定跨域請求權限。
+
+### dotenv
+設定與取存環境變數。
+
+### ecpay-payment
+綠界金流套件。
+
+### jsonwebtoken
+簽署 token 實作使用者身分驗證。
+
+### multer
+存取來自前端的圖片資料。
+
+### sequelize
+實作資料庫的 ORM 操作。
+
+
 ## 資料庫關連
+
 [連結](https://drawsql.app/lidemyfinalproject/diagrams/finalproject-db)
 ![](https://i.imgur.com/ZdTnG5e.png)
 
 ## API 文件
-## 如何使用
+[Parlando API doc](https://hackmd.io/@GL7n1a5oR9-4-AueB1TGEw/BJS6xUipw)
 
+## 如何使用
+### 安裝套件
+```bash=
+npm install
+```
+
+### 建立 config/config.json
+格式如下：
+```json=
+{
+  "development": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "",
+    "password": ",
+    "database": "",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+```
+### 建立 .env 設定環境變數
+格式如下：
+```bash=
+SECRET=
+```
+
+### 建立資料庫 table
+```bash=
+npm run migrate
+```
+
+### 寫入測試資料
+```bash=
+npm run seed
+```
+
+### 開發
+```bash=
+npm run start
+```
+
+### 部暑
+```bash=
+pm2 start app.js
+```
