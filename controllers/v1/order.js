@@ -190,7 +190,8 @@ const orderController = {
       })
         .then(() => {
           res.status(200).json({
-            success: true
+            success: true,
+            data: { UUID }
           })
         })
         .catch(err => {
