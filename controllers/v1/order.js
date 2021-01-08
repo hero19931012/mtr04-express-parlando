@@ -117,15 +117,12 @@ const orderController = {
     }
 
     const orderProducts = []
-
     const UUID = uuidv4();
     const newModels = []
     let totalPrice = 0
 
-
     for (let i = 0; i < products.length; i++) {
       const item = products[i]
-
       const model = await Product_model.findOne({
         where: { id: item.modelId },
         include: [Product],
@@ -178,7 +175,7 @@ const orderController = {
 
         for (let i = 0; i < newModels.length; i++) {
           const { model, updateData } = newModels[i]
-          await model.update({ ...updateData })
+          await model.update({ ...updateData }, {lock: true})
         }
 
         await Order_product.bulkCreate(orderProducts.map(model => {
