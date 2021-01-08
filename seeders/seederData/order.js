@@ -106,8 +106,8 @@ for (let i = 0; i < orderList.length; i++) {
     phone: "0987654321",
     email: "mail@mail.com",
     address: "中正路",
-    createdAt: orderList[i].orderContent.createdAt,
-    updatedAt: orderList[i].orderContent.updatedAt,
+    createdAt: orderList[i].createdAt,
+    updatedAt: orderList[i].updatedAt,
     cityId: 1,
     districtId: 1,
     orderId: i + 1

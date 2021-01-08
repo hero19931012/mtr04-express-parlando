@@ -95,7 +95,7 @@ for (let i = 0; i < 4; i++) {
       productName,
       price,
       type: typeInfo.typeNum,
-      article: JSON.stringify({"ops":[{"attributes":{"size":"huge"},"insert":"FEATURES"},{"insert":"\n 請於此輸入你的特色說 \n"}]}),
+      article: JSON.stringify({"ops":[{"attributes":{"size":"huge"},"insert":"FEATURES"},{"attributes":{"header":2},"insert":"\n"},{"insert":{"image":"https://i.imgur.com/MB6ZYh9.jpg"}},{"insert":"\n\n"},{"attributes":{"color":"#1d1d1f"},"insert":"搭配你的所有裝置使用，帶給你難以媲美的聆聽體驗。各種機型均可輕鬆連接，並將層次豐富的優質音色，帶進突破創新的無線設計。"},{"insert":"\n\n\n"}]}),
       isShow: 1,
       createdAt,
       updatedAt,
