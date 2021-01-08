@@ -6,3 +6,4 @@ env/
 ssl/
 .env
 sequelize cli commands.md
+views/
