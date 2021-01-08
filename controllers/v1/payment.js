@@ -21,18 +21,18 @@ const paymentController = {
       })
     }
 
-    if (order.userId !== req.user.id) {
-      console.log("payment error: invalid user");
-      return res.status(403).json({
-        success: false,
-        message: "invalid user"
-      })
-    }
+    // if (order.userId !== req.user.id) {
+    //   console.log("payment error: invalid user");
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "invalid user"
+    //   })
+    // }
 
     // 寫入 orderId & MerchantTradeNo 進 ECpay_result
     const { id, totalPrice, Product_models } = order
 
-    if (totalPrice >= 30000) {
+    if (totalPrice > 30000) {
       console.log("post payment error: total price must below 30,000");
       return res.status(400).json({
         success: false,

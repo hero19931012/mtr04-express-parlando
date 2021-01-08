@@ -80,7 +80,7 @@ router.get('/districts', districtController.getAll)
 
 router.post('/recipients/:UUID', onlyUser, recipientController.add);
 
-router.get('/payments/:UUID', onlyUser, paymentController.handlePayment)
+router.get('/payments/:UUID', paymentController.handlePayment)
 router.post('/payments', paymentController.handlePaymentResult)
 
 router.use((req, res) => {
