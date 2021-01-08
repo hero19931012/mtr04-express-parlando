@@ -5,7 +5,7 @@
 此專案為 [程式導師實驗計畫第四期](https://github.com/Lidemy/mentor-program-4th) 的 Final project - Parlando 後端專案，藉由實作過程練習課程所學。團隊成員包含 [awuuu0716](https://github.com/awuuu0716), [vick12052002](https://github.com/vick12052002) 與 [huiming](https://github.com/hero19931012)，使用 React + Express 前後端分離開發，專案主題為音樂品牌官網，主要功能為使用者註冊、查看商品、加入購物車、結帳，管理員可以上架與管理商品。
 
 [前端專案](https://github.com/awuuu0716/MTR04-Parlando)  
-[作品 DEMO](https://awuuu0716.github.io/MTR04-Parlando/#/)
+[作品 DEMO](https://www.parlando.tw/#/login)
 
 ## 目錄
 - [使用套件](#使用套件)
