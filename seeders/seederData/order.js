@@ -69,8 +69,6 @@ function getOrderContent(orderRequestData, orderId) {
     UUID: uuidv4(),
     userId,
     totalPrice,
-    // status: 0,
-    // isDeleted: 0,
     createdAt,
     updatedAt
   }
@@ -100,4 +98,22 @@ for (let i = 0; i < orderRequestDataList.length; i++) {
 // console.log(orderList);
 // console.log(orderProductList);
 
-module.exports = { orderList, orderProductList };
+const recipientList = []
+
+for (let i = 0; i < orderList.length; i++) {
+  const recipientInfo = {
+    name: "Someone",
+    phone: "0987654321",
+    email: "mail@mail.com",
+    address: "中正路",
+    createdAt: orderList[i].orderContent.createdAt,
+    updatedAt: orderList[i].orderContent.updatedAt,
+    cityId: 1,
+    districtId: 1,
+    orderId: i + 1
+  }
+
+  recipientList.push(recipientInfo)
+}
+
+module.exports = { orderList, orderProductList, recipientList };
